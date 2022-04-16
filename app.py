@@ -9,7 +9,7 @@ import time
 #Initialize the Flask app
 app = Flask(__name__)
 
-
+# Load the most lightweight yolov5 model
 model = torch.hub.load('ultralytics/yolov5', 'yolov5n')
 
 camera = cv2.VideoCapture(0)
