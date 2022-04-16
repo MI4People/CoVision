@@ -1,3 +1,6 @@
+
+<h2> Installation Guide</h2>
+
 ```bash
 git clone https://github.com/Lennart-Ma/CoVision.git  # clone
 pip install -r requirements.txt  # install requirements
