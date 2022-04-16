@@ -3,8 +3,6 @@ import cv2
 import torch
 import numpy as np
 
-import time
-
 
 #Initialize the Flask app
 app = Flask(__name__)
@@ -12,32 +10,28 @@ app = Flask(__name__)
 # Load the most lightweight yolov5 model
 model = torch.hub.load('ultralytics/yolov5', 'yolov5n')
 
+# capture the Video from your webcam
 camera = cv2.VideoCapture(0)
 
 def gen_frames():  
+    
     counter = 0
-    text = "Recording and looking for a bottle to save a picture"
     while True:
         success, frame = camera.read()  # read the camera frame
         if not success:
             break
         else:
 
-            results = model(frame)
-
-            # print(type(results.crop())) # results.crop() saves the whole image as well as the crops of the objects in the image
-
-            # print(type(results)) # results is of type <class 'models.common.Detections'>
-
-            #time.sleep(1)
+            results = model(frame) # predict the objects in the corresponding frame
 
             if results.pandas().xyxy[0]['name'].str.contains('bottle').any():
                 counter += 1
                 print("bottle is here", counter)
-                if counter >= 40:
-                    print("the bottle cropped is saved")
-                    # We could make many more pictures, and than do a majority vote for the lassification task
-                    results.crop() 
+
+                if counter >= 40: # bottle has to be in the video for 40 frames
+                    print("the cropped image of bottle is saved")
+                    # We could make many more pictures, and than do a majority vote for the classification task
+                    results.crop() # saves the images under runs/
                     counter = 0
             else:
                 counter = 0
