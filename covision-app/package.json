@@ -66,8 +66,12 @@
       "last 1 safari version"
     ]
   },
+  "prettier": "@ionic/prettier-config",
   "devDependencies": {
-    "@capacitor/cli": "3.4.3"
+    "@capacitor/cli": "3.4.3",
+    "@ionic/eslint-config": "^0.3.0",
+    "@ionic/prettier-config": "^2.0.0",
+    "eslint": "^8.13.0"
   },
   "description": "An Ionic project"
 }
