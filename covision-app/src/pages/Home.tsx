@@ -1,5 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import CovCamera from '../components/CovCamera/CovCamera';
+import ExploreContainer from '../components/ExploreContainer/ExploreContainer';
 import './Home.css';
 
 const Home: React.FC = () => {
@@ -17,6 +18,7 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <ExploreContainer />
+        <CovCamera />
       </IonContent>
     </IonPage>
   );
