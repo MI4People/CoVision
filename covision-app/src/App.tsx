@@ -30,9 +30,6 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        {/* <Route exact path="/testInstruction/:id" render={(props) => {
-          return <TestInstruction testId={props}/>
-        }}/> */}
         <Route exact path="/testInstruction/:id">
           <TestInstruction />
         </Route>

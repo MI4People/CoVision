@@ -55,7 +55,6 @@ const Home: React.FC = () => {
         )}
 
         <CovCamera ref={webcamRef} />
-
         <IonButton href="/testInstructionOverview">Go to full test instruction</IonButton>
       </IonContent>
     </IonPage>
