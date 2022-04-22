@@ -1,0 +1,7 @@
+{
+  "name": "covision-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
