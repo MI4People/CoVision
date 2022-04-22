@@ -4,9 +4,12 @@
 }
 .header {
   text-align: center;
+  font-size: x-large;
 }
 .subheader {
+  margin-top: 5vw;
   text-align: center;
+  font-size: large;
 }
 .mainText {
   text-align: center;

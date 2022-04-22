@@ -1,22 +1,41 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import instructions from '../data/instructions';
 import { IonText } from '@ionic/react';
 import Speech from 'speak-tts';
 import './TestInstruction.css';
+import { useTimer } from 'react-timer-hook';
 
 const TestInstruction = () => {
   const { id } = useParams();
   const instruction = instructions[id];
   const numberOfSteps = instruction.steps.length;
-  const [index, setIndex] = useState(-1);
+  const testTime = instruction.time * 60;
+  const [index, setIndex] = useState(10);
   const [buttonsDisabled, setButtonsDisabled] = useState(false);
+  const [timerRunning, setTimerRunning] = useState(false);
+  let history = useHistory();
+
+  const { seconds, minutes, hours, days, isRunning, start, pause, resume, restart } = useTimer({
+    testTime,
+    onExpire: () => {
+      console.log('timer expired');
+      const text =
+        'Die Zeit von ' + instruction.time + ' ist vorüber. Sie werden zur Ergebnis Erkennung weiter geleitet.';
+      triggerInstruction(text);
+      history.push('/');
+    },
+  });
 
   useEffect(() => {
-    triggerInstruction();
+    let text = instruction.steps[index];
+    if (index === instruction.timerTriggerStep) {
+      text = text + 'Ein timer von ' + instruction.time + ' Minuten wurde gesetzt.';
+    }
+    triggerInstruction(text);
   }, [index]);
 
-  const triggerInstruction = () => {
+  const triggerInstruction = (text) => {
     const speech = new Speech();
     if (speech.hasBrowserSupport()) {
       console.log('speech synthesis supported');
@@ -29,7 +48,7 @@ const TestInstruction = () => {
 
           speech
             .speak({
-              text: instruction.steps[index],
+              text: text,
               listeners: {
                 onstart: () => {
                   setButtonsDisabled(true);
@@ -52,8 +71,18 @@ const TestInstruction = () => {
     }
   };
 
+  const startTimer = () => {
+    setTimerRunning(true);
+    const time = new Date();
+    time.setSeconds(time.getSeconds() + testTime);
+    restart(time);
+  };
+
   const nextStep = () => {
     if (index < numberOfSteps - 1) {
+      if (index + 1 === instruction.timerTriggerStep) {
+        startTimer();
+      }
       setIndex(index + 1);
     } else {
       setIndex(index);
@@ -71,7 +100,7 @@ const TestInstruction = () => {
   return (
     <div className="pageContainer">
       <div className="header">
-        <IonText>Instruction to rapid test with id {instruction.id}</IonText>
+        <IonText>Instruction to rapid test {instruction.id}</IonText>
       </div>
       <div className="subheader">
         <IonText>
@@ -99,6 +128,13 @@ const TestInstruction = () => {
           {index < 0 ? <>Start</> : <>Nächster Schritt</>}
         </button>
       </div>
+      {timerRunning ? (
+        <div style={{ fontSize: '100px', textAlign: 'center' }}>
+          <span>{minutes}</span>:<span>{seconds}</span>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
