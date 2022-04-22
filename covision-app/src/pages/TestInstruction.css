@@ -1,12 +1,38 @@
-.header{
+.pageContainer {
+  height: 100%;
+  width: 100%;
+}
+.header {
   text-align: center;
 }
-.subheader{
+.subheader {
   text-align: center;
 }
-.playButton{
+.mainText {
   text-align: center;
+  font-size: xx-large;
 }
-.nextButton {
+.hintText {
   text-align: center;
+  font-size: small;
+}
+.buttons {
+  display: flex;
+  margin-top: 30vw;
+}
+.buttonPrev {
+  height: 50vw;
+  width: 100%;
+  background-color: #cfe9de;
+  color: gray;
+  font-size: large;
+  font-weight: 400;
+}
+.buttonNext {
+  height: 50vw;
+  width: 100%;
+  background-color: #fec79a;
+  color: grey;
+  font-size: large;
+  font-weight: 400;
 }

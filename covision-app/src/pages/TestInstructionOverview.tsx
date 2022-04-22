@@ -1,4 +1,4 @@
-import { IonButton } from "@ionic/react";
+import { IonButton } from '@ionic/react';
 
 const TestInstructionOverview: React.FC = () => {
   return (
@@ -6,7 +6,7 @@ const TestInstructionOverview: React.FC = () => {
       <IonButton href="/testInstruction/0">Hotgen Test</IonButton>
       <IonButton href="/testInstruction/1">Another Test</IonButton>
     </>
-  )
-}
+  );
+};
 
-export default TestInstructionOverview
+export default TestInstructionOverview;
