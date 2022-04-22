@@ -1,11 +1,10 @@
-import { IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
 import { useRef } from 'react';
 import Webcam from 'react-webcam';
 import useYolov5Analysis from '../api/useYolov5Analysis';
 import CovCamera from '../components/CovCamera';
 import { getValidTestArea } from '../api/getValidTestArea';
 import useClassifierAnalysis, { TestResult } from '../api/useClassifierAnalysis';
-import TextToSpeech from '../components/CovInstruction/TextToSpeech';
 
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
@@ -56,7 +55,8 @@ const Home: React.FC = () => {
         )}
 
         <CovCamera ref={webcamRef} />
-        <TextToSpeech />
+
+        <IonButton href="/testInstructionOverview">Go to full test instruction</IonButton>
       </IonContent>
     </IonPage>
   );
