@@ -1,7 +1,14 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import CovCamera from '../components/CovCamera/CovCamera';
-import ExploreContainer from '../components/ExploreContainer/ExploreContainer';
-import './Home.css';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
+import CovCamera from "../components/CovCamera/CovCamera";
+import ExploreContainer from "../components/ExploreContainer/ExploreContainer";
+import TextToSpeech from "../components/CovInstruction/TextToSpeech";
+import "./Home.css";
 
 const Home: React.FC = () => {
   return (
@@ -19,6 +26,7 @@ const Home: React.FC = () => {
         </IonHeader>
         <ExploreContainer />
         <CovCamera />
+        <TextToSpeech />
       </IonContent>
     </IonPage>
   );
