@@ -31,6 +31,10 @@
   font-size: large;
   font-weight: 400;
 }
+.buttonPrev:disabled {
+  background-color: gray;
+  color: black;
+}
 .buttonNext {
   height: 20vw;
   width: 100%;
@@ -38,6 +42,10 @@
   color: grey;
   font-size: large;
   font-weight: 400;
+}
+.buttonNext:disabled {
+  background-color: gray;
+  color: black;
 }
 @media screen and (max-width: 960px) {
   .buttons {
