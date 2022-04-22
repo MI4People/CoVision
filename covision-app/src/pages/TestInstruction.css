@@ -18,10 +18,10 @@
 }
 .buttons {
   display: flex;
-  margin-top: 30vw;
+  margin-top: 5vw;
 }
 .buttonPrev {
-  height: 50vw;
+  height: 20vw;
   width: 100%;
   background-color: #cfe9de;
   color: gray;
@@ -29,10 +29,21 @@
   font-weight: 400;
 }
 .buttonNext {
-  height: 50vw;
+  height: 20vw;
   width: 100%;
   background-color: #fec79a;
   color: grey;
   font-size: large;
   font-weight: 400;
+}
+@media screen and (max-width: 960px) {
+  .buttons {
+    margin-top: 20vw;
+  }
+  .buttonPrev {
+    height: 50vw;
+  }
+  .buttonNext {
+    height: 50vw;
+  }
 }
