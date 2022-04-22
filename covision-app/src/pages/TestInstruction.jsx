@@ -6,6 +6,7 @@ import {
     IonText,
     IonButton
   } from "@ionic/react";
+import "./TestInstruction.css"
 
 const TestInstruction = () => {
     const { id } = useParams();
@@ -19,10 +20,18 @@ const TestInstruction = () => {
 
     return (
         <>
-            <IonText>Instruction to rapid test with id {instruction.id}</IonText>
-            <IonText>{" "}Step {index+1} out of {numberOfSteps}</IonText>
-            <TextToSpeech text={instruction.steps[index]}/>
-            <IonButton onClick={() => nextStep()}>Next Step</IonButton>
+            <div className="header">
+                <IonText>Instruction to rapid test with id {instruction.id}</IonText>
+            </div>
+            <div className="subheader">
+                <IonText>{" "}Step {index+1} out of {numberOfSteps}</IonText>
+            </div>
+            <div className="playButton">
+                <TextToSpeech text={instruction.steps[index]} step={index+1}/>
+            </div>
+            <div className="nextButton">
+                <IonButton onClick={() => nextStep()}>Next Step</IonButton>
+            </div>
         </>
     )
 }
