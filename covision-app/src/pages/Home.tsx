@@ -5,6 +5,7 @@ import useYolov5Analysis from '../api/useYolov5Analysis';
 import CovCamera from '../components/CovCamera';
 import { getValidTestArea } from '../api/getValidTestArea';
 import useClassifierAnalysis, { TestResult } from '../api/useClassifierAnalysis';
+import TextToSpeech from '../components/CovInstruction/TextToSpeech';
 
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
@@ -55,6 +56,7 @@ const Home: React.FC = () => {
         )}
 
         <CovCamera ref={webcamRef} />
+        <TextToSpeech />
       </IonContent>
     </IonPage>
   );
