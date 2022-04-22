@@ -26,3 +26,5 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
+
+public/assets/yolov5s/*
