@@ -52,10 +52,11 @@
   left: 48.646vw;
   top: 30.156vw;
 
+  /* font-family: 'Inter'; */
   font-style: normal;
   font-weight: 400;
-  font-size: 5.128vw;
-  line-height: 6.154vw;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
 
   color: #000000;
 }

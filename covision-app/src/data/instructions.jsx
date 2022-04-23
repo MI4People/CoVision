@@ -1,7 +1,7 @@
 const instructions = [
   {
     id: 'AT1236/21',
-    eanCode: ['4064691006013'],
+    eanCode: ['4064691684352'],
     time: 0.25,
     timerTriggerStep: 11,
     steps: [
