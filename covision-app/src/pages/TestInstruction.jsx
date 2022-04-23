@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import instructions from '../data/instructions';
 import Speech from 'speak-tts';
@@ -100,11 +100,10 @@ const TestInstruction = () => {
 
   return (
     <div className="pageContainer">
-      {/* <div className="header">
-        <IonText>Anleitung für Test {instruction.id}</IonText>
-      </div> */}
       <div className="subheader">
-        Schritt {index + 1} von {numberOfSteps}
+        <Fragment>
+          Schritt {index + 1} von {numberOfSteps}
+        </Fragment>
       </div>
       <div className="mainText">{displayedText}</div>
       <div className="textFrame" />
