@@ -12,6 +12,7 @@ const TestInstruction = () => {
   const numberOfSteps = instruction.steps.length;
   const testTime = instruction.time * 60;
   const [index, setIndex] = useState(10);
+  const [displayedText, setDisplayedText] = useState('');
   const [buttonsDisabled, setButtonsDisabled] = useState(false);
   const [timerRunning, setTimerRunning] = useState(false);
   let history = useHistory();
@@ -32,7 +33,8 @@ const TestInstruction = () => {
     if (index === instruction.timerTriggerStep) {
       text = text + 'Ein timer von ' + instruction.time + ' Minuten wurde gesetzt.';
     }
-    triggerInstruction(text);
+    setDisplayedText(text);
+    // triggerInstruction(text);
   }, [index]);
 
   const triggerInstruction = (text) => {
@@ -100,13 +102,16 @@ const TestInstruction = () => {
   return (
     <div className="pageContainer">
       <div className="header">
-        <IonText>Instruction to rapid test {instruction.id}</IonText>
+        <IonText>Anleitung für Test {instruction.id}</IonText>
       </div>
       <div className="subheader">
         <IonText>
           {' '}
           Schritt {index + 1} von {numberOfSteps}
         </IonText>
+      </div>
+      <div className="mainText">
+        <IonText>{displayedText}</IonText>
       </div>
       <div className="buttons">
         <button
@@ -129,7 +134,7 @@ const TestInstruction = () => {
         </button>
       </div>
       {timerRunning ? (
-        <div style={{ fontSize: '100px', textAlign: 'center' }}>
+        <div style={{ fontSize: 'large', textAlign: 'center', padding: '10vw' }}>
           <span>{minutes}</span>:<span>{seconds}</span>
         </div>
       ) : (
