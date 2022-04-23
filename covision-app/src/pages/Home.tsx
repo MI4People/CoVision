@@ -18,6 +18,19 @@ const Home: React.FC = () => {
         <div
           style={{
             position: 'absolute',
+            top: 'env(safe-area-inset-top)',
+            left: 0,
+            right: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            background: 'linear-gradient(0deg, rgba(24,24,24,0) 0%, rgba(24,24,24,1) 100%);',
+          }}
+        >
+          <img style={{ height: 80 }} src="/assets/logo.png" alt="CoVision" />
+        </div>
+        <div
+          style={{
+            position: 'absolute',
             bottom: 0,
             left: 0,
             right: 0,
@@ -27,11 +40,14 @@ const Home: React.FC = () => {
         >
           <IonCard>
             <IonCardContent>
-              <IonText color="primary">
-                <h1>
-                  {testArea.area ? 1 : 0} tests detected (highest score: {testArea.score}), result: {TestResult[result]}{' '}
-                  (score: {score})
-                </h1>
+              <IonText style={{ color: '#fff' }}>
+                <h2>{testArea.area ? 'Test detected, result ' + TestResult[result] + '!' : 'Please scan a test'}</h2>
+                {false && ( // debug info
+                  <h2>
+                    {testArea.area ? 1 : 0} tests detected (highest score: {testArea.score}), result:{' '}
+                    {TestResult[result]} (score: {score})
+                  </h2>
+                )}
               </IonText>
             </IonCardContent>
           </IonCard>
