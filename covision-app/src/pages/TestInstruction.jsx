@@ -116,7 +116,7 @@ const TestInstruction = () => {
           }}
           disabled={buttonsDisabled}
         >
-          Vorheriger Schritt
+          Zurück
         </button>
         <button
           className="buttonNext"
@@ -125,7 +125,7 @@ const TestInstruction = () => {
           }}
           disabled={buttonsDisabled}
         >
-          {index < 0 ? <>Start</> : <>Nächster Schritt</>}
+          {index < 0 ? <>Start</> : <>Weiter</>}
         </button>
       </div>
       {timerRunning ? (
