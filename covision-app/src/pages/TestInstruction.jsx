@@ -21,8 +21,7 @@ const TestInstruction = () => {
     testTime,
     onExpire: () => {
       console.log('timer expired');
-      const text =
-        'Die Zeit von ' + instruction.time + ' ist vorüber. Sie werden zur Ergebnis Erkennung weiter geleitet.';
+      const text = 'The time of ' + instruction.time + ' is over. You will be redirected to the result detection.';
       window.alert(text);
       history.push('/');
     },
@@ -32,7 +31,7 @@ const TestInstruction = () => {
     mainText.current.focus();
     let text = instruction.steps[index];
     if (index === instruction.timerTriggerStep) {
-      text = text + 'Ein timer von ' + instruction.time + ' Minuten wurde gesetzt.';
+      text = text + ' A timer of ' + instruction.time + ' minutes was set.';
     }
     setDisplayedText(text);
   }, [index, instruction.steps, instruction.time, instruction.timerTriggerStep, mainText]);
@@ -66,7 +65,7 @@ const TestInstruction = () => {
   return (
     <div className="pageContainer">
       <div className="subheader">
-        Schritt {index + 1} von {numberOfSteps}
+        Step {index + 1} out of {numberOfSteps}
       </div>
       <div className="mainText" ref={mainText}>
         {displayedText}
@@ -80,7 +79,7 @@ const TestInstruction = () => {
             prevStep();
           }}
         >
-          Zurück
+          Back
         </button>
         <button
           className="buttonNext"
@@ -88,7 +87,7 @@ const TestInstruction = () => {
             nextStep();
           }}
         >
-          {index < 0 ? <>Start</> : <>Weiter</>}
+          {index < 0 ? <>Start</> : <>Next</>}
         </button>
         <a href="/">
           <button className="buttonHome">Home</button>
@@ -96,7 +95,13 @@ const TestInstruction = () => {
       </div>
       {timerRunning ? (
         <div className="timer">
-          <span>{minutes}</span>:<span>{seconds}</span>
+          <span>{minutes}</span>:
+          <span>
+            {seconds.toLocaleString('en-US', {
+              minimumIntegerDigits: 2,
+              useGrouping: false,
+            })}
+          </span>
         </div>
       ) : (
         <></>
