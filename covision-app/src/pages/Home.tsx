@@ -6,6 +6,10 @@ import CovCamera from '../components/CovCamera';
 import { getValidTestArea } from '../api/getValidTestArea';
 import useClassifierAnalysis, { TestResult } from '../api/useClassifierAnalysis';
 
+const welcomeText =
+  'Wilkommen bei CoVision. Richten Sie Ihre Kamera auf eine Covid Test Kasette um das Ergebnis zu erfahren oder auf den Barcode der Verpackung wenn Sie den Test noch nicht begonnen haben.';
+window.alert(welcomeText);
+
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
   const analysis = useYolov5Analysis(webcamRef) ?? {};
