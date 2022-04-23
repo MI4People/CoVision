@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import instructions from '../data/instructions';
-// import Speech from 'speak-tts';
 import './TestInstruction.css';
 import { useTimer } from 'react-timer-hook';
 
@@ -10,12 +9,13 @@ const TestInstruction = () => {
   const instruction = instructions[id];
   const numberOfSteps = instruction.steps.length;
   const testTime = instruction.time * 60;
-  const [index, setIndex] = useState(10);
+  const [index, setIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
-  // const [buttonsDisabled, setButtonsDisabled] = useState(false);
   const [timerRunning, setTimerRunning] = useState(false);
   let history = useHistory();
-  const mainText = React.createRef();
+  const mainText = React.useRef();
+
+  console.log(id);
 
   const { seconds, minutes, restart } = useTimer({
     testTime,
@@ -24,7 +24,6 @@ const TestInstruction = () => {
       const text =
         'Die Zeit von ' + instruction.time + ' ist vorüber. Sie werden zur Ergebnis Erkennung weiter geleitet.';
       window.alert(text);
-      // triggerInstruction(text);
       history.push('/');
     },
   });
@@ -36,44 +35,7 @@ const TestInstruction = () => {
       text = text + 'Ein timer von ' + instruction.time + ' Minuten wurde gesetzt.';
     }
     setDisplayedText(text);
-    // triggerInstruction(text);
   }, [index, instruction.steps, instruction.time, instruction.timerTriggerStep, mainText]);
-
-  // const triggerInstruction = (text) => {
-  //   const speech = new Speech();
-  //   if (speech.hasBrowserSupport()) {
-  //     console.log('speech synthesis supported');
-
-  //     speech
-  //       .init()
-  //       .then((data) => {
-  //         // The "data" object contains the list of available voices and the voice synthesis params
-  //         console.log('Speech is ready, voices are available', data);
-
-  //         speech
-  //           .speak({
-  //             text: text,
-  //             listeners: {
-  //               onstart: () => {
-  //                 setButtonsDisabled(true);
-  //               },
-  //               onend: () => {
-  //                 setButtonsDisabled(false);
-  //               },
-  //             },
-  //           })
-  //           .then(() => {
-  //             console.log('Success !');
-  //           })
-  //           .catch((e) => {
-  //             console.error('An error occurred :', e);
-  //           });
-  //       })
-  //       .catch((e) => {
-  //         console.error('An error occured while initializing : ', e);
-  //       });
-  //   }
-  // };
 
   const startTimer = () => {
     setTimerRunning(true);
@@ -117,7 +79,6 @@ const TestInstruction = () => {
           onClick={() => {
             prevStep();
           }}
-          // disabled={buttonsDisabled}
         >
           Zurück
         </button>
@@ -126,7 +87,6 @@ const TestInstruction = () => {
           onClick={() => {
             nextStep();
           }}
-          // disabled={buttonsDisabled}
         >
           {index < 0 ? <>Start</> : <>Weiter</>}
         </button>

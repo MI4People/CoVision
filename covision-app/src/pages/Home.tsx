@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
+import { IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
 import { useRef } from 'react';
 import Webcam from 'react-webcam';
 import useYolov5Analysis from '../api/useYolov5Analysis';
@@ -6,16 +6,15 @@ import CovCamera from '../components/CovCamera';
 import { getValidTestArea } from '../api/getValidTestArea';
 import useClassifierAnalysis, { TestResult } from '../api/useClassifierAnalysis';
 import Scanner from '../components/Scanner';
-
-const welcomeText =
-  'Wilkommen bei CoVision. Richten Sie Ihre Kamera auf eine Covid Test Kasette um das Ergebnis zu erfahren oder auf den Barcode der Verpackung wenn Sie den Test noch nicht begonnen haben.';
-// window.alert(welcomeText);
+import { useHistory } from 'react-router-dom';
+import { getInstruction } from '../data/instructions';
 
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
   const analysis = useYolov5Analysis(webcamRef) ?? {};
   const testArea = getValidTestArea(analysis);
   const [result, score] = useClassifierAnalysis(testArea);
+  const history = useHistory();
 
   return (
     <IonPage>
@@ -61,8 +60,15 @@ const Home: React.FC = () => {
 
         <CovCamera ref={webcamRef} />
 
-        <Scanner target={webcamRef.current?.video} onDetected={console.log} />
-        <IonButton href="/testInstructionOverview">Go to full test instruction</IonButton>
+        <Scanner
+          target={webcamRef.current?.video}
+          onDetected={(data) => {
+            let index = getInstruction(data.codeResult.code);
+            if (index !== -1) {
+              history.push('/testInstruction/' + index);
+            }
+          }}
+        />
       </IonContent>
     </IonPage>
   );

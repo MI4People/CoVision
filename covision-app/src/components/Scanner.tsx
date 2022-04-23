@@ -71,7 +71,6 @@ const Scanner: React.FC<ScannerProps> = ({ target, onDetected }) => {
       }
     );
     const handleDetected = (data) => {
-      console.log('data');
       onDetectedRef.current(data);
     };
     Quagga.onDetected(handleDetected);
