@@ -10,7 +10,7 @@ const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
   const analysis = useYolov5Analysis(webcamRef) ?? {};
   const testArea = getValidTestArea(analysis);
-  const result = useClassifierAnalysis(testArea);
+  const [result, score] = useClassifierAnalysis(testArea);
 
   return (
     <IonPage>
@@ -29,7 +29,8 @@ const Home: React.FC = () => {
             <IonCardContent>
               <IonText color="primary">
                 <h1>
-                  {testArea.area ? 1 : 0} tests detected (highest score: {testArea.score}), result: {TestResult[result]}
+                  {testArea.area ? 1 : 0} tests detected (highest score: {testArea.score}), result: {TestResult[result]}{' '}
+                  (score: {score})
                 </h1>
               </IonText>
             </IonCardContent>
