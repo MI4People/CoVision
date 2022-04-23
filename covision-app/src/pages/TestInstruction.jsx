@@ -100,11 +100,11 @@ const TestInstruction = () => {
 
   return (
     <div className="pageContainer">
-      <div className="subheader">
-        <Fragment>
+      <Fragment>
+        <div className="subheader">
           Schritt {index + 1} von {numberOfSteps}
-        </Fragment>
-      </div>
+        </div>
+      </Fragment>
       <div className="mainText">{displayedText}</div>
       <div className="textFrame" />
       <div className="buttons">
