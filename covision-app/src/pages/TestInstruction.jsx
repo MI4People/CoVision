@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import instructions from '../data/instructions';
-import Speech from 'speak-tts';
+// import Speech from 'speak-tts';
 import './TestInstruction.css';
 import { useTimer } from 'react-timer-hook';
 
@@ -12,7 +12,7 @@ const TestInstruction = () => {
   const testTime = instruction.time * 60;
   const [index, setIndex] = useState(10);
   const [displayedText, setDisplayedText] = useState('');
-  const [buttonsDisabled, setButtonsDisabled] = useState(false);
+  // const [buttonsDisabled, setButtonsDisabled] = useState(false);
   const [timerRunning, setTimerRunning] = useState(false);
   let history = useHistory();
   const mainText = React.createRef();
@@ -117,7 +117,7 @@ const TestInstruction = () => {
           onClick={() => {
             prevStep();
           }}
-          disabled={buttonsDisabled}
+          // disabled={buttonsDisabled}
         >
           Zurück
         </button>
@@ -126,7 +126,7 @@ const TestInstruction = () => {
           onClick={() => {
             nextStep();
           }}
-          disabled={buttonsDisabled}
+          // disabled={buttonsDisabled}
         >
           {index < 0 ? <>Start</> : <>Weiter</>}
         </button>
