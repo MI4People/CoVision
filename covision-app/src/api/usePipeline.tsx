@@ -3,7 +3,6 @@ import Webcam from 'react-webcam';
 import { getValidTestArea, TestArea } from './getValidTestArea';
 import runClassifierAnalysis, { evaluate, TestResult } from './runClassifierAnalysis';
 import runYolov5Analysis from './runYolov5Analysis';
-import * as tf from '@tensorflow/tfjs';
 import { BarcodeScanResult, runBarcodeScan } from './runBarcodeScan';
 
 const useEverySecond = (callback: () => Promise<void>) => {
@@ -39,12 +38,13 @@ const usePipeline = (webcamRef: MutableRefObject<Webcam | null>) => {
     useCallback(async () => {
       if (!webcamRef.current) return;
 
-      tf.engine().startScope();
       const yolov5Res = await runYolov5Analysis(webcamRef.current);
       const testArea = getValidTestArea(yolov5Res);
       const classificationScore = await runClassifierAnalysis(testArea);
+
+      yolov5Res.input_tf?.dispose();
+
       const result = evaluate(classificationScore);
-      tf.engine().endScope();
 
       const screenshot = webcamRef.current.getScreenshot({ width: 320, height: 640 });
       let barcodeResult;

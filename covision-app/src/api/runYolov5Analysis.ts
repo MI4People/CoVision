@@ -7,7 +7,7 @@ const MODEL_URL = "assets/yolov5s_rapid_test_web_model/model.json";
 const modelPromise = loadGraphModel(MODEL_URL);
 
 export type Yolov5AnalysisResult = {
-  input?: tf.Tensor<Rank.R4>,
+  input_tf?: tf.Tensor<Rank.R4>,
   boxes?: number[];
   scores?: number[];
   classes?: number[];
@@ -20,15 +20,21 @@ const runYolov5Analysis = async (webcam: Webcam): Promise<Yolov5AnalysisResult> 
   const canvas = webcam.getCanvas({ width, height });
   if (!canvas) throw new Error('could not take screenshot');
 
-  const input = tf.browser.fromPixels(canvas).div(255.0).expandDims<tf.Tensor4D>();
+  const input_tf = tf.tidy(() => tf.browser.fromPixels(canvas).div(255.0).expandDims<tf.Tensor4D>());
   const [boxes_tf, scores_tf, classes_tf, valid_detections_tf] =
-    (await model.executeAsync(input)) as tf.Tensor<tf.Rank>[];
+    (await model.executeAsync(input_tf)) as tf.Tensor<tf.Rank>[];
 
   const boxes = Array.from(boxes_tf.dataSync());
   const scores = Array.from(scores_tf.dataSync());
   const classes = Array.from(classes_tf.dataSync());
   const valid_detections = valid_detections_tf.dataSync()[0];
-  return { input, boxes, scores, classes, valid_detections }
+
+  boxes_tf.dispose();
+  scores_tf.dispose();
+  classes_tf.dispose();
+  valid_detections_tf.dispose();
+
+  return { input_tf, boxes, scores, classes, valid_detections }
 };
 
 export default runYolov5Analysis;

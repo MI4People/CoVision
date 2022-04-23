@@ -11,12 +11,13 @@ export enum TestResult {
   Positive
 }
 
-function normalize(img: tf.Tensor4D, mean: [number, number, number], std: [number, number, number], axis: number) {
+function normalize(img: tf.Tensor4D, mean: number[], std: number[], axis: number) {
   const centeredRgb = new Array(img.shape[axis]).fill(0).map((idx) =>
     tf.gather(img, [idx], axis)
       .sub(tf.scalar(mean[idx]))
       .div(tf.scalar(std[idx])));
-  return tf.concat(centeredRgb, axis)
+
+  return tf.concat(centeredRgb, axis);
 }
 
 export const evaluate = (score: number | null) => {
@@ -27,26 +28,36 @@ export const evaluate = (score: number | null) => {
 }
 
 const runClassifierAnalysis = async (testArea: TestArea): Promise<number | null> => {
-  if (!testArea.input || !testArea.area) return null;
+  if (!testArea.input_tf || !testArea.area) return null;
   const model = await modelPromise;
-  const [width, height] = model.inputs[0].shape?.slice(2, 4) ?? [];
-  const inputUnnormalized = tf.image.cropAndResize(
-    testArea.input,
-    [[
-      testArea.area.top,
-      testArea.area.left,
-      testArea.area.bottom,
-      testArea.area.right,
-    ]],
-    [0],
-    [height, width],
-  ).transpose<tf.Tensor4D>([0, 3, 1, 2]);
 
-  const input = normalize(inputUnnormalized, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225], 1);
+  const input_tf = tf.tidy(() => {
+    if (!testArea.input_tf || !testArea.area) throw new Error('testArea changed unexpectedly');
+
+    const [width, height] = model.inputs[0].shape?.slice(2, 4) ?? [];
+    const inputUnnormalized = tf.image.cropAndResize(
+      testArea.input_tf,
+      [[
+        testArea.area.top,
+        testArea.area.left,
+        testArea.area.bottom,
+        testArea.area.right,
+      ]],
+      [0],
+      [height, width],
+    ).transpose<tf.Tensor4D>([0, 3, 1, 2]);
+
+    return normalize(inputUnnormalized, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225], 1);
+  })
+
   const result_tf =
-    (await model.executeAsync(input)) as tf.Tensor1D;
+    (await model.executeAsync(input_tf)) as tf.Tensor1D;
 
   const output = Array.from(result_tf.dataSync())[0];
+
+  input_tf.dispose();
+  result_tf.dispose();
+
   return sigmoid(output);
 }
 
