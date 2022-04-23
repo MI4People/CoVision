@@ -22,9 +22,9 @@ function normalize(img: tf.Tensor4D, mean: [number, number, number], std: [numbe
 
 const evaluate = (result: number | null) => {
   if (result == null) return TestResult.Unknown;
-  if (result <= 0.2) return TestResult.Negative; // TODO adjust threshold
-  if (result >= 0.8) return TestResult.Positive; // TODO adjust threshold
-  return TestResult.Unknown;
+  // if (result <= 0.2) return TestResult.Negative; // TODO adjust threshold
+  // if (result >= 0.8) return TestResult.Positive; // TODO adjust threshold
+  return result > 0.5 ? TestResult.Positive : TestResult.Negative;
 }
 
 const runAnalysis = async (testArea: TestArea): Promise<number | null> => {
@@ -33,14 +33,14 @@ const runAnalysis = async (testArea: TestArea): Promise<number | null> => {
   const [width, height] = model.inputs[0].shape?.slice(2, 4) ?? [];
   const inputUnnormalized = tf.image.cropAndResize(
     testArea.input,
-    tf.tensor2d([[
-      testArea.area.left,
+    [[
       testArea.area.top,
+      testArea.area.left,
+      testArea.area.bottom,
       testArea.area.right,
-      testArea.area.bottom
-    ]]).mul<tf.Tensor2D>(640),
+    ]],
     [0],
-    [width, height],
+    [height, width],
   ).transpose<tf.Tensor4D>([0, 3, 1, 2]);
 
   const input = normalize(inputUnnormalized, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225], 1);
