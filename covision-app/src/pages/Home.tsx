@@ -5,12 +5,16 @@ import CovCamera from '../components/CovCamera';
 import { TestResult } from '../api/runClassifierAnalysis';
 import showWelcomeText from '../api/showWelcomeText';
 import usePipeline from '../api/usePipeline';
+import Scanner from '../components/Scanner';
+import { getInstruction } from '../data/instructions';
+import { useHistory } from 'react-router';
 
 showWelcomeText();
 
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
   const { result, classificationScore, detectionScore, area } = usePipeline(webcamRef) ?? {};
+  const history = useHistory();
 
   return (
     <IonPage>
