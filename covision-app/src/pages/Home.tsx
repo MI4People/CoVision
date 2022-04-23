@@ -5,6 +5,7 @@ import useYolov5Analysis from '../api/useYolov5Analysis';
 import CovCamera from '../components/CovCamera';
 import { getValidTestArea } from '../api/getValidTestArea';
 import useClassifierAnalysis, { TestResult } from '../api/useClassifierAnalysis';
+import Scanner from '../components/Scanner';
 
 const welcomeText =
   'Wilkommen bei CoVision. Richten Sie Ihre Kamera auf eine Covid Test Kasette um das Ergebnis zu erfahren oder auf den Barcode der Verpackung wenn Sie den Test noch nicht begonnen haben.';
@@ -59,6 +60,8 @@ const Home: React.FC = () => {
         )}
 
         <CovCamera ref={webcamRef} />
+
+        <Scanner target={webcamRef.current?.video} onDetected={console.log} />
         <IonButton href="/testInstructionOverview">Go to full test instruction</IonButton>
       </IonContent>
     </IonPage>

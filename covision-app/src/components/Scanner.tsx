@@ -1,12 +1,26 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Quagga from 'quagga';
 
-class Scanner extends Component {
-  componentDidMount() {
+type ScannerProps = {
+  target: Element | null | undefined;
+  onDetected: (data: {
+    codeResult: {
+      code: string;
+    };
+  }) => void;
+};
+
+const Scanner: React.FC<ScannerProps> = ({ target, onDetected }) => {
+  const onDetectedRef = useRef<ScannerProps['onDetected']>(onDetected);
+  onDetectedRef.current = onDetected;
+  useEffect(() => {
+    if (!target) return undefined;
+    console.log('init');
     Quagga.init(
       {
         inputStream: {
           type: 'LiveStream',
+          target,
           constraints: {
             width: 640,
             height: 320,
@@ -56,20 +70,17 @@ class Scanner extends Component {
         Quagga.start();
       }
     );
-    Quagga.onDetected(this._onDetected);
-  }
+    const handleDetected = (data) => {
+      console.log('data');
+      onDetectedRef.current(data);
+    };
+    Quagga.onDetected(handleDetected);
+    return () => {
+      Quagga.offDetected(handleDetected);
+    };
+  }, [target]);
 
-  componentWillUnmount() {
-    Quagga.offDetected(this._onDetected);
-  }
-
-  _onDetected = (result) => {
-    this.props.onDetected(result);
-  };
-
-  render() {
-    return <div id="interactive" className="viewport" />;
-  }
-}
+  return <div id="interactive" className="viewport" />;
+};
 
 export default Scanner;
