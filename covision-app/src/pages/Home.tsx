@@ -45,8 +45,9 @@ const Home: React.FC = () => {
             <IonCardContent>
               <IonText style={{ color: '#fff' }}>
                 <h2 role="alert">
-                  {testArea.area ? 'Test detected, result ' + TestResult[result] + '!' : 'Please scan a test'}
+                  {testArea.area ? 'Test detected, result ' + TestResult[result] + '. ' : 'Please scan a test'}
                 </h2>
+                {result === TestResult.Positive && <h2 role="alert">Please call 116 117 to schedule a PRC test.</h2>}
                 {false && ( // debug info
                   <h2>
                     {testArea.area ? 1 : 0} tests detected (highest score: {testArea.score}), result:{' '}
