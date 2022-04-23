@@ -90,6 +90,9 @@ const TestInstruction = () => {
         >
           {index < 0 ? <>Start</> : <>Weiter</>}
         </button>
+        <a href="/">
+          <button className="buttonHome">Home</button>
+        </a>
       </div>
       {timerRunning ? (
         <div className="timer">
