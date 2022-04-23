@@ -11,8 +11,11 @@ const useEverySecond = (callback: () => Promise<void>) => {
     let isActive = true;
     const addTimeout = () => {
       setTimeout(async () => {
-        await callback();
-        if (isActive) addTimeout();
+        try {
+          await callback();
+        } finally {
+          if (isActive) addTimeout();
+        }
       }, 1000);
     };
     addTimeout();

@@ -57,7 +57,7 @@ const Home: React.FC = () => {
                 <h2 role="alert">
                   {detectionScore !== -1 ? 'Test detected, result ' + TestResult[result] + '. ' : 'Please scan a test'}
                 </h2>
-                {result === TestResult.Positive && <h2 role="alert">Please call 116 117 to schedule a PRC test.</h2>}
+                {result === TestResult.Positive && <h2 role="alert">Please call 116 117 to schedule a PCR test.</h2>}
                 {false && ( // debug info
                   <h2>
                     {detectionScore !== -1 ? 1 : 0} tests detected (highest score: {detectionScore}), result:{' '}
