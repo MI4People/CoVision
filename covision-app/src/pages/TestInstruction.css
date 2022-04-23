@@ -1,55 +1,110 @@
-.pageContainer {
-  height: 100%;
-  width: 100%;
-}
-.header {
-  text-align: center;
-  font-size: x-large;
-}
 .subheader {
-  margin-top: 5vw;
-  text-align: center;
-  font-size: large;
+  position: absolute;
+  width: 40.513vw;
+  height: 6.154vw;
+  left: 29.744vw;
+  top: 18.718vw;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 5.128vw;
+  line-height: 6.154vw;
+
+  color: #000000;
 }
 .mainText {
   position: absolute;
-  top: 20vw;
-  padding-left: 10vw;
-  padding-right: 10vw;
+  width: 89.744vw;
+  height: 115.641vw;
+  left: 5.128vw;
+  top: 28.205vw;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 5.128vw;
+  line-height: 6.154vw;
+  display: flex;
+  align-items: center;
   text-align: center;
-  font-size: x-large;
+
+  color: #000000;
 }
-.buttons {
+.textFrame {
+  position: absolute;
+  width: 94.872vw;
+  height: 115.641vw;
+  left: 2.564vw;
+  top: 28.205vw;
+
+  border: 0.769vw solid #c4c4c4;
+  box-sizing: border-box;
+  border-radius: 2.051vw;
+}
+.timer {
+  position: absolute;
+  width: 13.333vw;
+  height: 6.154vw;
+  left: 43.333vw;
+  top: 148.462vw;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 5.128vw;
+  line-height: 6.154vw;
+
+  color: #000000;
+}
+/* .buttons {
   position: absolute;
   display: flex;
   top: 40vw;
   width: 100%;
   padding-left: 10vw;
   padding-right: 10vw;
-}
+} */
 .buttonPrev {
-  height: 5vw;
-  width: 100%;
-  background-color: #cfe9de;
-  color: gray;
-  font-size: large;
+  position: absolute;
+  width: 46.918vw;
+  height: 17.179vw;
+  left: 2.564vw;
+  top: 158.974vw;
+
+  font-style: normal;
   font-weight: 400;
-  border-radius: 5vw;
-  margin: 2px;
+  font-size: 5.128vw;
+  line-height: 6.154vw;
+  display: block;
+  align-items: center;
+  text-align: center;
+
+  color: #000000;
+
+  background: #c4c4c4;
+  border-radius: 2.051vw;
 }
 .buttonPrev:disabled {
   background-color: gray;
   color: black;
 }
 .buttonNext {
-  height: 5vw;
-  width: 100%;
-  background-color: #fec79a;
-  color: grey;
-  font-size: large;
+  position: absolute;
+  width: 46.918vw;
+  height: 17.179vw;
+  left: 50.518vw;
+  top: 158.974vw;
+
+  font-style: normal;
   font-weight: 400;
-  border-radius: 5vw;
-  margin: 2px;
+  font-size: 5.128vw;
+  line-height: 6.154vw;
+  display: block;
+  align-items: center;
+  text-align: center;
+
+  color: #000000;
+
+  background: #c4c4c4;
+  border-radius: 2.051vw;
 }
 .buttonNext:disabled {
   background-color: gray;
