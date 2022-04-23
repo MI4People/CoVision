@@ -23,7 +23,8 @@ const TestInstruction = () => {
       console.log('timer expired');
       const text =
         'Die Zeit von ' + instruction.time + ' ist vorüber. Sie werden zur Ergebnis Erkennung weiter geleitet.';
-      triggerInstruction(text);
+      window.alert(text);
+      // triggerInstruction(text);
       history.push('/');
     },
   });
@@ -38,41 +39,41 @@ const TestInstruction = () => {
     // triggerInstruction(text);
   }, [index, instruction.steps, instruction.time, instruction.timerTriggerStep, mainText]);
 
-  const triggerInstruction = (text) => {
-    const speech = new Speech();
-    if (speech.hasBrowserSupport()) {
-      console.log('speech synthesis supported');
+  // const triggerInstruction = (text) => {
+  //   const speech = new Speech();
+  //   if (speech.hasBrowserSupport()) {
+  //     console.log('speech synthesis supported');
 
-      speech
-        .init()
-        .then((data) => {
-          // The "data" object contains the list of available voices and the voice synthesis params
-          console.log('Speech is ready, voices are available', data);
+  //     speech
+  //       .init()
+  //       .then((data) => {
+  //         // The "data" object contains the list of available voices and the voice synthesis params
+  //         console.log('Speech is ready, voices are available', data);
 
-          speech
-            .speak({
-              text: text,
-              listeners: {
-                onstart: () => {
-                  setButtonsDisabled(true);
-                },
-                onend: () => {
-                  setButtonsDisabled(false);
-                },
-              },
-            })
-            .then(() => {
-              console.log('Success !');
-            })
-            .catch((e) => {
-              console.error('An error occurred :', e);
-            });
-        })
-        .catch((e) => {
-          console.error('An error occured while initializing : ', e);
-        });
-    }
-  };
+  //         speech
+  //           .speak({
+  //             text: text,
+  //             listeners: {
+  //               onstart: () => {
+  //                 setButtonsDisabled(true);
+  //               },
+  //               onend: () => {
+  //                 setButtonsDisabled(false);
+  //               },
+  //             },
+  //           })
+  //           .then(() => {
+  //             console.log('Success !');
+  //           })
+  //           .catch((e) => {
+  //             console.error('An error occurred :', e);
+  //           });
+  //       })
+  //       .catch((e) => {
+  //         console.error('An error occured while initializing : ', e);
+  //       });
+  //   }
+  // };
 
   const startTimer = () => {
     setTimerRunning(true);

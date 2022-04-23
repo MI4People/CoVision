@@ -1,28 +1,28 @@
 .subheader {
   position: absolute;
-  width: 40.513vw;
-  height: 6.154vw;
-  left: 29.744vw;
-  top: 18.718vw;
+  width: 8.229vw;
+  height: 1.25vw;
+  left: 45.885vw;
+  top: 3.802vw;
 
   font-style: normal;
   font-weight: 400;
-  font-size: 5.128vw;
-  line-height: 6.154vw;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
 
   color: #000000;
 }
 .mainText {
   position: absolute;
-  width: 89.744vw;
-  height: 115.641vw;
-  left: 5.128vw;
-  top: 28.205vw;
+  width: 18.229vw;
+  height: 23.49vw;
+  left: 40.885vw;
+  top: 5.729vw;
 
   font-style: normal;
   font-weight: 400;
-  font-size: 5.128vw;
-  line-height: 6.154vw;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
   display: flex;
   align-items: center;
   text-align: center;
@@ -31,21 +31,21 @@
 }
 .textFrame {
   position: absolute;
-  width: 94.872vw;
-  height: 115.641vw;
-  left: 2.564vw;
-  top: 28.205vw;
+  width: 19.271vw;
+  height: 23.49vw;
+  left: 40.365vw;
+  top: 5.729vw;
 
-  border: 0.769vw solid #c4c4c4;
+  border: 0.269vw solid #c4c4c4;
   box-sizing: border-box;
   border-radius: 2.051vw;
 }
 .timer {
   position: absolute;
-  width: 13.333vw;
-  height: 6.154vw;
-  left: 43.333vw;
-  top: 148.462vw;
+  width: 2.708vw;
+  height: 1.25vw;
+  left: 48.646vw;
+  top: 30.156vw;
 
   font-style: normal;
   font-weight: 400;
@@ -64,15 +64,15 @@
 } */
 .buttonPrev {
   position: absolute;
-  width: 46.918vw;
-  height: 17.179vw;
-  left: 2.564vw;
-  top: 158.974vw;
+  width: 9.53vw;
+  height: 3.49vw;
+  left: 40.365vw;
+  top: 32.292vw;
 
   font-style: normal;
   font-weight: 400;
-  font-size: 5.128vw;
-  line-height: 6.154vw;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
   display: block;
   align-items: center;
   text-align: center;
@@ -80,7 +80,7 @@
   color: #000000;
 
   background: #c4c4c4;
-  border-radius: 2.051vw;
+  border-radius: 0.417vw;
 }
 .buttonPrev:disabled {
   background-color: gray;
@@ -88,15 +88,15 @@
 }
 .buttonNext {
   position: absolute;
-  width: 46.918vw;
-  height: 17.179vw;
-  left: 50.518vw;
-  top: 158.974vw;
+  width: 9.53vw;
+  height: 3.49vw;
+  left: 50.105vw;
+  top: 32.292vw;
 
   font-style: normal;
   font-weight: 400;
-  font-size: 5.128vw;
-  line-height: 6.154vw;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
   display: block;
   align-items: center;
   text-align: center;
@@ -104,22 +104,124 @@
   color: #000000;
 
   background: #c4c4c4;
-  border-radius: 2.051vw;
+  border-radius: 0.417vw;
 }
 .buttonNext:disabled {
   background-color: gray;
   color: black;
 }
+
 @media screen and (max-width: 960px) {
-  .buttons {
-    top: 80vw;
-    padding-left: 0vw;
-    padding-right: 0vw;
+  .subheader {
+    position: absolute;
+    width: 40.513vw;
+    height: 6.154vw;
+    left: 29.744vw;
+    top: 18.718vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+
+    color: #000000;
   }
+  .mainText {
+    position: absolute;
+    width: 89.744vw;
+    height: 115.641vw;
+    left: 5.128vw;
+    top: 28.205vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+  }
+  .textFrame {
+    position: absolute;
+    width: 94.872vw;
+    height: 115.641vw;
+    left: 2.564vw;
+    top: 28.205vw;
+
+    border: 0.769vw solid #c4c4c4;
+    box-sizing: border-box;
+    border-radius: 2.051vw;
+  }
+  .timer {
+    position: absolute;
+    width: 13.333vw;
+    height: 6.154vw;
+    left: 43.333vw;
+    top: 148.462vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+
+    color: #000000;
+  }
+  /* .buttons {
+    position: absolute;
+    display: flex;
+    top: 40vw;
+    width: 100%;
+    padding-left: 10vw;
+    padding-right: 10vw;
+  } */
   .buttonPrev {
-    height: 10vw;
+    position: absolute;
+    width: 46.918vw;
+    height: 17.179vw;
+    left: 2.564vw;
+    top: 158.974vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+    display: block;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+
+    background: #c4c4c4;
+    border-radius: 2.051vw;
+  }
+  .buttonPrev:disabled {
+    background-color: gray;
+    color: black;
   }
   .buttonNext {
-    height: 10vw;
+    position: absolute;
+    width: 46.918vw;
+    height: 17.179vw;
+    left: 50.518vw;
+    top: 158.974vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+    display: block;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+
+    background: #c4c4c4;
+    border-radius: 2.051vw;
+  }
+  .buttonNext:disabled {
+    background-color: gray;
+    color: black;
   }
 }
