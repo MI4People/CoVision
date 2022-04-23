@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "covision-training"
+		},
+		{
+			"path": "classification_model_training"
 		}
 	],
 	"settings": {
