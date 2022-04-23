@@ -30,7 +30,8 @@ const Home: React.FC = () => {
         <div
           style={{
             position: 'absolute',
-            top: 'env(safe-area-inset-top)',
+            top: 0,
+            paddingTop: 'env(safe-area-inset-top)',
             left: 0,
             right: 0,
             display: 'flex',

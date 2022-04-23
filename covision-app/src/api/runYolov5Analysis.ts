@@ -2,9 +2,11 @@ import * as tf from "@tensorflow/tfjs";
 import { loadGraphModel } from "@tensorflow/tfjs-converter";
 import Webcam from "react-webcam";
 import { Rank } from "@tensorflow/tfjs";
+import warmUp from "./warmUp";
 
 const MODEL_URL = "assets/yolov5s_rapid_test_web_model/model.json";
 const modelPromise = loadGraphModel(MODEL_URL);
+warmUp(modelPromise);
 
 export type Yolov5AnalysisResult = {
   input_tf?: tf.Tensor<Rank.R4>,

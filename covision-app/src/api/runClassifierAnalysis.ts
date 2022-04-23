@@ -1,9 +1,11 @@
 import { loadGraphModel } from "@tensorflow/tfjs-converter";
 import { TestArea } from "./getValidTestArea";
 import * as tf from "@tensorflow/tfjs";
+import warmUp from "./warmUp";
 
 const MODEL_URL = "assets/classifier_model/model.json";
 const modelPromise = loadGraphModel(MODEL_URL);
+warmUp(modelPromise);
 
 export enum TestResult {
   Negative,
