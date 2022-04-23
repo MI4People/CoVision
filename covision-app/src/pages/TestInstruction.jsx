@@ -101,18 +101,14 @@ const TestInstruction = () => {
 
   return (
     <div className="pageContainer">
-      <div className="header">
+      {/* <div className="header">
         <IonText>Anleitung für Test {instruction.id}</IonText>
-      </div>
+      </div> */}
       <div className="subheader">
-        <IonText>
-          {' '}
-          Schritt {index + 1} von {numberOfSteps}
-        </IonText>
+        Schritt {index + 1} von {numberOfSteps}
       </div>
-      <div className="mainText">
-        <IonText>{displayedText}</IonText>
-      </div>
+      <div className="mainText">{displayedText}</div>
+      <div className="textFrame" />
       <div className="buttons">
         <button
           className="buttonPrev"
@@ -134,7 +130,7 @@ const TestInstruction = () => {
         </button>
       </div>
       {timerRunning ? (
-        <div style={{ fontSize: 'large', textAlign: 'center', padding: '10vw' }}>
+        <div className="timer">
           <span>{minutes}</span>:<span>{seconds}</span>
         </div>
       ) : (
