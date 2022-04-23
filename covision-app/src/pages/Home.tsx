@@ -1,19 +1,16 @@
 import { IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
 import { useRef } from 'react';
 import Webcam from 'react-webcam';
-import useYolov5Analysis from '../api/useYolov5Analysis';
 import CovCamera from '../components/CovCamera';
-import { getValidTestArea } from '../api/getValidTestArea';
-import useClassifierAnalysis, { TestResult } from '../api/useClassifierAnalysis';
+import { TestResult } from '../api/runClassifierAnalysis';
 import showWelcomeText from '../api/showWelcomeText';
+import usePipeline from '../api/usePipeline';
 
 showWelcomeText();
 
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
-  const analysis = useYolov5Analysis(webcamRef) ?? {};
-  const testArea = getValidTestArea(analysis);
-  const [result, score] = useClassifierAnalysis(testArea);
+  const { result, classificationScore, detectionScore, area } = usePipeline(webcamRef) ?? {};
 
   return (
     <IonPage>
@@ -45,13 +42,13 @@ const Home: React.FC = () => {
             <IonCardContent>
               <IonText style={{ color: '#fff' }}>
                 <h2 role="alert">
-                  {testArea.area ? 'Test detected, result ' + TestResult[result] + '. ' : 'Please scan a test'}
+                  {detectionScore !== -1 ? 'Test detected, result ' + TestResult[result] + '. ' : 'Please scan a test'}
                 </h2>
                 {result === TestResult.Positive && <h2 role="alert">Please call 116 117 to schedule a PRC test.</h2>}
                 {false && ( // debug info
                   <h2>
-                    {testArea.area ? 1 : 0} tests detected (highest score: {testArea.score}), result:{' '}
-                    {TestResult[result]} (score: {score})
+                    {detectionScore !== -1 ? 1 : 0} tests detected (highest score: {detectionScore}), result:{' '}
+                    {TestResult[result]} (score: {classificationScore})
                   </h2>
                 )}
               </IonText>
@@ -59,7 +56,7 @@ const Home: React.FC = () => {
           </IonCard>
         </div>
 
-        {testArea.area && (
+        {area && (
           <div
             style={{
               position: 'absolute',
@@ -68,10 +65,10 @@ const Home: React.FC = () => {
               borderStyle: 'solid',
               borderRadius: 8,
               zIndex: 10000,
-              top: testArea.area.top * 100 + '%',
-              bottom: (1 - testArea.area.bottom) * 100 + '%',
-              left: testArea.area.left * 100 + '%',
-              right: (1 - testArea.area?.right) * 100 + '%',
+              top: area.top * 100 + '%',
+              bottom: (1 - area.bottom) * 100 + '%',
+              left: area.left * 100 + '%',
+              right: (1 - area.right) * 100 + '%',
             }}
           ></div>
         )}

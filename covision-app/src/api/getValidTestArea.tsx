@@ -1,4 +1,4 @@
-import { Yolov5AnalysisResult } from './useYolov5Analysis';
+import { Yolov5AnalysisResult } from './runYolov5Analysis';
 
 export type TestArea = {
   score: number;

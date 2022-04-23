@@ -1,4 +1,3 @@
-import { MutableRefObject, useCallback, useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { loadGraphModel } from "@tensorflow/tfjs-converter";
 import Webcam from "react-webcam";
@@ -15,26 +14,11 @@ export type Yolov5AnalysisResult = {
   valid_detections?: number;
 }
 
-const useEverySecond = (callback: () => Promise<void>) => {
-  useEffect(() => {
-    let isActive = true;
-    const addTimeout = () => {
-      setTimeout(async () => {
-        await callback();
-        if (isActive)
-          addTimeout();
-      }, 1000);
-    };
-    addTimeout();
-    return () => { isActive = false };
-  }, [callback]);
-};
-
-const runAnalysis = async (webcam: Webcam): Promise<Yolov5AnalysisResult | null> => {
+const runYolov5Analysis = async (webcam: Webcam): Promise<Yolov5AnalysisResult> => {
   const model = await modelPromise;
   const [width, height] = model.inputs[0].shape?.slice(1, 3) ?? [];
   const canvas = webcam.getCanvas({ width, height });
-  if (!canvas) return null;
+  if (!canvas) throw new Error('could not take screenshot');
 
   const input = tf.browser.fromPixels(canvas).div(255.0).expandDims<tf.Tensor4D>();
   const [boxes_tf, scores_tf, classes_tf, valid_detections_tf] =
@@ -47,15 +31,4 @@ const runAnalysis = async (webcam: Webcam): Promise<Yolov5AnalysisResult | null>
   return { input, boxes, scores, classes, valid_detections }
 };
 
-const useYolov5Analysis = (webcamRef: MutableRefObject<Webcam | null>) => {
-  const [lastResult, setLastResult] = useState<Yolov5AnalysisResult | null>(null);
-  useEverySecond(
-    useCallback(async () => {
-      if (!webcamRef.current) return;
-      setLastResult(await runAnalysis(webcamRef.current));
-    }, [webcamRef])
-  );
-  return lastResult;
-}
-
-export default useYolov5Analysis;
+export default runYolov5Analysis;
