@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import instructions from '../data/instructions';
 import Speech from 'speak-tts';
@@ -15,6 +15,7 @@ const TestInstruction = () => {
   const [buttonsDisabled, setButtonsDisabled] = useState(false);
   const [timerRunning, setTimerRunning] = useState(false);
   let history = useHistory();
+  const mainText = React.createRef();
 
   const { seconds, minutes, restart } = useTimer({
     testTime,
@@ -28,6 +29,7 @@ const TestInstruction = () => {
   });
 
   useEffect(() => {
+    mainText.current.focus();
     let text = instruction.steps[index];
     if (index === instruction.timerTriggerStep) {
       text = text + 'Ein timer von ' + instruction.time + ' Minuten wurde gesetzt.';
@@ -100,12 +102,12 @@ const TestInstruction = () => {
 
   return (
     <div className="pageContainer">
-      <Fragment>
-        {/* <div className="subheader"> */}
+      <div className="subheader">
         Schritt {index + 1} von {numberOfSteps}
-        {/* </div> */}
-      </Fragment>
-      <div className="mainText">{displayedText}</div>
+      </div>
+      <div className="mainText" ref={mainText}>
+        {displayedText}
+      </div>
       <div className="textFrame" />
       <div className="buttons">
         <button
