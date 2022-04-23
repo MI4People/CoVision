@@ -1,11 +1,10 @@
 import { IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
 import CovCamera from '../components/CovCamera';
 import { TestResult } from '../api/runClassifierAnalysis';
 import showWelcomeText from '../api/showWelcomeText';
 import usePipeline from '../api/usePipeline';
-import Scanner from '../components/Scanner';
 import { getInstruction } from '../data/instructions';
 import { useHistory } from 'react-router';
 
@@ -13,8 +12,18 @@ showWelcomeText();
 
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
-  const { result, classificationScore, detectionScore, area } = usePipeline(webcamRef) ?? {};
+  const { result, classificationScore, detectionScore, area, barcodeResult } = usePipeline(webcamRef) ?? {};
   const history = useHistory();
+
+  useEffect(() => {
+    if (!barcodeResult) return;
+
+    let index = getInstruction(barcodeResult.codeResult?.code);
+    console.log(barcodeResult, 'tada');
+    if (index !== -1) {
+      history.push('/testInstruction/' + index);
+    }
+  }, [barcodeResult, history]);
 
   return (
     <IonPage>
@@ -78,16 +87,6 @@ const Home: React.FC = () => {
         )}
 
         <CovCamera ref={webcamRef} />
-
-        <Scanner
-          target={webcamRef.current?.video}
-          onDetected={(data) => {
-            let index = getInstruction(data.codeResult.code);
-            if (index !== -1) {
-              history.push('/testInstruction/' + index);
-            }
-          }}
-        />
       </IonContent>
     </IonPage>
   );

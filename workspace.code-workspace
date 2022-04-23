@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "classification_model_training"
+		},
+		{
+			"path": "covision-website"
 		}
 	],
 	"settings": {
