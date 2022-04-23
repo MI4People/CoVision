@@ -1,3 +1,4 @@
+from configparser import Interpolation
 import os
 from sklearn import metrics
 import torch
@@ -10,6 +11,8 @@ import numpy as np
 import json
 import matplotlib.pyplot as plt
 from datetime import datetime
+import cv2
+from torchvision import transforms
 
 from efficientnet_pytorch import EfficientNet
 from utils.data import ClassificationDataset
@@ -23,8 +26,10 @@ def train(mean, std, fold, training_data_path, gt, num_classes, metric, device, 
     mean = mean
     std = std
 
-    df_train = df[df.kfold != fold].reset_index(drop=True)
-    df_val = df[df.kfold == fold].reset_index(drop=True)
+
+    df_train = df[df.fold != fold].reset_index(drop=True)
+    df_val = df[df.fold == fold].reset_index(drop=True)
+
 
     print()
     print("use_pretrained: ", pretrained_on_ImageNet)
@@ -32,35 +37,28 @@ def train(mean, std, fold, training_data_path, gt, num_classes, metric, device, 
 
     if pretrained_on_ImageNet:
         print("Using on ImageNet pretrained model")
-        model = EfficientNet.from_pretrained("efficientnet-b2", in_channels = 1, num_classes = num_classes)
-    
-    elif pretrained_own is not None:
-        model = EfficientNet.from_name('efficientnet-b2', in_channels = 1, num_classes = num_classes)
-        checkpoint = torch.load(pretrained_own)
-        print(len(checkpoint.keys()))
-        print()
-        model.load_state_dict(checkpoint)
+        model = EfficientNet.from_pretrained("efficientnet-b2", in_channels = 3, num_classes = num_classes)
+        # model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=True, num_classes=1, force_reload=True)
     
     else:
         print("Using NOT pretrained model")
-        model = EfficientNet.from_name('efficientnet-b2', in_channels = 1, num_classes = num_classes)
+        model = EfficientNet.from_name('efficientnet-b2', in_channels = 3, num_classes = num_classes)
+        # model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=False, num_classes=1)
     
     model.to(device)
 
     # Set up the train_loader and val_loader
-    train_aug = albumentations.Compose(
-        [
-            albumentations.Normalize(mean, std, max_pixel_value=255.0, always_apply=True),
-            albumentations.ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.1, rotate_limit=15),
-            albumentations.Flip(p=0.5)
-        ]
-    )
+    train_aug = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
 
-    val_aug = albumentations.Compose(
-        [
-            albumentations.Normalize(mean, std, max_pixel_value=255.0, always_apply=True)
-        ]
-    )
+    val_aug = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
 
     train_images = df_train.image.values.tolist()
     train_images = [os.path.join(training_data_path, i) for i in train_images]
@@ -130,18 +128,23 @@ def train(mean, std, fold, training_data_path, gt, num_classes, metric, device, 
 
         assert np.array_equal(targets, val_targets), "targets from val_loop are not equal to val_targets (source of the validation data)"
 
-        if num_classes == 1:
-            predictions = np.vstack((predictions)).ravel()
+        print()
+        print("targets: ", targets)
+        print("predictions: ", predictions)
+        print()
 
         if num_classes == 1:
+            predictions = np.vstack((predictions)).ravel()
             f1_score = metrics.f1_score(targets, predictions)
-            auc = metrics.roc_auc_score(targets, predictions)
+            accuracy = metrics.accuracy_score(targets, predictions)
+            # auc = metrics.roc_auc_score(targets, predictions)
+
         else:
             f1_score = metrics.f1_score(targets, predictions, average='micro')
             #auc = metrics.roc_auc_score(targets, predictions, multi_class ="ovr")
             auc = "needs to be debugged"
 
-        print(f"Epoch = {epoch+1}, AUC = {auc}, F1_Score = {f1_score}")
+        print(f"Epoch = {epoch+1}, accuracy = {accuracy}, F1_Score = {f1_score}")
     
         # Learning rate scheduler improves according to chosen metric
         if metric == "auc":
@@ -154,14 +157,14 @@ def train(mean, std, fold, training_data_path, gt, num_classes, metric, device, 
         elif metric == "f1_score":
             scheduler.step(f1_score)
         
-            if all(f1_score > i for i in f1_score_for_model_saving_list) and epoch >= 15:
-                torch.save(model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.bin"))
+            if all(f1_score > i for i in f1_score_for_model_saving_list) and epoch >= 3:
+                torch.save(model.state_dict(), os.path.join(outdir, f"model_fold_{fold}_{epoch}.bin"))
                 print("Model with improved f1_score saved to outdir")
 
         elif metric == "accuracy":
             scheduler.step(accuracy)
         
-            if all(accuracy > i for i in f1_score_for_model_saving_list) and epoch >= 15:
+            if all(accuracy > i for i in f1_score_for_model_saving_list) and epoch >= 3:
                 torch.save(model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.bin"))
                 print("Model with improved accuracy saved to outdir")
 
@@ -171,7 +174,6 @@ def train(mean, std, fold, training_data_path, gt, num_classes, metric, device, 
         val_loss_list.append(val_loss)
         accuracy_list.append(accuracy)
         f1_score_list.append(f1_score)
-        auc_list.append(auc)
 
 
     # Make a function for the following lines
@@ -216,8 +218,8 @@ if __name__ == "__main__" :
 
     parser.add_argument("--device", type=str, default="cuda")
     parser.add_argument("--epochs", type=int, default=80, help="number of epochs")
-    parser.add_argument("--train_batch", type=int, default=64, help="batch size for training")
-    parser.add_argument("--val_batch", type=int, default=64, help="batch size for validation")
+    parser.add_argument("--train_batch", type=int, default=16, help="batch size for training")
+    parser.add_argument("--val_batch", type=int, default=16, help="batch size for validation")
     parser.add_argument("--lr", type=int, default=1e-3)
     parser.add_argument("--pretrained_own", type=str, help="path to a pretrained model (.bin)")
     parser.add_argument("--metric", type=str, default="f1_score", help="The metric on which to save improved models - (f1_score,auc, precision)")
@@ -244,16 +246,17 @@ if __name__ == "__main__" :
 
     print(epoch)
 
-    open(os.path.join(opt.outdir, f'training_options{opt.fold}.txt'), 'w').close()
+    # open(os.path.join(opt.outdir, f'training_options{opt.fold}.txt'), 'w').close()
 
-    with open(os.path.join(opt.outdir, f'training_options{opt.fold}.txt'), 'a') as f:
-        json.dump(json_object, f)
+    # with open(os.path.join(opt.outdir, f'training_options{opt.fold}.txt'), 'a') as f:
+    #     json.dump(json_object, f)
     
     starting_time = datetime.now()
 
     starting_time = starting_time.strftime("%H:%M:%S")
     print("Starting Time =", starting_time)
 
-    mean, std = get_mean_std(opt.dataset)
+    mean = mean=[0.485, 0.456, 0.406]
+    std = std=[0.229, 0.224, 0.225]
 
     train(mean, std, opt.fold, opt.dataset, opt.gt, opt.num_classes, opt.metric, opt.device, opt.epochs, opt.train_batch, opt.val_batch, opt.outdir, opt.lr, opt.pretrained_on_ImageNet, opt.pretrained_own)

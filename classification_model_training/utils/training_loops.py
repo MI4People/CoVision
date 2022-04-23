@@ -61,6 +61,7 @@ def val_loop(model, num_classes, device, val_loader, loss_function):
 
             if num_classes == 1:
                 curr_loss = loss_function(torch.flatten(output),target)
+                # curr_loss = loss_function(output, target)
             else:
                 curr_loss = loss_function(output, target)
             

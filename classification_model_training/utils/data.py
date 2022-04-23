@@ -36,12 +36,11 @@ class ClassificationDataset():
         
         if self.backend == "pil":
             image = Image.open(self.image_paths[item])
-            image = np.array(image)
-            image = np.array([image])
+            
             if self.augmentations is not None:
-                augmented = self.augmentations(image=image)
-                image = augmented["image"]
+                image = self.augmentations(image)
+                # image = augmented["image"]
         else:
             raise Exception("Backend not implemented")
 
-        return torch.tensor(image), torch.tensor(target)
+        return image, target
