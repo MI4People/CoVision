@@ -17,7 +17,7 @@ const TestInstruction = () => {
   const [timerRunning, setTimerRunning] = useState(false);
   let history = useHistory();
 
-  const { seconds, minutes, hours, days, isRunning, start, pause, resume, restart } = useTimer({
+  const { seconds, minutes, restart } = useTimer({
     testTime,
     onExpire: () => {
       console.log('timer expired');
@@ -35,7 +35,7 @@ const TestInstruction = () => {
     }
     setDisplayedText(text);
     // triggerInstruction(text);
-  }, [index]);
+  }, [index, instruction.steps, instruction.time, instruction.timerTriggerStep]);
 
   const triggerInstruction = (text) => {
     const speech = new Speech();
