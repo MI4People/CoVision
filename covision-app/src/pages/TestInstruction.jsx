@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import instructions from '../data/instructions';
-import { IonText } from '@ionic/react';
 import Speech from 'speak-tts';
 import './TestInstruction.css';
 import { useTimer } from 'react-timer-hook';
