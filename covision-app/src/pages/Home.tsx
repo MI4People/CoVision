@@ -6,7 +6,7 @@ import CovCamera from '../components/CovCamera';
 
 const welcomeText =
   'Wilkommen bei CoVision. Richten Sie Ihre Kamera auf eine Covid Test Kasette um das Ergebnis zu erfahren oder auf den Barcode der Verpackung wenn Sie den Test noch nicht begonnen haben.';
-window.alert(welcomeText);
+// window.alert(welcomeText);
 
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
