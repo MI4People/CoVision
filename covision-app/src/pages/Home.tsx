@@ -19,7 +19,6 @@ const Home: React.FC = () => {
     if (!barcodeResult) return;
 
     let index = getInstruction(barcodeResult.codeResult?.code);
-    console.log(barcodeResult, 'tada');
     if (index !== -1) {
       history.push('/testInstruction/' + index);
     }

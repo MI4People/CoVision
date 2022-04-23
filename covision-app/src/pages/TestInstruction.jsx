@@ -15,12 +15,9 @@ const TestInstruction = () => {
   let history = useHistory();
   const mainText = React.useRef();
 
-  console.log(id);
-
   const { seconds, minutes, restart } = useTimer({
     testTime,
     onExpire: () => {
-      console.log('timer expired');
       const text =
         'Die Zeit von ' + instruction.time + ' ist vorüber. Sie werden zur Ergebnis Erkennung weiter geleitet.';
       window.alert(text);
