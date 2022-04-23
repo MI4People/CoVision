@@ -49,7 +49,6 @@ export function getInstruction(eanCode) {
   let result = -1;
   instructions.forEach((instruction, index) => {
     if (instruction.eanCode.includes(eanCode)) {
-      console.log(index);
       result = index;
     }
   });

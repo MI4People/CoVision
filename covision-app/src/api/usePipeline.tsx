@@ -4,14 +4,18 @@ import { getValidTestArea, TestArea } from './getValidTestArea';
 import runClassifierAnalysis, { evaluate, TestResult } from './runClassifierAnalysis';
 import runYolov5Analysis from './runYolov5Analysis';
 import * as tf from '@tensorflow/tfjs';
+import { BarcodeScanResult, runBarcodeScan } from './runBarcodeScan';
 
 const useEverySecond = (callback: () => Promise<void>) => {
   useEffect(() => {
     let isActive = true;
     const addTimeout = () => {
       setTimeout(async () => {
-        await callback();
-        if (isActive) addTimeout();
+        try {
+          await callback();
+        } finally {
+          if (isActive) addTimeout();
+        }
       }, 1000);
     };
     addTimeout();
@@ -26,6 +30,7 @@ type AnalysisResult = {
   detectionScore: number;
   classificationScore?: number | null;
   area?: TestArea['area'];
+  barcodeResult?: BarcodeScanResult;
 };
 
 const usePipeline = (webcamRef: MutableRefObject<Webcam | null>) => {
@@ -41,7 +46,19 @@ const usePipeline = (webcamRef: MutableRefObject<Webcam | null>) => {
       const result = evaluate(classificationScore);
       tf.engine().endScope();
 
-      setLastResult({ result, classificationScore, detectionScore: testArea.score, area: testArea.area });
+      const screenshot = webcamRef.current.getScreenshot({ width: 320, height: 640 });
+      let barcodeResult;
+      if (screenshot) {
+        barcodeResult = await runBarcodeScan(screenshot);
+      }
+
+      setLastResult({
+        result,
+        classificationScore,
+        detectionScore: testArea.score,
+        area: testArea.area,
+        barcodeResult,
+      });
     }, [webcamRef])
   );
   return lastResult;

@@ -15,13 +15,16 @@ const TestInstruction = () => {
   let history = useHistory();
   const mainText = React.useRef();
 
-  console.log(id);
-
   const { seconds, minutes, restart } = useTimer({
     testTime,
     onExpire: () => {
+<<<<<<< HEAD
       console.log('timer expired');
       const text = 'The time of ' + instruction.time + ' is over. You will be redirected to the result detection.';
+=======
+      const text =
+        'Die Zeit von ' + instruction.time + ' ist vorüber. Sie werden zur Ergebnis Erkennung weiter geleitet.';
+>>>>>>> 7179c9ba2b0f3ed5b7460e812f833ef2b589cc00
       window.alert(text);
       history.push('/');
     },
