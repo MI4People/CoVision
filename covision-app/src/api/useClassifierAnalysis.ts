@@ -47,8 +47,12 @@ const runAnalysis = async (testArea: TestArea): Promise<number | null> => {
   const result_tf =
     (await model.executeAsync(input)) as tf.Tensor1D;
 
-  const result = Array.from(result_tf.dataSync())[0];
-  return result;
+  const output = Array.from(result_tf.dataSync())[0];
+  return sigmoid(output);
+}
+
+const sigmoid = (z: number) => {
+  return 1 / (1 + Math.exp(-z));
 }
 
 const useClassifierAnalysis = (testArea: TestArea) => {
