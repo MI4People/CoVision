@@ -1,25 +1,16 @@
 import { IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
 import { useRef } from 'react';
 import Webcam from 'react-webcam';
-import useYolov5Analysis, { Yolov5AnalysisResult } from '../api/useYolov5Analysis';
+import useYolov5Analysis from '../api/useYolov5Analysis';
 import CovCamera from '../components/CovCamera';
-
-const getValidTestArea = (analysis: Yolov5AnalysisResult) => {
-  if (!analysis.scores || !analysis.boxes) return null;
-  for (let i = 0; i < 100; i += 1) {
-    const hasTest = (analysis.scores[i] ?? -1) >= 0.6; // threshold
-    if (hasTest) {
-      const [topLeft, topRight, bottomLeft, bottomRight] = analysis.boxes.slice(i * 4, i * 4 + 4);
-      return { score: analysis.scores[i], topLeft, topRight, bottomLeft, bottomRight };
-    }
-  }
-};
+import { getValidTestArea } from '../api/getValidTestArea';
+import useClassifierAnalysis, { TestResult } from '../api/useClassifierAnalysis';
 
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
   const analysis = useYolov5Analysis(webcamRef) ?? {};
-  const test = getValidTestArea(analysis);
-  console.log(test);
+  const testArea = getValidTestArea(analysis);
+  const result = useClassifierAnalysis(testArea);
 
   return (
     <IonPage>
@@ -37,11 +28,31 @@ const Home: React.FC = () => {
           <IonCard>
             <IonCardContent>
               <IonText color="primary">
-                <h1>{(test ? 1 : 0) + ' tests detected'}</h1>
+                <h1>
+                  {testArea.area ? 1 : 0} tests detected (highest score: {testArea.score}), result: {TestResult[result]}
+                </h1>
               </IonText>
             </IonCardContent>
           </IonCard>
         </div>
+
+        {testArea.area && (
+          <div
+            style={{
+              position: 'absolute',
+              borderWidth: 4,
+              borderColor: 'red',
+              borderStyle: 'solid',
+              borderRadius: 8,
+              zIndex: 10000,
+              top: testArea.area.top * 100 + '%',
+              bottom: (1 - testArea.area.bottom) * 100 + '%',
+              left: testArea.area.left * 100 + '%',
+              right: (1 - testArea.area?.right) * 100 + '%',
+            }}
+          ></div>
+        )}
+
         <CovCamera ref={webcamRef} />
       </IonContent>
     </IonPage>
