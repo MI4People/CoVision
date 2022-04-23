@@ -36,7 +36,7 @@ const TestInstruction = () => {
     }
     setDisplayedText(text);
     // triggerInstruction(text);
-  }, [index, instruction.steps, instruction.time, instruction.timerTriggerStep]);
+  }, [index, instruction.steps, instruction.time, instruction.timerTriggerStep, mainText]);
 
   const triggerInstruction = (text) => {
     const speech = new Speech();
