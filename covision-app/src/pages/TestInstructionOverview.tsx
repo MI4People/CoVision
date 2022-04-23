@@ -13,6 +13,11 @@ const TestInstructionOverview: React.FC = () => {
           Another Test
         </IonButton>
       </div>
+      <div>
+        <IonButton expand="block" href="/barcodeScanner">
+          go to barcode scanner
+        </IonButton>
+      </div>
     </>
   );
 };

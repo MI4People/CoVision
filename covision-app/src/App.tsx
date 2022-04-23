@@ -4,6 +4,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import TestInstructionOverview from './pages/TestInstructionOverview';
 import TestInstruction from './pages/TestInstruction';
+import BarcodeScanner from './pages/BarcodeScanner';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -30,6 +31,9 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
+        <Route exact path="/barcodeScanner">
+          <BarcodeScanner />
+        </Route>
         <Route exact path="/testInstruction/:id">
           <TestInstruction />
         </Route>
