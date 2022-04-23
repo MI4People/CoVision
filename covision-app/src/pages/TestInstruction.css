@@ -1,0 +1,250 @@
+.pageContainer {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+}
+.subheader {
+  position: absolute;
+  width: 8.229vw;
+  height: 1.25vw;
+  left: 45.885vw;
+  top: 3.802vw;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
+
+  color: #000000;
+}
+.mainText {
+  position: absolute;
+  width: 18.229vw;
+  height: 23.49vw;
+  left: 40.885vw;
+  top: 5.729vw;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #000000;
+}
+.textFrame {
+  position: absolute;
+  width: 19.271vw;
+  height: 23.49vw;
+  left: 40.365vw;
+  top: 5.729vw;
+
+  border: 0.269vw solid #c4c4c4;
+  box-sizing: border-box;
+  border-radius: 2.051vw;
+}
+.timer {
+  position: absolute;
+  width: 2.708vw;
+  height: 1.25vw;
+  left: 48.646vw;
+  top: 30.156vw;
+
+  /* font-family: 'Inter'; */
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
+
+  color: #000000;
+}
+.buttonPrev {
+  position: absolute;
+  width: 9.53vw;
+  height: 3.49vw;
+  left: 40.365vw;
+  top: 32.292vw;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
+  display: block;
+  align-items: center;
+  text-align: center;
+
+  color: #000000;
+
+  background: #c4c4c4;
+  border-radius: 0.417vw;
+}
+.buttonNext {
+  position: absolute;
+  width: 9.53vw;
+  height: 3.49vw;
+  left: 50.105vw;
+  top: 32.292vw;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
+  display: block;
+  align-items: center;
+  text-align: center;
+
+  color: #000000;
+
+  background: #c4c4c4;
+  border-radius: 0.417vw;
+}
+.buttonHome {
+  position: absolute;
+  width: 19.271vw;
+  height: 3.49vw;
+  left: 40.365vw;
+  top: 35.99vw;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.042vw;
+  line-height: 1.25vw;
+  display: block;
+  align-items: center;
+  text-align: center;
+
+  color: #000000;
+
+  background: #c4c4c4;
+  border-radius: 0.417vw;
+}
+
+@media screen and (max-width: 960px) {
+  .subheader {
+    position: absolute;
+    width: 40.513vw;
+    height: 6.154vw;
+    left: 29.744vw;
+    top: 18.718vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+
+    color: #000000;
+  }
+  .mainText {
+    position: absolute;
+    width: 89.744vw;
+    height: 115.641vw;
+    left: 5.128vw;
+    top: 28.205vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+  }
+  .textFrame {
+    position: absolute;
+    width: 94.872vw;
+    height: 115.641vw;
+    left: 2.564vw;
+    top: 28.205vw;
+
+    border: 0.769vw solid #c4c4c4;
+    box-sizing: border-box;
+    border-radius: 2.051vw;
+  }
+  .timer {
+    position: absolute;
+    width: 13.333vw;
+    height: 6.154vw;
+    left: 43.333vw;
+    top: 148.462vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+
+    color: #000000;
+  }
+  /* .buttons {
+    position: absolute;
+    display: flex;
+    top: 40vw;
+    width: 100%;
+    padding-left: 10vw;
+    padding-right: 10vw;
+  } */
+  .buttonPrev {
+    position: absolute;
+    width: 46.918vw;
+    height: 17.179vw;
+    left: 2.564vw;
+    top: 158.974vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+    display: block;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+
+    background: #c4c4c4;
+    border-radius: 2.051vw;
+  }
+
+  .buttonNext {
+    position: absolute;
+    width: 46.918vw;
+    height: 17.179vw;
+    left: 50.518vw;
+    top: 158.974vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+    display: block;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+
+    background: #c4c4c4;
+    border-radius: 2.051vw;
+  }
+  .buttonHome {
+    position: absolute;
+    width: 94.872vw;
+    height: 17.179vw;
+    left: 2.564vw;
+    top: 177.179vw;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 5.128vw;
+    line-height: 6.154vw;
+    display: block;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+
+    background: #c4c4c4;
+    border-radius: 2.051vw;
+  }
+}

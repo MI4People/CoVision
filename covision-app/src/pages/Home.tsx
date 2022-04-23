@@ -74,6 +74,16 @@ const Home: React.FC = () => {
         )}
 
         <CovCamera ref={webcamRef} />
+
+        <Scanner
+          target={webcamRef.current?.video}
+          onDetected={(data) => {
+            let index = getInstruction(data.codeResult.code);
+            if (index !== -1) {
+              history.push('/testInstruction/' + index);
+            }
+          }}
+        />
       </IonContent>
     </IonPage>
   );
