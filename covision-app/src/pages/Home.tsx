@@ -27,7 +27,7 @@ const Home: React.FC = () => {
             right: 0,
             display: 'flex',
             justifyContent: 'center',
-            background: 'linear-gradient(0deg, rgba(24,24,24,0) 0%, rgba(24,24,24,1) 100%);',
+            background: 'linear-gradient(0deg, rgba(24,24,24,0) 0%, rgba(24,24,24,1) 100%)',
           }}
         >
           <img style={{ height: 80 }} src="/assets/logo.png" alt="CoVision" />
