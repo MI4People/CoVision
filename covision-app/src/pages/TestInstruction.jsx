@@ -3,6 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import instructions from '../data/instructions';
 import './TestInstruction.css';
 import { useTimer } from 'react-timer-hook';
+import { IonInfiniteScroll, IonContent } from '@ionic/react';
 
 const TestInstruction = () => {
   const { id } = useParams();
@@ -61,50 +62,52 @@ const TestInstruction = () => {
   };
 
   return (
-    <div className="pageContainer">
-      <div className="subheader">
-        Step {index + 1} out of {numberOfSteps}
-      </div>
-      <div className="mainText" ref={mainText}>
-        {displayedText}
-      </div>
-
-      <div className="textFrame" />
-      <div className="buttons">
-        <button
-          className="buttonPrev"
-          onClick={() => {
-            prevStep();
-          }}
-        >
-          Back
-        </button>
-        <button
-          className="buttonNext"
-          onClick={() => {
-            nextStep();
-          }}
-        >
-          {index < 0 ? <>Start</> : <>Next</>}
-        </button>
-        <a href="/">
-          <button className="buttonHome">Home</button>
-        </a>
-      </div>
-      {timerRunning ? (
-        <div className="timer">
-          <span>{minutes}</span>:
-          <span>
-            {seconds.toLocaleString('en-US', {
-              minimumIntegerDigits: 2,
-              useGrouping: false,
-            })}
-          </span>
+    <IonContent>
+      <IonInfiniteScroll>
+        <div className="subheader">
+          Step {index + 1} out of {numberOfSteps}
         </div>
-      ) : (
-        <></>
-      )}
-    </div>
+        <div className="mainText" ref={mainText}>
+          {displayedText}
+        </div>
+
+        <div className="textFrame" />
+        <div className="buttons">
+          <button
+            className="buttonPrev"
+            onClick={() => {
+              prevStep();
+            }}
+          >
+            Back
+          </button>
+          <button
+            className="buttonNext"
+            onClick={() => {
+              nextStep();
+            }}
+          >
+            {index < 0 ? <>Start</> : <>Next</>}
+          </button>
+          <a href="/">
+            <button className="buttonHome">Home</button>
+          </a>
+        </div>
+        {timerRunning ? (
+          <div className="timer">
+            <span>{minutes}</span>:
+            <span>
+              {seconds.toLocaleString('en-US', {
+                minimumIntegerDigits: 2,
+                useGrouping: false,
+              })}
+            </span>
+          </div>
+        ) : (
+          <></>
+        )}
+      </IonInfiniteScroll>
+    </IonContent>
   );
 };
 
