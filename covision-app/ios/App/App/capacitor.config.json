@@ -1,0 +1,6 @@
+{
+	"appId": "app.covision",
+	"appName": "covision-app",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
