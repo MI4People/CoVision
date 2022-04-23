@@ -5,6 +5,9 @@ import useYolov5Analysis from '../api/useYolov5Analysis';
 import CovCamera from '../components/CovCamera';
 import { getValidTestArea } from '../api/getValidTestArea';
 import useClassifierAnalysis, { TestResult } from '../api/useClassifierAnalysis';
+import showWelcomeText from '../api/showWelcomeText';
+
+showWelcomeText();
 
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
@@ -41,7 +44,9 @@ const Home: React.FC = () => {
           <IonCard>
             <IonCardContent>
               <IonText style={{ color: '#fff' }}>
-                <h2>{testArea.area ? 'Test detected, result ' + TestResult[result] + '!' : 'Please scan a test'}</h2>
+                <h2 role="alert">
+                  {testArea.area ? 'Test detected, result ' + TestResult[result] + '!' : 'Please scan a test'}
+                </h2>
                 {false && ( // debug info
                   <h2>
                     {testArea.area ? 1 : 0} tests detected (highest score: {testArea.score}), result:{' '}
