@@ -4,7 +4,6 @@ import instructions from '../data/instructions';
 import Speech from 'speak-tts';
 import './TestInstruction.css';
 import { useTimer } from 'react-timer-hook';
-import { FocusScope } from '@react-aria/focus';
 
 const TestInstruction = () => {
   const { id } = useParams();
@@ -106,40 +105,38 @@ const TestInstruction = () => {
       <div className="subheader">
         Schritt {index + 1} von {numberOfSteps}
       </div>
-      <FocusScope contain restoreFocus autoFocus>
-        <div className="mainText" ref={mainText}>
-          {displayedText}
-        </div>
+      <div className="mainText" ref={mainText}>
+        {displayedText}
+      </div>
 
-        <div className="textFrame" />
-        <div className="buttons">
-          <button
-            className="buttonPrev"
-            onClick={() => {
-              prevStep();
-            }}
-            disabled={buttonsDisabled}
-          >
-            Zurück
-          </button>
-          <button
-            className="buttonNext"
-            onClick={() => {
-              nextStep();
-            }}
-            disabled={buttonsDisabled}
-          >
-            {index < 0 ? <>Start</> : <>Weiter</>}
-          </button>
+      <div className="textFrame" />
+      <div className="buttons">
+        <button
+          className="buttonPrev"
+          onClick={() => {
+            prevStep();
+          }}
+          disabled={buttonsDisabled}
+        >
+          Zurück
+        </button>
+        <button
+          className="buttonNext"
+          onClick={() => {
+            nextStep();
+          }}
+          disabled={buttonsDisabled}
+        >
+          {index < 0 ? <>Start</> : <>Weiter</>}
+        </button>
+      </div>
+      {timerRunning ? (
+        <div className="timer">
+          <span>{minutes}</span>:<span>{seconds}</span>
         </div>
-        {timerRunning ? (
-          <div className="timer">
-            <span>{minutes}</span>:<span>{seconds}</span>
-          </div>
-        ) : (
-          <></>
-        )}
-      </FocusScope>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

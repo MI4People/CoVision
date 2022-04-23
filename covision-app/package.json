@@ -10,7 +10,6 @@
     "@capacitor/status-bar": "1.0.8",
     "@ionic/react": "^6.0.0",
     "@ionic/react-router": "^6.0.0",
-    "@react-aria/focus": "^3.5.4",
     "@tensorflow/tfjs": "^3.16.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
