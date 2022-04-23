@@ -39,7 +39,7 @@ const usePipeline = (webcamRef: MutableRefObject<Webcam | null>) => {
     useCallback(async () => {
       if (!webcamRef.current) return;
 
-      const screenshot = webcamRef.current.getScreenshot({ width: 320, height: 640 });
+      const screenshot = webcamRef.current.getScreenshot({ width: 640, height: 640 });
       const barcodeTask = screenshot ? runBarcodeScan(screenshot) : undefined;
 
       const yolov5Res = await runYolov5Analysis(webcamRef.current);
