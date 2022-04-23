@@ -6,11 +6,11 @@ import Webcam from "react-webcam";
 const MODEL_URL = "assets/yolov5s_rapid_test_web_model/model.json";
 const modelPromise = loadGraphModel(MODEL_URL);
 
-type Yolov5AnalysisResult = {
-  boxes_data: Float32Array;
-  scores_data: Float32Array;
-  classes_data: Float32Array;
-  valid_detections_data: number;
+export type Yolov5AnalysisResult = {
+  boxes?: number[];
+  scores?: number[];
+  classes?: number[];
+  valid_detections?: number;
 }
 
 const useEverySecond = (callback: () => void) => {
@@ -28,17 +28,17 @@ const useYolov5Analysis = (webcamRef: MutableRefObject<Webcam | null>) => {
     if (!canvas) return null;
 
     const input = tf.browser.fromPixels(canvas).div(255.0).expandDims();
-    const [boxes, scores, classes, valid_detections] =
+    const [boxes_tf, scores_tf, classes_tf, valid_detections_tf] =
       (await model.executeAsync(input)) as tf.Tensor<tf.Rank>[];
 
-    const boxes_data = boxes.dataSync() as Float32Array;
-    const scores_data = scores.dataSync() as Float32Array;
-    const classes_data = classes.dataSync() as Float32Array;
-    const valid_detections_data = valid_detections.dataSync()[0];
-    return { boxes_data, scores_data, classes_data, valid_detections_data }
+    const boxes = Array.from(boxes_tf.dataSync());
+    const scores = Array.from(scores_tf.dataSync());
+    const classes = Array.from(classes_tf.dataSync());
+    const valid_detections = valid_detections_tf.dataSync()[0];
+    return { boxes, scores, classes, valid_detections }
   }, [])
 
-  const [lastResult, setLastResult] = useState<Yolov5AnalysisResult|null>(null);
+  const [lastResult, setLastResult] = useState<Yolov5AnalysisResult | null>(null);
   useEverySecond(
     useCallback(async () => {
       if (!webcamRef.current) return;
