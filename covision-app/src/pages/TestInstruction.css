@@ -12,36 +12,44 @@
   font-size: large;
 }
 .mainText {
+  position: absolute;
+  top: 20vw;
+  padding-left: 10vw;
+  padding-right: 10vw;
   text-align: center;
-  font-size: xx-large;
-}
-.hintText {
-  text-align: center;
-  font-size: small;
+  font-size: x-large;
 }
 .buttons {
+  position: absolute;
   display: flex;
-  margin-top: 5vw;
+  top: 40vw;
+  width: 100%;
+  padding-left: 10vw;
+  padding-right: 10vw;
 }
 .buttonPrev {
-  height: 20vw;
+  height: 5vw;
   width: 100%;
   background-color: #cfe9de;
   color: gray;
   font-size: large;
   font-weight: 400;
+  border-radius: 5vw;
+  margin: 2px;
 }
 .buttonPrev:disabled {
   background-color: gray;
   color: black;
 }
 .buttonNext {
-  height: 20vw;
+  height: 5vw;
   width: 100%;
   background-color: #fec79a;
   color: grey;
   font-size: large;
   font-weight: 400;
+  border-radius: 5vw;
+  margin: 2px;
 }
 .buttonNext:disabled {
   background-color: gray;
@@ -49,12 +57,14 @@
 }
 @media screen and (max-width: 960px) {
   .buttons {
-    margin-top: 20vw;
+    top: 80vw;
+    padding-left: 0vw;
+    padding-right: 0vw;
   }
   .buttonPrev {
-    height: 50vw;
+    height: 10vw;
   }
   .buttonNext {
-    height: 50vw;
+    height: 10vw;
   }
 }
