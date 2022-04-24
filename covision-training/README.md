@@ -1,5 +1,5 @@
 
-<h2> Installation Guide</h2>
+<h2> Object Detection using YOLOv5 - Installation Guide</h2>
 
 ```bash
 git clone https://github.com/Lennart-Ma/CoVision.git  # clone
