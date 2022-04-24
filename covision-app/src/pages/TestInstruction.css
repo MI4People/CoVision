@@ -75,9 +75,9 @@
   align-items: center;
   text-align: center;
 
-  color: #000000;
+  color: #ffffff;
 
-  background: #c4c4c4;
+  background: gray;
   border-radius: 0.417vw;
 }
 .buttonNext {
@@ -95,9 +95,9 @@
   align-items: center;
   text-align: center;
 
-  color: #000000;
+  color: #ffffff;
 
-  background: #c4c4c4;
+  background: #0058c1;
   border-radius: 0.417vw;
 }
 .buttonHome {
@@ -115,9 +115,9 @@
   align-items: center;
   text-align: center;
 
-  color: #000000;
+  color: #ffffff;
 
-  background: #c4c4c4;
+  background: gray;
   border-radius: 0.417vw;
 }
 
@@ -201,9 +201,9 @@
     align-items: center;
     text-align: center;
 
-    color: #000000;
+    color: #ffffff;
 
-    background: #c4c4c4;
+    background: gray;
     border-radius: 2.051vw;
   }
 
@@ -222,9 +222,9 @@
     align-items: center;
     text-align: center;
 
-    color: #000000;
+    color: #ffffff;
 
-    background: #c4c4c4;
+    background: #0058c1;
     border-radius: 2.051vw;
   }
   .buttonHome {
@@ -242,9 +242,9 @@
     align-items: center;
     text-align: center;
 
-    color: #000000;
+    color: #ffffff;
 
-    background: #c4c4c4;
+    background: gray;
     border-radius: 2.051vw;
   }
 }
