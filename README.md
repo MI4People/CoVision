@@ -1,7 +1,7 @@
 ![logo](https://github.com/Lennart-Ma/CoVision/blob/main/CoVision%20logo%20small%20transp.png) 
 #
 
-273 million visually disabled and blind people around the world do not have access to covid rapid tests due to visual steps and results.
+273 million visually disabled and blind people around the world do not have access to covid rapid tests due to exclusively visual steps and results.
 
 **We would like to change this.**
 
