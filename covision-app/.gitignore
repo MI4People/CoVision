@@ -28,3 +28,9 @@ yarn-error.log*
 .eslintcache
 
 public/assets/yolov5s/*
+
+
+resources/android/icon
+resources/android/splash
+resources/ios/icon
+resources/ios/splash

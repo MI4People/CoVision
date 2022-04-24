@@ -15,10 +15,13 @@ const getCookie = (cname: string) => {
 }
 
 const welcomeText =
-  'Wilkommen bei CoVision. Richten Sie Ihre Kamera auf eine Covid Test Kasette um das Ergebnis zu erfahren oder auf den Barcode der Verpackung wenn Sie den Test noch nicht begonnen haben.';
+  'Welcome to CoVision. Point your camera at a Covid test cassette to find out the result. Point your camera at the barcode of the packaging if you want to get a fully guided test instruction.';
 
 const COOKIE_NAME = "welcomeTextShown";
-const showWelcomeText = () => {
+
+const sleep = (ms: number) => new Promise(resolve => { setTimeout(resolve, ms) });
+const showWelcomeText = async () => {
+  await sleep(500);
   if (getCookie(COOKIE_NAME) !== "1") {
     window.alert(welcomeText);
     document.cookie = COOKIE_NAME + "=1";
