@@ -12,7 +12,7 @@ showWelcomeText();
 
 const Home: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
-  const { result, classificationScore, detectionScore, area, barcodeResult } = usePipeline(webcamRef) ?? {};
+  const { result, detectionScore, area, barcodeResult } = usePipeline(webcamRef) ?? {};
   const history = useHistory();
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const Home: React.FC = () => {
                 {false && ( // debug info
                   <h2>
                     {detectionScore !== -1 ? 1 : 0} tests detected (highest score: {detectionScore}), result:{' '}
-                    {TestResult[result]} (score: {classificationScore})
+                    {TestResult[result]}
                   </h2>
                 )}
               </IonText>

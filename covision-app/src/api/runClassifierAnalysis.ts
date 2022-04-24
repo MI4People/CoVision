@@ -8,9 +8,10 @@ const modelPromise = loadGraphModel(MODEL_URL);
 warmUp(modelPromise);
 
 export enum TestResult {
-  Negative,
-  Unknown,
-  Positive
+  Unknown = -1,
+  Negative = 0,
+  Positive = 1,
+  Empty = 2,
 }
 
 function normalize(img: tf.Tensor4D, mean: number[], std: number[], axis: number) {
@@ -22,15 +23,8 @@ function normalize(img: tf.Tensor4D, mean: number[], std: number[], axis: number
   return tf.concat(centeredRgb, axis);
 }
 
-export const evaluate = (score: number | null) => {
-  if (score == null) return TestResult.Unknown;
-  // if (result <= 0.2) return TestResult.Negative; // TODO adjust threshold
-  // if (result >= 0.8) return TestResult.Positive; // TODO adjust threshold
-  return score > 0.5 ? TestResult.Positive : TestResult.Negative;
-}
-
-const runClassifierAnalysis = async (testArea: TestArea): Promise<number | null> => {
-  if (!testArea.input_tf || !testArea.area) return null;
+const runClassifierAnalysis = async (testArea: TestArea): Promise<TestResult> => {
+  if (!testArea.input_tf || !testArea.area) return TestResult.Unknown;
   const model = await modelPromise;
 
   const input_tf = tf.tidy(() => {
@@ -55,16 +49,14 @@ const runClassifierAnalysis = async (testArea: TestArea): Promise<number | null>
   const result_tf =
     (await model.executeAsync(input_tf)) as tf.Tensor1D;
 
-  const output = Array.from(result_tf.dataSync())[0];
+  const argMax_tf = result_tf.argMax(1);
+  const output = Array.from(argMax_tf.dataSync())[0];
 
   input_tf.dispose();
   result_tf.dispose();
+  argMax_tf.dispose();
 
-  return sigmoid(output);
-}
-
-const sigmoid = (z: number) => {
-  return 1 / (1 + Math.exp(-z));
+  return output;
 }
 
 export default runClassifierAnalysis;
