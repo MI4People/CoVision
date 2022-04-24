@@ -29,6 +29,11 @@ const TestInstruction = () => {
   useEffect(() => {
     mainText.current.focus();
     let text = instruction.steps[index];
+    if (index === 0) {
+      window.alert(
+        'You are now in the instruction section. The text is located in the middle of the screen. Buttons to jump to the previous or next step are below. To go back to the home screen use the button at the bottom.'
+      );
+    }
     if (index === instruction.timerTriggerStep) {
       text = text + ' A timer of ' + instruction.time + ' minutes was set.';
     }
