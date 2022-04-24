@@ -15,7 +15,7 @@ const getCookie = (cname: string) => {
 }
 
 const welcomeText =
-  'Welcome to CoVision. Point your camera at a Covid test cassette to find out the result or at the barcode of the packaging if you have not started the test yet.';
+  'Welcome to CoVision. Point your camera at a Covid test cassette to find out the result. Point your camera at the barcode of the packaging if you want to get a fully guided test instruction.';
 
 const COOKIE_NAME = "welcomeTextShown";
 
