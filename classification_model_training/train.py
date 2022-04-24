@@ -138,27 +138,27 @@ def train(mean, std, fold, training_data_path, gt, num_classes, metric, device, 
             f1_score = metrics.f1_score(targets, predictions)
             accuracy = metrics.accuracy_score(targets, predictions)
             # auc = metrics.roc_auc_score(targets, predictions)
+            print(f"Epoch = {epoch+1}, accuracy = {accuracy}, F1_Score = {f1_score}")
 
         else:
             f1_score = metrics.f1_score(targets, predictions, average='micro')
             #auc = metrics.roc_auc_score(targets, predictions, multi_class ="ovr")
             auc = "needs to be debugged"
-
-        print(f"Epoch = {epoch+1}, accuracy = {accuracy}, F1_Score = {f1_score}")
+            print(f"Epoch = {epoch+1}, F1_Score = {f1_score}")
     
         # Learning rate scheduler improves according to chosen metric
         if metric == "auc":
             scheduler.step(auc)
         
             if all(auc > i for i in auc_list):
-                torch.save(model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.bin"))
+                torch.save(model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.pt"))
                 print("Model with improved auc saved to outdir")
 
         elif metric == "f1_score":
             scheduler.step(f1_score)
         
             if all(f1_score > i for i in f1_score_for_model_saving_list) and epoch >= 3:
-                torch.save(model.state_dict(), os.path.join(outdir, f"model_fold_{fold}_{epoch}.bin"))
+                torch.save(model.state_dict(), os.path.join(outdir, f"model_fold_{fold}_{epoch}.pt"))
                 print("Model with improved f1_score saved to outdir")
 
         elif metric == "accuracy":
