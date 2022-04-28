@@ -28,6 +28,7 @@ const Home: React.FC = () => {
     <IonPage>
       <IonContent fullscreen>
         <div
+          aria-hidden="true"
           style={{
             position: 'absolute',
             top: 0,
@@ -39,7 +40,7 @@ const Home: React.FC = () => {
             background: 'linear-gradient(0deg, rgba(24,24,24,0) 0%, rgba(24,24,24,1) 100%)',
           }}
         >
-          <img style={{ height: 80 }} src="/assets/logo.png" alt="CoVision" />
+          <img aria-hidden="true" style={{ height: 80 }} src="/assets/logo.png" alt="CoVision" />
         </div>
         <div
           style={{
@@ -55,9 +56,9 @@ const Home: React.FC = () => {
             <IonCardContent>
               <IonText style={{ color: '#fff' }}>
                 <h2 role="alert">
-                  {detectionScore !== -1 ? 'Test detected, result ' + TestResult[result] + '. ' : 'Please scan a test'}
+                  {detectionScore !== -1 ? 'Test detected, result ' + TestResult[result] + '.               ' : 'Please scan a test'}
+                  {result === TestResult.Positive && <h2 role="alert">Please call 116 117 to schedule a PCR test.</h2>}
                 </h2>
-                {result === TestResult.Positive && <h2 role="alert">Please call 116 117 to schedule a PCR test.</h2>}
                 {false && ( // debug info
                   <h2>
                     {detectionScore !== -1 ? 1 : 0} tests detected (highest score: {detectionScore}), result:{' '}
