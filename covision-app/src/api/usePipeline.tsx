@@ -5,13 +5,18 @@ import runClassifierAnalysis, { TestResult } from './runClassifierAnalysis';
 import runYolov5Analysis from './runYolov5Analysis';
 import { BarcodeScanResult, runBarcodeScan } from './runBarcodeScan';
 
+const sleep = (ms: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
 const useEvery = (ms: number, callback: () => Promise<void>) => {
   useEffect(() => {
     let isActive = true;
     const addTimeout = () => {
       setTimeout(async () => {
         try {
-          await callback();
+          await Promise.any([sleep(5000), callback()]);
         } finally {
           if (isActive) addTimeout();
         }
