@@ -80,15 +80,42 @@ h1 {
 
 @media screen and (min-width: 960px) {
   h1 {
+    position: absolute;
+    width: 15.99vw;
+    height: 1.615vw;
+    left: 42.031vw;
+    top: 10.99vw;
+    font-size: 1.354vw;
+    line-height: 1.615vw;
   }
   .logo {
-  }
-  .fileInput {
+    width: 10.417vw;
+    height: 10.417vw;
+    left: 44.792vw;
+    top: 0vw;
   }
   .btnInput {
+    width: 15.625vw;
+    height: 3.125vw;
+    left: 42.188vw;
+    top: 15.01vw;
+    border-radius: 0.625vw;
+    font-size: 1.25vw;
+    line-height: 3.3vw;
   }
   .btnUpload {
+    width: 15.625vw;
+    height: 3.125vw;
+    left: 42.188vw;
+    top: 18.542vw;
+    border-radius: 0.625vw;
+    font-size: 1.25vw;
+    line-height: 1.51vw;
   }
   .imgPrev {
+    max-width: 19.271vw;
+    max-height: 20.052vw;
+    left: 40.365vw;
+    top: 23.073vw;
   }
 }
