@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+
+    <img class="logo" src="../CoVision logo small transp.png" />
+    <h1>Rapid Test Image Upload</h1>
+    <form action="https://storage.googleapis.com/covisionapp_image_upload" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="key" value={Math.random().toString().substring(2)}>
+        <input type="hidden" name="success_action_redirect" value="https://research.covision.app/upload_success">
+        <label>
+            <input class="fileInput" name="file" type="file" required onchange="loadFile(event)">
+            <span class="btnInput">Select</span>
+        </label>
+        <input class="btnUpload" type="submit" value="Upload">
+    </form>
+    <p><img class="imgPrev" id="output" width="500" /></p>
+
+
+    <script>
+        var loadFile = function (event) {
+            var image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
+
+</body>
+
+</html>
