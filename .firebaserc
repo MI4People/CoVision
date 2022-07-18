@@ -3,7 +3,7 @@
     "default": "covisionapp"
   },
   "targets": {
-    "read-o": {
+    "covisionapp": {
       "hosting": {
         "upload": [
           "covisionapp-upload"
