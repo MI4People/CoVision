@@ -24,7 +24,7 @@
     <script>
         // set the filename to a random value
         const keyField = document.getElementById("key-field");
-        keyField.value = Math.random().toString().substring(2);
+        keyField.value = new Date().getDate() + '_' + Math.random().toString().substring(2, 6);
 
         const loadFile = function (event) {
             var image = document.getElementById('output');
