@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "covisionapp"
+  },
+  "targets": {
+    "covisionapp": {
+      "hosting": {
+        "upload": [
+          "covisionapp-upload"
+        ]
+      }
+    }
+  }
+}

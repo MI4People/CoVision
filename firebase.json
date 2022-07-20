@@ -1,0 +1,10 @@
+{
+  "hosting": [
+    {
+      "public": "cloud-bucket-upload-page",
+      "target": "upload",
+      "cleanUrls": true,
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    }
+  ]
+}

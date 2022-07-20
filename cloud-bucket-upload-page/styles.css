@@ -1,0 +1,121 @@
+h1 {
+  position: absolute;
+  width: 78.718vw;
+  height: 7.949vw;
+  left: 10.769vw;
+  top: 51.538vw;
+
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 6.667vw;
+  line-height: 7.949vw;
+  display: flex;
+  align-items: center;
+
+  color: #000000;
+}
+.logo {
+  position: absolute;
+  width: 51.282vw;
+  height: 51.282vw;
+  left: 24.359vw;
+  top: 3.846vw;
+}
+.fileInput {
+  display: none;
+}
+.btnInput {
+  position: absolute;
+  width: 76.923vw;
+  height: 11.538vw;
+  left: 11.538vw;
+  top: 68.641vw;
+
+  background: #3171e0;
+  border-radius: 3.077vw;
+
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 6.154vw;
+  line-height: 12vw;
+  display: block;
+  align-items: center;
+  text-align: center;
+
+  color: #ffffff;
+  cursor: pointer;
+}
+.btnUpload {
+  position: absolute;
+  width: 76.923vw;
+  height: 11.538vw;
+  left: 11.538vw;
+  top: 83.333vw;
+
+  background: #3171e0;
+  border-radius: 3.077vw;
+
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 6.154vw;
+  line-height: 7.436vw;
+  display: block;
+  align-items: center;
+  text-align: center;
+
+  color: #ffffff;
+  cursor: pointer;
+}
+.imgPrev {
+  position: absolute;
+  width: 92.308vw;
+  height: 98.718vw;
+  left: 3.846vw;
+  top: 102.564vw;
+
+  background: #d9d9d9;
+}
+
+@media screen and (min-width: 960px) {
+  h1 {
+    position: absolute;
+    width: 15.99vw;
+    height: 1.615vw;
+    left: 42.031vw;
+    top: 10.99vw;
+    font-size: 1.354vw;
+    line-height: 1.615vw;
+  }
+  .logo {
+    width: 10.417vw;
+    height: 10.417vw;
+    left: 44.792vw;
+    top: 0vw;
+  }
+  .btnInput {
+    width: 15.625vw;
+    height: 3.125vw;
+    left: 42.188vw;
+    top: 15.01vw;
+    border-radius: 0.625vw;
+    font-size: 1.25vw;
+    line-height: 3.3vw;
+  }
+  .btnUpload {
+    width: 15.625vw;
+    height: 3.125vw;
+    left: 42.188vw;
+    top: 18.542vw;
+    border-radius: 0.625vw;
+    font-size: 1.25vw;
+    line-height: 1.51vw;
+  }
+  .imgPrev {
+    max-width: 19.271vw;
+    max-height: 20.052vw;
+    left: 40.365vw;
+    top: 23.073vw;
+  }
+}
