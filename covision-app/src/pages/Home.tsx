@@ -52,11 +52,39 @@ const Home: React.FC = () => {
             justifyContent: 'center',
           }}
         >
+          <IonText style={{ padding: '10px' }}>
+            <h2 role="alert">
+              <a style={{ color: '#fff' }} href="/privacyPolicy">
+                Privacy Policy
+              </a>
+            </h2>
+          </IonText>
+          <IonText style={{ padding: '10px' }}>
+            <h2 role="alert">
+              <a style={{ color: '#fff' }} href="https://www.mi4people.org/imprint">
+                Imprint
+              </a>
+            </h2>
+          </IonText>
+        </div>
+
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 60,
+            left: 0,
+            right: 0,
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
           <IonCard>
             <IonCardContent>
               <IonText style={{ color: '#fff' }}>
                 <h2 role="alert">
-                  {detectionScore !== -1 ? 'Test detected, result ' + TestResult[result] + '.               ' : 'Please scan a test'}
+                  {detectionScore !== -1
+                    ? 'Test detected, result ' + TestResult[result] + '.               '
+                    : 'Please scan a test'}
                   {result === TestResult.Positive && <h2 role="alert">Please call 116 117 to schedule a PCR test.</h2>}
                 </h2>
                 {false && ( // debug info
