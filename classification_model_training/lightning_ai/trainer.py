@@ -24,8 +24,8 @@ def main(hparams: Namespace):
 
     trainer.fit(model, dm)
 
-    # if hparams.test_data_path is not None:
-    #     trainer.test(ckpt_path="best", datamodule=dm)
+    if hparams.test_data_path is not None:
+        trainer.test(ckpt_path="best", datamodule=dm)
 
 
 
