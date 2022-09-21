@@ -37,6 +37,8 @@ class DataModuleClassification(pl.LightningDataModule):
 
         self.train_aug = transforms.Compose([
             transforms.Resize((self.load_size, self.load_size)),
+            transforms.RandomHorizontalFlip(0.5),
+            transforms.RandomRotation((0,360)),
             transforms.ToTensor(),
         ])
 
