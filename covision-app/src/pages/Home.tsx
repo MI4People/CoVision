@@ -1,4 +1,4 @@
-import { IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
 import { useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
 import CovCamera from '../components/CovCamera';
@@ -50,22 +50,15 @@ const Home: React.FC = () => {
             right: 0,
             display: 'flex',
             justifyContent: 'center',
+            padding: '10px',
           }}
         >
-          <IonText style={{ padding: '10px' }}>
-            <h2 role="alert">
-              <a style={{ color: '#fff' }} href="/privacyPolicy">
-                Privacy Policy
-              </a>
-            </h2>
-          </IonText>
-          <IonText style={{ padding: '10px' }}>
-            <h2 role="alert">
-              <a style={{ color: '#fff' }} href="https://www.mi4people.org/imprint">
-                Imprint
-              </a>
-            </h2>
-          </IonText>
+          <IonButton style={{ width: '150px', 'font-size': '14px' }} href="/privacyPolicy">
+            Privacy Policy
+          </IonButton>
+          <IonButton style={{ width: '150px', 'font-size': '14px' }} href="https://www.mi4people.org/imprint">
+            Imprint
+          </IonButton>
         </div>
 
         <div
