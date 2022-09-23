@@ -24,6 +24,8 @@ const Home: React.FC = () => {
     }
   }, [barcodeResult, history]);
 
+  
+
   return (
     <IonPage>
       <IonContent fullscreen>
