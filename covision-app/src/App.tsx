@@ -3,6 +3,7 @@ import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import TestInstruction from './pages/TestInstruction';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import { createBrowserHistory } from 'history';
 
 /* Core CSS required for Ionic components to work properly */
@@ -32,6 +33,9 @@ const App: React.FC = () => (
     <IonReactRouter history={customHistory}>
       <IonRouterOutlet>
         <Switch>
+          <Route exact path="/privacyPolicy">
+            <PrivacyPolicy />
+          </Route>
           <Route exact path="/testInstruction/:id">
             <TestInstruction />
           </Route>
