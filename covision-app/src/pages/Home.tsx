@@ -1,4 +1,4 @@
-import { IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
 import { useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
 import CovCamera from '../components/CovCamera';
@@ -23,6 +23,8 @@ const Home: React.FC = () => {
       history.push('/testInstruction/' + index);
     }
   }, [barcodeResult, history]);
+
+  
 
   return (
     <IonPage>
@@ -50,13 +52,34 @@ const Home: React.FC = () => {
             right: 0,
             display: 'flex',
             justifyContent: 'center',
+            padding: '10px',
+          }}
+        >
+          <IonButton style={{ width: '150px', 'font-size': '14px' }} href="/privacyPolicy">
+            Privacy Policy
+          </IonButton>
+          <IonButton style={{ width: '150px', 'font-size': '14px' }} href="https://www.mi4people.org/imprint">
+            Imprint
+          </IonButton>
+        </div>
+
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 60,
+            left: 0,
+            right: 0,
+            display: 'flex',
+            justifyContent: 'center',
           }}
         >
           <IonCard>
             <IonCardContent>
               <IonText style={{ color: '#fff' }}>
                 <h2 role="alert">
-                  {detectionScore !== -1 ? 'Test detected, result ' + TestResult[result] + '.               ' : 'Please scan a test'}
+                  {detectionScore !== -1
+                    ? 'Test detected, result ' + TestResult[result] + '.               '
+                    : 'Please scan a test'}
                   {result === TestResult.Positive && <h2 role="alert">Please call 116 117 to schedule a PCR test.</h2>}
                 </h2>
                 {false && ( // debug info
