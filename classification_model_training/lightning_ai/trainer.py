@@ -8,15 +8,17 @@ from models.classification_models import ClassificationNet
 
 from utils.data import DataModuleClassification
 
+from callbacks.val_callback import LogPredictionsCallback
+
 def main(hparams: Namespace):
 
-    model = ClassificationNet()
+    wandb_logger = WandbLogger(name=hparams.run_name, project=hparams.project_name, log_model="True")
+
+    model = ClassificationNet(wandb_logger)
 
     dm = DataModuleClassification(path_to_train=hparams.train_data_path, path_to_test=hparams.test_data_path, batch_size=hparams.batch_size, load_size=hparams.load_size)
 
-    checkpoint_callback = ModelCheckpoint(save_top_k=2, dirpath=hparams.checkpoint_dir, monitor="Val - CrossEntropyLoss", mode="min") # saves top-K checkpoint based on metric defined with monitor
-
-    wandb_logger = WandbLogger(name=hparams.run_name, project=hparams.project_name, log_model="True")
+    checkpoint_callback = ModelCheckpoint(save_top_k=2, dirpath=hparams.checkpoint_dir, monitor="valid_acc_epoch", mode="max") # saves top-K checkpoint based on metric defined with monitor
     
     trainer = pl.Trainer(callbacks=checkpoint_callback, accelerator='gpu', devices=1, logger=wandb_logger, max_epochs=hparams.max_epochs)
 

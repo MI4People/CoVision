@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+import torchmetrics
 import numpy as np
 import torch.nn.functional as F
 import pytorch_lightning as pl
@@ -13,6 +14,7 @@ class ClassificationNet(pl.LightningModule):
 
     def __init__(
         self,
+        wandb_logger,
         num_classes: int=4,
         lr: float = 1e-3,
 ):
@@ -25,6 +27,15 @@ class ClassificationNet(pl.LightningModule):
 
         # save hyper-parameters to self.hparams (auto-logged by W&B)
         self.save_hyperparameters()
+
+        self.val_accuracy_torchmetrics = torchmetrics.Accuracy(num_classes=num_classes)
+        self.confmat = torchmetrics.classification.MulticlassConfusionMatrix(num_classes=num_classes)
+
+        self.confmat_test = torchmetrics.classification.MulticlassConfusionMatrix(num_classes=num_classes)
+
+        self.wandb_logger = wandb_logger
+
+        self.classes = ["positive", "negative", "empty", "invalid"]
 
     def forward(self, x):
 
@@ -61,31 +72,30 @@ class ClassificationNet(pl.LightningModule):
         # , each value is a "probability" (after using nn.Softmax()) for the specific class e.g. output[0] = [7.1723e-01, 1.8264e-03, 2.7491e-01, 6.0351e-03]
         # Shape of target: (B) the value tells which class it is
         
+
         prediction = torch.argmax(output, dim=1)
         
         prediction = prediction.clone().cpu()
         target = target.clone().cpu()
 
-        accuracy = metrics.accuracy_score(target, prediction)
-        conf_mat = metrics.confusion_matrix(target, prediction)
+        self.val_accuracy_torchmetrics.update(prediction, target)
 
-        precision_micro = metrics.precision_score(target, prediction, average='micro')
-        precision_macro = metrics.precision_score(target, prediction, average='macro')
-        recall_micro = metrics.recall_score(target, prediction, average='micro')
-        recall_macro = metrics.recall_score(target, prediction, average='macro')
-
-
-        ############
-
-        self.log('Val - CrossEntropyLoss', loss, prog_bar=True)
-        self.log('Accuracy', accuracy, prog_bar=True)
-        self.log('Precision micro', precision_micro, prog_bar=True)
-        self.log('Precision macro', precision_macro, prog_bar=True)
-        self.log('Recall micro', recall_micro, prog_bar=True)
-        self.log('Recall macro', recall_macro, prog_bar=True)
-        # self.log('Conf_mat', conf_mat, prog_bar=True)
+        
+        cuda_target = target.clone().to("cuda")
+        self.confmat.update(output, cuda_target)
 
         return loss
+
+    def validation_epoch_end(self, outputs):
+
+        self.log('valid_acc_epoch', self.val_accuracy_torchmetrics.compute(), on_epoch=True)
+        ## create an image from the conf matrix (A 4x4 tensor) and log the image to w&b
+
+        self.wandb_logger.log_table(key="Confusion metric", columns=self.classes, data=self.confmat.compute().tolist())
+
+        self.val_accuracy_torchmetrics.reset()
+        self.confmat.reset()
+
 
     def test_step(self, batch, batch_idx):
 
@@ -98,16 +108,14 @@ class ClassificationNet(pl.LightningModule):
         #######
         # Calculate different metrics here: (F1 Score, Precision, Recall, Sensitivity, Specifity etc.)
 
-        print()
-        print("shape of output: ", output.shape())
-        print()
-        print("shape of target: ", target.shape())
-        print()
-
-
+        cuda_target = target.clone().to("cuda")
+        self.confmat_test.update(output, cuda_target)
+        
         ############
 
-        self.log('Test - CrossEntropyLoss', loss, prog_bar=True)
-
         return loss
+
+    def test_epoch_end(self, outputs):
+
+        self.wandb_logger.log_table(key="Confusion metric test images", columns=self.classes, data=self.confmat_test.compute().tolist())
     
