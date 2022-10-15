@@ -18,26 +18,10 @@ import { getInstruction } from '../data/instructions';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
-import cookies from 'js-cookie';
 
 showWelcomeText();
 
-// const languages = [
-//   {
-//     code: 'de',
-//     name: 'Deutsch',
-//     country_code: 'de',
-//   },
-//   {
-//     code: 'en',
-//     name: 'English',
-//     country_code: 'en',
-//   },
-// ];
-
 const Home: React.FC = () => {
-  // const currentLanguageCode = cookies.get('i18next') || 'en';
-  // const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
   const { t } = useTranslation();
 
   const webcamRef = useRef<Webcam>(null);
@@ -51,9 +35,6 @@ const Home: React.FC = () => {
     if (index !== -1) {
       history.push('/testInstruction/' + index);
     }
-
-    // document.body.dir = currentLanguage.dir || 'ltr'
-    // document.title = t('app_title')
   }, [barcodeResult, history, t]);
 
   return (
@@ -79,12 +60,11 @@ const Home: React.FC = () => {
           style={{
             position: 'absolute',
             top: 0,
-            left: 0,
             right: 0,
             display: 'flex',
-            // justifyContent: 'center',
+            float: 'right',
             background: 'linear-gradient(0deg, rgba(24,24,24,0) 0%, rgba(24,24,24,1) 100%)',
-            paddingLeft: '5px',
+            paddingRight: '5px',
             paddingTop: '5px',
           }}
         >
