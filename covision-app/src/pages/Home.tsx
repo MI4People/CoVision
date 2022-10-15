@@ -75,6 +75,29 @@ const Home: React.FC = () => {
           <img aria-hidden="true" style={{ height: 80 }} src="/assets/logo.png" alt="CoVision" />
         </div>
         <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            display: 'flex',
+            // justifyContent: 'center',
+            background: 'linear-gradient(0deg, rgba(24,24,24,0) 0%, rgba(24,24,24,1) 100%)',
+            paddingLeft: '5px',
+            paddingTop: '5px',
+          }}
+        >
+          <IonSelect
+            onIonChange={(e) => i18next.changeLanguage(e.detail.value)}
+            style={{ background: '#fff' }}
+            placeholder={t('language')}
+          >
+            <IonSelectOption value="en">EN</IonSelectOption>
+            <IonSelectOption value="de">DE</IonSelectOption>
+          </IonSelect>
+        </div>
+        <div
           style={{
             position: 'absolute',
             bottom: 0,
@@ -91,14 +114,6 @@ const Home: React.FC = () => {
           <IonButton style={{ width: '150px', 'font-size': '14px' }} href="https://www.mi4people.org/imprint">
             {t('imprint')}
           </IonButton>
-          <IonSelect
-            onIonChange={(e) => i18next.changeLanguage(e.detail.value)}
-            style={{ background: '#fff' }}
-            placeholder="Select Language"
-          >
-            <IonSelectOption value="en">EN</IonSelectOption>
-            <IonSelectOption value="de">DE</IonSelectOption>
-          </IonSelect>
         </div>
 
         <div
