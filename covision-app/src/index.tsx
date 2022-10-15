@@ -1,8 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import reportWebVitals from './reportWebVitals';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import reportWebVitals from './reportWebVitals';
+import i18next from 'i18next';
+import { initReactI18next } from 'react-i18next'
+import HttpApi from 'i18next-http-backend'
+import LanguageDetector from 'i18next-browser-languagedetector'
+
+i18next
+  .use(initReactI18next)
+  .use(HttpApi)
+  .use(LanguageDetector)
+  .init({
+    supportedLngs: ['en', 'de'],
+    fallbackLng: 'en',
+    debug: false,
+    // Options for language detector
+    detection: {
+      order: ['cookie', 'htmlTag', 'localStorage', 'path', 'subdomain'],
+      caches: ['cookie'],
+    },
+    backend: {
+      loadPath: '/assets/i18n/{{lng}}/translation.json',
+    },
+    react: { useSuspense: false },
+  });
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,4 +1,13 @@
-import { IonButton, IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonContent,
+  IonPage,
+  IonText,
+  IonSelect,
+  IonSelectOption,
+} from '@ionic/react';
 import { useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
 import CovCamera from '../components/CovCamera';
@@ -7,10 +16,30 @@ import showWelcomeText from '../api/showWelcomeText';
 import usePipeline from '../api/usePipeline';
 import { getInstruction } from '../data/instructions';
 import { useHistory } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
+import cookies from 'js-cookie';
 
 showWelcomeText();
 
+// const languages = [
+//   {
+//     code: 'de',
+//     name: 'Deutsch',
+//     country_code: 'de',
+//   },
+//   {
+//     code: 'en',
+//     name: 'English',
+//     country_code: 'en',
+//   },
+// ];
+
 const Home: React.FC = () => {
+  // const currentLanguageCode = cookies.get('i18next') || 'en';
+  // const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+  const { t } = useTranslation();
+
   const webcamRef = useRef<Webcam>(null);
   const { result, detectionScore, area, barcodeResult } = usePipeline(webcamRef) ?? {};
   const history = useHistory();
@@ -22,9 +51,10 @@ const Home: React.FC = () => {
     if (index !== -1) {
       history.push('/testInstruction/' + index);
     }
-  }, [barcodeResult, history]);
 
-  
+    // document.body.dir = currentLanguage.dir || 'ltr'
+    // document.title = t('app_title')
+  }, [barcodeResult, history, t]);
 
   return (
     <IonPage>
@@ -56,11 +86,19 @@ const Home: React.FC = () => {
           }}
         >
           <IonButton style={{ width: '150px', 'font-size': '14px' }} href="/privacyPolicy">
-            Privacy Policy
+            {t('privacypolicy')}
           </IonButton>
           <IonButton style={{ width: '150px', 'font-size': '14px' }} href="https://www.mi4people.org/imprint">
-            Imprint
+            {t('imprint')}
           </IonButton>
+          <IonSelect
+            onIonChange={(e) => i18next.changeLanguage(e.detail.value)}
+            style={{ background: '#fff' }}
+            placeholder="Select Language"
+          >
+            <IonSelectOption value="en">EN</IonSelectOption>
+            <IonSelectOption value="de">DE</IonSelectOption>
+          </IonSelect>
         </div>
 
         <div
