@@ -1,6 +1,9 @@
 {
-  "welcome": "Wilkommen",
   "privacypolicy": "Privatsphäre",
   "imprint": "Impressum",
-  "language": "Sprache"
+  "info": "Info",
+  "language": "Sprache",
+  "pleaseScan": "Bitte einen Test scannen",
+  "testDetected": "Test erkannt, Ergebnis ",
+  "pleaseCall": "Bitte rufen Sie bei 116 117 an um einen PCR-Test Termin zu vereinbaren.",
 }

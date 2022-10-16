@@ -1,6 +1,9 @@
 {
-  "welcome": "Welcome",
   "privacypolicy": "Privacy Policy",
   "imprint": "Imprint",
-  "language": "Language"
+  "info": "Info",
+  "language": "Language",
+  "pleaseScan": "Please scan a test",
+  "testDetected": "Test detected, result ",
+  "pleaseCall": "Please call 116 117 to schedule a PCR test.",
 }

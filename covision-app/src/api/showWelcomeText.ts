@@ -15,7 +15,7 @@ const getCookie = (cname: string) => {
 }
 
 const welcomeText =
-  'Welcome to CoVision. Point your camera at a Covid test cassette to find out the result. Point your camera at the barcode of the packaging if you want to get a fully guided test instruction. By using the app, you accept our privacy policy.';
+  'Willkommen bei CoVision. Richten Sie Ihre Kamera auf eine Covid-Testkassette, um das Ergebnis Ihres Tests herauszufinden. Beachten Sie bitte, dass CoVision kein Medizinprodukt ist und die Korrektheit der Ergebnisse mit einer Wahrscheinlichkeit assoziiert ist, lesen Sie mehr dazu unter Info. Wir speichern keine Daten von Ihnen und durch die Nutzung der App akzeptieren Sie unsere Datenschutzerklärung. Wir übernehmen keine Haftung für die Ergebnisse.  ';
 
 const COOKIE_NAME = "welcomeTextShown";
 

@@ -4,6 +4,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import TestInstruction from './pages/TestInstruction';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import Info from './pages/Info';
 import { createBrowserHistory } from 'history';
 
 /* Core CSS required for Ionic components to work properly */
@@ -24,20 +25,19 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import { useTranslation } from 'react-i18next';
 
 setupIonicReact();
 export const customHistory = createBrowserHistory();
 
 const App: React.FC = () => {
-  const { t } = useTranslation();
-  console.log(t('welcome'));
-
   return (
     <IonApp>
       <IonReactRouter history={customHistory}>
         <IonRouterOutlet>
           <Switch>
+            <Route exact path="/info">
+              <Info/>
+            </Route>
             <Route exact path="/privacyPolicy">
               <PrivacyPolicy />
             </Route>

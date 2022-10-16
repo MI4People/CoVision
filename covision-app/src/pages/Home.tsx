@@ -59,13 +59,11 @@ const Home: React.FC = () => {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            top: 0,
-            right: 0,
+            top: '10px',
+            right: '10px',
             display: 'flex',
             float: 'right',
             background: 'linear-gradient(0deg, rgba(24,24,24,0) 0%, rgba(24,24,24,1) 100%)',
-            paddingRight: '5px',
-            paddingTop: '5px',
           }}
         >
           <IonSelect
@@ -94,6 +92,9 @@ const Home: React.FC = () => {
           <IonButton style={{ width: '150px', 'font-size': '14px' }} href="https://www.mi4people.org/imprint">
             {t('imprint')}
           </IonButton>
+          <IonButton style={{ width: '150px', 'font-size': '14px' }} href="/info">
+            {t('info')}
+          </IonButton>
         </div>
 
         <div
@@ -111,9 +112,9 @@ const Home: React.FC = () => {
               <IonText style={{ color: '#fff' }}>
                 <h2 role="alert">
                   {detectionScore !== -1
-                    ? 'Test detected, result ' + TestResult[result] + '.               '
-                    : 'Please scan a test'}
-                  {result === TestResult.Positive && <h2 role="alert">Please call 116 117 to schedule a PCR test.</h2>}
+                    ? t('testDetected') + TestResult[result] + '.               '
+                    : t('pleaseScan')}
+                  {result === TestResult.Positive && <h2 role="alert">{t('pleaseCall')}</h2>}
                 </h2>
                 {false && ( // debug info
                   <h2>

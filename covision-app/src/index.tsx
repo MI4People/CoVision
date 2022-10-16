@@ -13,14 +13,10 @@ i18next
   .use(HttpApi)
   .use(LanguageDetector)
   .init({
+    lng: 'de',
     supportedLngs: ['en', 'de'],
-    fallbackLng: 'en',
+    fallbackLng: 'de',
     debug: false,
-    // Options for language detector
-    detection: {
-      order: ['cookie', 'htmlTag', 'localStorage', 'path', 'subdomain'],
-      caches: ['cookie'],
-    },
     backend: {
       loadPath: '/assets/i18n/{{lng}}/translation.json',
     },
