@@ -15,7 +15,7 @@ const getCookie = (cname: string) => {
 }
 
 const welcomeText =
-  'Willkommen bei CoVision. Richten Sie Ihre Kamera auf eine Covid-Testkassette, um das Ergebnis Ihres Tests herauszufinden. Beachten Sie bitte, dass CoVision kein Medizinprodukt ist und die Korrektheit der Ergebnisse mit einer Wahrscheinlichkeit assoziiert ist, lesen Sie mehr dazu unter Info. Wir speichern keine Daten von Ihnen und durch die Nutzung der App akzeptieren Sie unsere Datenschutzerklärung. Wir übernehmen keine Haftung für die Ergebnisse.  ';
+  'Willkommen bei CoVision. Richten Sie Ihre Kamera auf eine Covid-Testkassette, um das Ergebnis Ihres Tests herauszufinden. Beachten Sie bitte, dass CoVision kein Medizinprodukt ist und die Korrektheit der Ergebnisse mit einer Wahrscheinlichkeit assoziiert ist, lesen Sie mehr dazu unter Info. Wir speichern keine Daten von Ihnen und durch die Nutzung der App akzeptieren Sie unsere Datenschutzerklärung. Wir übernehmen keine Haftung für die Ergebnisse.';
 
 const COOKIE_NAME = "welcomeTextShown";
 

@@ -1,9 +1,10 @@
 {
-  "privacypolicy": "Privatsphäre",
+  "privacypolicy": "Datenschutz",
   "imprint": "Impressum",
   "info": "Info",
   "language": "Sprache",
   "pleaseScan": "Bitte einen Test scannen",
   "testDetected": "Test erkannt, Ergebnis ",
   "pleaseCall": "Bitte rufen Sie bei 116 117 an um einen PCR-Test Termin zu vereinbaren.",
+  "welcome": "Willkommen bei CoVision. Richten Sie Ihre Kamera auf eine Covid-Testkassette, um das Ergebnis Ihres Tests herauszufinden. Beachten Sie bitte, dass CoVision kein Medizinprodukt ist und die Korrektheit der Ergebnisse mit einer Wahrscheinlichkeit assoziiert ist, lesen Sie mehr dazu unter Info. Wir speichern keine Daten von Ihnen und durch die Nutzung der App akzeptieren Sie unsere Datenschutzerklärung. Wir übernehmen keine Haftung für die Ergebnisse."
 }
