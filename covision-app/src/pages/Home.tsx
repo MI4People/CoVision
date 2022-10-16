@@ -14,7 +14,6 @@ import CovCamera from '../components/CovCamera';
 import { TestResult } from '../api/runClassifierAnalysis';
 import showWelcomeText from '../api/showWelcomeText';
 import usePipeline from '../api/usePipeline';
-import { getInstruction } from '../data/instructions';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
@@ -25,17 +24,11 @@ const Home: React.FC = () => {
   const { t } = useTranslation();
 
   const webcamRef = useRef<Webcam>(null);
-  const { result, detectionScore, area, barcodeResult } = usePipeline(webcamRef) ?? {};
+  const { result, detectionScore, area } = usePipeline(webcamRef) ?? {};
   const history = useHistory();
 
   useEffect(() => {
-    if (!barcodeResult) return;
-
-    let index = getInstruction(barcodeResult.codeResult?.code);
-    if (index !== -1) {
-      history.push('/testInstruction/' + index);
-    }
-  }, [barcodeResult, history, t]);
+  }, [history, t]);
 
   return (
     <IonPage>
