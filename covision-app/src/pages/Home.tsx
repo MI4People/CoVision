@@ -27,8 +27,7 @@ const Home: React.FC = () => {
   const { result, detectionScore, area } = usePipeline(webcamRef) ?? {};
   const history = useHistory();
 
-  useEffect(() => {
-  }, [history, t]);
+  useEffect(() => {}, [history, t]);
 
   return (
     <IonPage>
@@ -82,7 +81,7 @@ const Home: React.FC = () => {
           <IonButton style={{ width: '150px', 'font-size': '14px' }} href="/privacyPolicy">
             {t('privacypolicy')}
           </IonButton>
-          <IonButton style={{ width: '150px', 'font-size': '14px' }} href="https://www.mi4people.org/imprint">
+          <IonButton style={{ width: '150px', 'font-size': '14px' }} href={t('imprintLink')}>
             {t('imprint')}
           </IonButton>
           <IonButton style={{ width: '150px', 'font-size': '14px' }} href="/info">
