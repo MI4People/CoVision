@@ -7,5 +7,6 @@
   "testDetected": "Test detected, result ",
   "pleaseCall": "Please call 116 117 to schedule a PCR test.",
   "welcome": "Welcome to CoVision. Point your camera at a Covid test cartridge to find out the result of your test. Please note that CoVision is not a medical device and the correctness of the results is associated with a probability, read more about it in Info. We do not store any data from you and by using the app you accept our privacy policy. We do not assume any liability for the results.",
-  "imprintLink" : "https://www.mi4people.org/imprint"
+  "imprintLink": "https://www.mi4people.org/imprint",
+  "infoText": "The CoVision app helps you evaluate your Covid rapid test safely and robustly. The first step is to detect the position of your rapid test using technology similar to the TapTapSee, SeeingAI or BeMyEyes app. This happens within a few milli-seconds if the camera is correctly positioned about 30cm above the rapid test. Then, in a second step, the detected rapid test is viewed in detail and the result of the rapid test is evaluated using artificial intelligence. Our AI can assign your test to four following categories: positive, negative, blank or invalid. The probability that a test will be assigned to a correct category is currently around 90%. In the final step, the result of your quick test is read out to you and, if necessary, further recommendations for action are suggested."
 }

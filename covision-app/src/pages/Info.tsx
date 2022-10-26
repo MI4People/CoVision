@@ -1,8 +1,8 @@
-import { IonPage, IonText } from '@ionic/react';
+import { IonPage, IonText, IonContent } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 
 const Info: React.FC = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   return (
     <IonPage>
       <div
@@ -12,10 +12,12 @@ const Info: React.FC = () => {
           justifyContent: 'center',
         }}
       >
-        <IonText>{t('welcome')}</IonText>
+        <IonContent fullscreen>
+          <IonText>{t('infoText')}</IonText>
+        </IonContent>
       </div>
     </IonPage>
   );
 };
 
-export default Info
+export default Info;
