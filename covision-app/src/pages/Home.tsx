@@ -84,9 +84,9 @@ const Home: React.FC = () => {
           <IonButton style={{ width: '150px', 'font-size': '14px' }} href={t('imprintLink')}>
             {t('imprint')}
           </IonButton>
-          <IonButton style={{ width: '150px', 'font-size': '14px' }} href="/info">
-            {t('info')}
-          </IonButton>
+          <a href="/info">
+            <button style={{ width: '150px', height: '35px', background: 'blue' }}>{t('info')}</button>
+          </a>
         </div>
 
         <div
