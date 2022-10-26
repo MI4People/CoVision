@@ -78,14 +78,26 @@ const Home: React.FC = () => {
             padding: '10px',
           }}
         >
-          <IonButton style={{ width: '150px', 'font-size': '14px' }} href="/privacyPolicy">
+          {/* <IonButton style={{ width: '150px', 'font-size': '14px' }} href="/privacyPolicy">
             {t('privacypolicy')}
           </IonButton>
           <IonButton style={{ width: '150px', 'font-size': '14px' }} href={t('imprintLink')}>
             {t('imprint')}
-          </IonButton>
+          </IonButton> */}
+          <a href="/privacyPolicy">
+            <button style={{ width: '100px', height: '35px', background: 'blue', color: '#fff', margin: '2px' }}>
+              {t('privacypolicy')}
+            </button>
+          </a>
+          <a href={t('imprintLink')}>
+            <button style={{ width: '100px', height: '35px', background: 'blue', color: '#fff', margin: '2px' }}>
+              {t('imprint')}
+            </button>
+          </a>
           <a href="/info">
-            <button style={{ width: '150px', height: '35px', background: 'blue' }}>{t('info')}</button>
+            <button style={{ width: '100px', height: '35px', background: 'blue', color: '#fff', margin: '2px' }}>
+              {t('info')}
+            </button>
           </a>
         </div>
 
