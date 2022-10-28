@@ -1,30 +1,33 @@
-import { IonButton, IonCard, IonCardContent, IonContent, IonPage, IonText } from '@ionic/react';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonContent,
+  IonPage,
+  IonText,
+  IonSelect,
+  IonSelectOption,
+} from '@ionic/react';
 import { useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
 import CovCamera from '../components/CovCamera';
 import { TestResult } from '../api/runClassifierAnalysis';
 import showWelcomeText from '../api/showWelcomeText';
 import usePipeline from '../api/usePipeline';
-import { getInstruction } from '../data/instructions';
 import { useHistory } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 showWelcomeText();
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
+
   const webcamRef = useRef<Webcam>(null);
-  const { result, detectionScore, area, barcodeResult } = usePipeline(webcamRef) ?? {};
+  const { result, detectionScore, area } = usePipeline(webcamRef) ?? {};
   const history = useHistory();
 
-  useEffect(() => {
-    if (!barcodeResult) return;
-
-    let index = getInstruction(barcodeResult.codeResult?.code);
-    if (index !== -1) {
-      history.push('/testInstruction/' + index);
-    }
-  }, [barcodeResult, history]);
-
-  
+  useEffect(() => {}, [history, t]);
 
   return (
     <IonPage>
@@ -45,6 +48,26 @@ const Home: React.FC = () => {
           <img aria-hidden="true" style={{ height: 80 }} src="/assets/logo.png" alt="CoVision" />
         </div>
         <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            display: 'flex',
+            float: 'right',
+            background: 'linear-gradient(0deg, rgba(24,24,24,0) 0%, rgba(24,24,24,1) 100%)',
+          }}
+        >
+          <IonSelect
+            onIonChange={(e) => i18next.changeLanguage(e.detail.value)}
+            style={{ background: '#fff' }}
+            placeholder={t('language')}
+          >
+            <IonSelectOption value="en">EN</IonSelectOption>
+            <IonSelectOption value="de">DE</IonSelectOption>
+          </IonSelect>
+        </div>
+        <div
           style={{
             position: 'absolute',
             bottom: 0,
@@ -55,11 +78,14 @@ const Home: React.FC = () => {
             padding: '10px',
           }}
         >
-          <IonButton style={{ width: '150px', 'font-size': '14px' }} href="/privacyPolicy">
-            Privacy Policy
+          <IonButton style={{ width: '150px', 'font-size': '14px', 'z-index': '1' }} href="/privacyPolicy">
+            {t('privacypolicy')}
           </IonButton>
-          <IonButton style={{ width: '150px', 'font-size': '14px' }} href="https://www.mi4people.org/imprint">
-            Imprint
+          <IonButton style={{ width: '150px', 'font-size': '14px', 'z-index': '1' }} href={t('imprintLink')}>
+            {t('imprint')}
+          </IonButton>
+          <IonButton style={{ width: '150px', 'font-size': '14px', 'z-index': '1' }} href="/info">
+            {t('info')}
           </IonButton>
         </div>
 
@@ -78,9 +104,9 @@ const Home: React.FC = () => {
               <IonText style={{ color: '#fff' }}>
                 <h2 role="alert">
                   {detectionScore !== -1
-                    ? 'Test detected, result ' + TestResult[result] + '.               '
-                    : 'Please scan a test'}
-                  {result === TestResult.Positive && <h2 role="alert">Please call 116 117 to schedule a PCR test.</h2>}
+                    ? t('testDetected') + TestResult[result] + '.               '
+                    : t('pleaseScan')}
+                  {result === TestResult.Positive && <h2 role="alert">{t('pleaseCall')}</h2>}
                 </h2>
                 {false && ( // debug info
                   <h2>
