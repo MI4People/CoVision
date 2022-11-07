@@ -14,7 +14,7 @@ i18next
   .use(LanguageDetector)
   .init({
     lng: 'de',
-    supportedLngs: ['en', 'de'],
+    supportedLngs: ['de'],
     fallbackLng: 'de',
     debug: false,
     backend: {

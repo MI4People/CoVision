@@ -5,8 +5,6 @@ import {
   IonContent,
   IonPage,
   IonText,
-  IonSelect,
-  IonSelectOption,
 } from '@ionic/react';
 import { useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
@@ -16,7 +14,6 @@ import showWelcomeText from '../api/showWelcomeText';
 import usePipeline from '../api/usePipeline';
 import { useHistory } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
 
 showWelcomeText();
 
@@ -46,26 +43,6 @@ const Home: React.FC = () => {
           }}
         >
           <img aria-hidden="true" style={{ height: 80 }} src="/assets/logo.png" alt="CoVision" />
-        </div>
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            display: 'flex',
-            float: 'right',
-            background: 'linear-gradient(0deg, rgba(24,24,24,0) 0%, rgba(24,24,24,1) 100%)',
-          }}
-        >
-          <IonSelect
-            onIonChange={(e) => i18next.changeLanguage(e.detail.value)}
-            style={{ background: '#fff' }}
-            placeholder={t('language')}
-          >
-            <IonSelectOption value="en">EN</IonSelectOption>
-            <IonSelectOption value="de">DE</IonSelectOption>
-          </IonSelect>
         </div>
         <div
           style={{
