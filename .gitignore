@@ -10,6 +10,13 @@ firebase-debug.*.log*
 # Firebase cache
 .firebase/
 
+# data for training
+classification_model_training/data
+
+classification_model_training/experiments/*
+
+*.pyc
+
 # Firebase config
 
 # Uncomment this if you'd like others to create their own Firebase project.
