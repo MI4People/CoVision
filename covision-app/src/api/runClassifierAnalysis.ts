@@ -46,7 +46,7 @@ const runClassifierAnalysis = async (testArea: TestArea): Promise<TestResult> =>
     return normalize(inputUnnormalized, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225], 1);
   })
 
-  console.log('BEFORE EXECUTE')
+  console.log('INPUT_TF', input_tf)
   const result_tf =
     (await model.executeAsync(input_tf)) as tf.Tensor1D;
   console.log('AFTER EXECUTE')
