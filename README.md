@@ -10,6 +10,13 @@ CoVision app identifies a covid test result (positive/negative) using AI and rea
 ## Try out CoVision
 https://covision.app
 
+## Build Android App
+```sh
+cd covision-app/android/
+ionic capacitor copy android
+ANDROID_SDK_ROOT=XXXXX ./gradlew assembleDebug
+```
+
 ## Developer Team
 - [Raphael Feigl](https://www.linkedin.com/in/raphael-feigl-368387159/)
 - [Lennart Maack](https://www.linkedin.com/in/lennart-maack/)
