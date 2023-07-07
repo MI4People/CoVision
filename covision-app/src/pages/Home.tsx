@@ -81,7 +81,7 @@ const Home: React.FC = () => {
               <IonText style={{ color: '#fff' }}>
                 <h2 role="alert">
                   {detectionScore !== -1
-                    ? t('testDetected') + TestResult[result] + '.               '
+                    ? t('testDetected') + t(TestResult[result]) + '.               '
                     : t('pleaseScan')}
                   {result === TestResult.Positive && <h2 role="alert">{t('pleaseCall')}</h2>}
                 </h2>
