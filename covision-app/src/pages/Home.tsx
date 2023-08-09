@@ -83,7 +83,6 @@ const Home: React.FC = () => {
                   {detectionScore !== -1
                     ? t('testDetected') + t(TestResult[result]) + '.               '
                     : t('pleaseScan')}
-                  {result === TestResult.Positive && <h2 role="alert">{t('pleaseCall')}</h2>}
                 </h2>
                 {false && ( // debug info
                   <h2>
