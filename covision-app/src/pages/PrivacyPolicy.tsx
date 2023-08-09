@@ -11,7 +11,7 @@ const PrivacyPolicy: React.FC = () => {
         }}
       >
         <IonContent fullscreen>
-          <IonText>
+          <IonText role="text">
             <b>Datenschutzerklärung für die Nutzung des CoVision-Systems</b>
             <br />
             <br />
