@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import TestInstruction from './pages/TestInstruction';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Info from './pages/Info';
+import Imprint from './pages/Imprint';
 import { createBrowserHistory } from 'history';
 
 /* Core CSS required for Ionic components to work properly */
@@ -40,6 +41,9 @@ const App: React.FC = () => {
             </Route>
             <Route exact path="/privacyPolicy">
               <PrivacyPolicy />
+            </Route>
+            <Route exact path="/imprint">
+              <Imprint />
             </Route>
             <Route exact path="/testInstruction/:id">
               <TestInstruction />

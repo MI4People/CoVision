@@ -58,7 +58,7 @@ const Home: React.FC = () => {
           <IonButton style={{ width: '150px', 'font-size': '14px', 'z-index': '1' }} href="/privacyPolicy">
             {t('privacypolicy')}
           </IonButton>
-          <IonButton style={{ width: '150px', 'font-size': '14px', 'z-index': '1' }} href={t('imprintLink')}>
+          <IonButton style={{ width: '150px', 'font-size': '14px', 'z-index': '1' }} href="/imprint">
             {t('imprint')}
           </IonButton>
           <IonButton style={{ width: '150px', 'font-size': '14px', 'z-index': '1' }} href="/info">
@@ -83,7 +83,6 @@ const Home: React.FC = () => {
                   {detectionScore !== -1
                     ? t('testDetected') + t(TestResult[result]) + '.               '
                     : t('pleaseScan')}
-                  {result === TestResult.Positive && <h2 role="alert">{t('pleaseCall')}</h2>}
                 </h2>
                 {false && ( // debug info
                   <h2>
