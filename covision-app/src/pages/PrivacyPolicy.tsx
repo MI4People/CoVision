@@ -38,8 +38,8 @@ const PrivacyPolicy: React.FC = () => {
             <br />
             <span aria-labelledby="all-text">
             Verantwortliche Stelle für die Datenverarbeitung bei der Nutzung des CoVision-Systems im
-            datenschutzrechtlichen Sinne ist die MI4People gemeinnützige GmbH, Winklsaß 49, 84088 Neufahrn in
-            Niederbayern. Erreichbar telefonisch unter +49 176 24973790 oder per Mail unter{' '}
+            datenschutzrechtlichen Sinne ist die MI4People gemeinnützige GmbH, Maxhofstraße 76, 81475 München.
+            Erreichbar telefonisch unter +49 176 24973790 oder per Mail unter{' '}
             </span>
             <a aria-labelledby="all-text" href="mailto:info@mi4people.org">info@mi4people.org</a>
             <br />
