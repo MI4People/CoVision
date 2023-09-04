@@ -19,6 +19,7 @@ from utils.data import ClassificationDataset
 
 
 def get_classes():
+    # TODO make this a config param
     classes = [
         "positive",
         "negative",
