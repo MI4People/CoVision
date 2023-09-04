@@ -33,6 +33,10 @@ pytest = "^7.4.1"
 pre-commit = "^3.4.0"
 notebook = "^7.0.3"
 jupyterlab = "^4.0.5"
+flask = "<2.3.3"
+flask-compress = "^1.13"
+ipywidgets = "^8.1.0"
+werkzeug = "2.0.0"
 
 [build-system]
 requires = ["poetry-core"]
