@@ -1,0 +1,34 @@
+stages:
+  train:
+    cmd: >-
+      python train.py
+      --num_classes ${train.num_classes}
+      --pretrained_on_ImageNet
+      --fold ${train.fold}
+      --dataset ${train.dataset}
+      --gt ${train.gt}
+      --outdir ${train.outdir}
+      --epochs ${train.epochs}
+      --seed ${base.random_seed}
+    deps:
+    - data/train
+    - train.py
+    params:
+    - base
+    - train
+    outs:
+    - models/model_best.pt
+  evaluate:
+    cmd: >-
+      python predict.py
+      --num_classes ${train.num_classes}
+      --dataset ${evaluate.dataset}
+      --gt ${evaluate.gt}
+      --single_model_path ${evaluate.single_model_path}
+    deps:
+    - data/test
+    - predict.py
+    - models/model_best.pt
+    params:
+    - base
+    - evaluate
