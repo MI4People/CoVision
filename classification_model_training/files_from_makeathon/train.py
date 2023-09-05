@@ -38,6 +38,7 @@ def train(
     lr,
     pretrained_on_ImageNet,
     pretrained_own=None,
+    starting_time=None,
 ):
 
     df = pd.read_csv(gt)
@@ -181,6 +182,7 @@ def train(
                 torch.save(
                     model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.pt")
                 )
+                torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
                 print("Model with improved auc saved to outdir")
 
         elif metric == "f1_score":
@@ -191,6 +193,7 @@ def train(
                     model.state_dict(),
                     os.path.join(outdir, f"model_fold_{fold}_{epoch}.pt"),
                 )
+                torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
                 print("Model with improved f1_score saved to outdir")
 
         elif metric == "accuracy":
@@ -200,6 +203,7 @@ def train(
                 torch.save(
                     model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.bin")
                 )
+                torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
                 print("Model with improved accuracy saved to outdir")
 
         if epoch >= 15:
@@ -216,29 +220,25 @@ def train(
     plt.plot(train_loss_all)
     plt.xlabel("Step")
     plt.ylabel("Training Loss")
-    train_loss_plot.savefig(
-        os.path.join(opt.outdir, f"training_loss_fold{opt.fold}.png")
-    )
+    train_loss_plot.savefig(os.path.join(outdir, f"training_loss_fold{fold}.png"))
 
     val_loss_plot = plt.figure()
     plt.plot(val_loss_list)
     plt.xlabel("Epoch")
     plt.ylabel("Validation Loss")
-    val_loss_plot.savefig(
-        os.path.join(opt.outdir, f"validation_loss_fold{opt.fold}.png")
-    )
+    val_loss_plot.savefig(os.path.join(outdir, f"validation_loss_fold{fold}.png"))
 
     accuracy_plot = plt.figure()
     plt.plot(accuracy_list)
     plt.xlabel("Epoch")
     plt.ylabel("Accuracy")
-    accuracy_plot.savefig(os.path.join(opt.outdir, f"accuracy_fold{opt.fold}.png"))
+    accuracy_plot.savefig(os.path.join(outdir, f"accuracy_fold{fold}.png"))
 
     f1_score_plot = plt.figure()
     plt.plot(f1_score_list)
     plt.xlabel("Epoch")
     plt.ylabel("F1_score")
-    f1_score_plot.savefig(os.path.join(opt.outdir, f"f1_scores_fold{opt.fold}.png"))
+    f1_score_plot.savefig(os.path.join(outdir, f"f1_scores_fold{fold}.png"))
 
     print("plots saved..")
 
@@ -362,4 +362,5 @@ if __name__ == "__main__":
         opt.lr,
         opt.pretrained_on_ImageNet,
         opt.pretrained_own,
+        starting_time,
     )
