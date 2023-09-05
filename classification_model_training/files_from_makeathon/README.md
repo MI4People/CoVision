@@ -1,6 +1,7 @@
 #### run pipeline with dvc
 ```bash
-dvc exp run
+dvc pull
+dvc repro
 ```
 
 #### train
