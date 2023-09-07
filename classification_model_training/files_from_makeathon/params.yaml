@@ -13,6 +13,10 @@ train:
   val_batch: 16
   outdir: models
   lr: 1e-3
+  dropout_rate: 0.3
+  drop_connect_rate: 0.2
+  batch_norm_momentum: 0.99
+  batch_norm_epsilon: 1e-3
   # pretrained_on_ImageNet:
   # pretrained_own:
 

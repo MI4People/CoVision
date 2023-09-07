@@ -3,7 +3,8 @@ stages:
   train:
     cmd: python train.py --num_classes 4 --pretrained_on_ImageNet --fold 1 --dataset
       ./data/train/images --gt ./data/train/gt.csv --outdir models --epochs 30 --seed
-      1
+      1 --lr 0.001 --dropout_rate 0.3 --drop_connect_rate 0.2 --batch_norm_momentum
+      0.99 --batch_norm_epsilon 0.001
     deps:
     - path: data/train
       hash: md5
@@ -12,8 +13,8 @@ stages:
       nfiles: 362
     - path: train.py
       hash: md5
-      md5: 18acedcc5c903d6a6dcfc08f4d97dc02
-      size: 11045
+      md5: 5750322e46e4c0d77c2adc4985a6d90a
+      size: 11957
     params:
       params.yaml:
         base:
@@ -30,6 +31,10 @@ stages:
           val_batch: 16
           outdir: models
           lr: 0.001
+          dropout_rate: 0.3
+          drop_connect_rate: 0.2
+          batch_norm_momentum: 0.99
+          batch_norm_epsilon: 0.001
     outs:
     - path: models/accuracy_fold1.png
       hash: md5
@@ -89,6 +94,10 @@ stages:
           val_batch: 16
           outdir: models
           lr: 0.001
+          dropout_rate: 0.3
+          drop_connect_rate: 0.2
+          batch_norm_momentum: 0.99
+          batch_norm_epsilon: 0.001
     outs:
     - path: models/metrics-evaluate.json
       hash: md5

@@ -36,6 +36,10 @@ def train(
     val_bs,
     outdir,
     lr,
+    dropout_rate,
+    drop_connect_rate,
+    batch_norm_momentum,
+    batch_norm_epsilon,
     pretrained_on_ImageNet,
     pretrained_own=None,
     starting_time=None,
@@ -55,14 +59,24 @@ def train(
     if pretrained_on_ImageNet:
         print("Using on ImageNet pretrained model")
         model = EfficientNet.from_pretrained(
-            "efficientnet-b2", in_channels=3, num_classes=num_classes
+            "efficientnet-b2",
+            in_channels=3,
+            num_classes=num_classes,
+            dropout_rate=dropout_rate,
+            drop_connect_rate=drop_connect_rate,
+            batch_norm_momentum=batch_norm_momentum,
+            batch_norm_epsilon=batch_norm_epsilon,
         )
         # model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=True, num_classes=1, force_reload=True)
 
     else:
         print("Using NOT pretrained model")
         model = EfficientNet.from_name(
-            "efficientnet-b2", in_channels=3, num_classes=num_classes
+            "efficientnet-b2", in_channels=3, num_classes=num_classes,
+            dropout_rate=dropout_rate,
+            drop_connect_rate=drop_connect_rate,
+            batch_norm_momentum=batch_norm_momentum,
+            batch_norm_epsilon=batch_norm_epsilon,
         )
         # model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=False, num_classes=1)
 
@@ -281,7 +295,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--val_batch", type=int, default=16, help="batch size for validation"
     )
-    parser.add_argument("--lr", type=int, default=1e-3)
+    parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument(
         "--pretrained_own", type=str, help="path to a pretrained model (.bin)"
     )
@@ -312,6 +326,10 @@ if __name__ == "__main__":
         "--outdir", type=str, help="outputdir where the files are stored"
     )
     parser.add_argument("--seed", type=int, help="Seed value")
+    parser.add_argument("--dropout_rate", type=float, default=0.3)
+    parser.add_argument("--drop_connect_rate", type=float, default=0.2)
+    parser.add_argument("--batch_norm_momentum", type=float, default=0.99)
+    parser.add_argument("--batch_norm_epsilon", type=float, default=1e-3)
 
     opt = parser.parse_args()
 
@@ -360,6 +378,10 @@ if __name__ == "__main__":
         opt.val_batch,
         opt.outdir,
         opt.lr,
+        opt.dropout_rate,
+        opt.drop_connect_rate,
+        opt.batch_norm_momentum,
+        opt.batch_norm_epsilon,
         opt.pretrained_on_ImageNet,
         opt.pretrained_own,
         starting_time,

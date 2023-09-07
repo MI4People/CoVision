@@ -10,6 +10,11 @@ stages:
       --outdir ${train.outdir}
       --epochs ${train.epochs}
       --seed ${base.random_seed}
+      --lr ${train.lr}
+      --dropout_rate ${train.dropout_rate}
+      --drop_connect_rate ${train.drop_connect_rate}
+      --batch_norm_momentum ${train.batch_norm_momentum}
+      --batch_norm_epsilon ${train.batch_norm_epsilon}
     deps:
     - data/train
     - train.py
