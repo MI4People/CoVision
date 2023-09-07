@@ -31,10 +31,26 @@ stages:
           outdir: models
           lr: 0.001
     outs:
+    - path: models/accuracy_fold1.png
+      hash: md5
+      md5: a435b0bbc49425558f29a72e845b5942
+      size: 22908
+    - path: models/f1_scores_fold1.png
+      hash: md5
+      md5: 338f0f973a3d0403955c744709ee9f5c
+      size: 22622
     - path: models/model_best.pt
       hash: md5
       md5: 43b5c6b74a5b036831c4195bf8679e90
       size: 31270857
+    - path: models/training_loss_fold1.png
+      hash: md5
+      md5: d6870ae011a7b3ff67b7b6074aa23d03
+      size: 43918
+    - path: models/validation_loss_fold1.png
+      hash: md5
+      md5: 0b99a1b895658392555231728c37926f
+      size: 28540
   evaluate:
     cmd: python predict.py --num_classes 4 --dataset ./data/test/images --gt ./data/test/gt.csv
       --single_model_path models/model_best.pt --metrics_file_path models/metrics-evaluate.json
@@ -133,6 +149,6 @@ stages:
     outs:
     - path: models/tfjs
       hash: md5
-      md5: d14e68ac11884407bf7fd1665fcbc8df.dir
+      md5: a56422595b689848585a456d7c3024f5.dir
       size: 31117801
       nfiles: 9
