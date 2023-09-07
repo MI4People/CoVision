@@ -25,6 +25,7 @@ stages:
       --dataset ${evaluate.dataset}
       --gt ${evaluate.gt}
       --single_model_path ${train.outdir}/model_best.pt
+      --metrics_file_path models/metrics-evaluate.json
     deps:
     - data/test
     - predict.py
@@ -33,6 +34,9 @@ stages:
     - base
     - train
     - evaluate
+    metrics:
+    - models/metrics-evaluate.json:
+        cache: false
   export:
     cmd: >-
       python export.py

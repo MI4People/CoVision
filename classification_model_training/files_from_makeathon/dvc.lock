@@ -37,7 +37,7 @@ stages:
       size: 31270857
   evaluate:
     cmd: python predict.py --num_classes 4 --dataset ./data/test/images --gt ./data/test/gt.csv
-      --single_model_path models/model_best.pt
+      --single_model_path models/model_best.pt --metrics_file_path models/metrics-evaluate.json
     deps:
     - path: data/test
       hash: md5
@@ -50,8 +50,8 @@ stages:
       size: 31270857
     - path: predict.py
       hash: md5
-      md5: c6dfc3e9141a230a662309a329f0ea87
-      size: 5501
+      md5: 8423985a8b1f20117aecc13fd9e81fa3
+      size: 5868
     params:
       params.yaml:
         base:
@@ -73,6 +73,11 @@ stages:
           val_batch: 16
           outdir: models
           lr: 0.001
+    outs:
+    - path: models/metrics-evaluate.json
+      hash: md5
+      md5: 49a445cb95476dbc8dc7e7e2530050f0
+      size: 74
   export:
     cmd: python export.py --single_model_path models/model_best.pt --outdir models
     deps:
