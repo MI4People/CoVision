@@ -21,10 +21,10 @@ stages:
       --output_node_names=tfjs_layers_model
       --saved_model_tags=serve
       ${base.workdir}/models/model_best.pb
-      ${base.workdir}/models/tfjs
+      ${base.workdir}/../../covision-app/public/assets/classifier_model
     deps:
     - ${base.workdir}/models/model_best.pb
     params:
     - base
-    outs:
-    - ${base.workdir}/models/tfjs
+    # outs:
+    # - ${base.workdir}/../../covision-app/public/assets/classifier_model

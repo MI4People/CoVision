@@ -2,4 +2,3 @@
 /model_best.pt
 /model_best.onnx
 /model_best.pb
-/tfjs

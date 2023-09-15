@@ -32,7 +32,7 @@ stages:
       nfiles: 3
   tensorflowjs:
     cmd: tensorflowjs_converter --input_format=tf_saved_model --output_node_names=tfjs_layers_model
-      --saved_model_tags=serve ../../models/model_best.pb ../../models/tfjs
+      --saved_model_tags=serve ../../models/model_best.pb ../../../../covision-app/public/assets/classifier_model
     deps:
     - path: ../../models/model_best.pb
       hash: md5
@@ -43,9 +43,3 @@ stages:
       params.yaml:
         base:
           workdir: ../..
-    outs:
-    - path: ../../models/tfjs
-      hash: md5
-      md5: 76f5a5ff2e98132a12fb91b0f0c02139.dir
-      size: 31117801
-      nfiles: 9
