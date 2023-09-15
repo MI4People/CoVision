@@ -121,3 +121,46 @@ stages:
       hash: md5
       md5: 47ca341920fa39b1290ff0cb11eba862
       size: 88028
+  export:
+    cmd: python yolov5/export.py --weights covision-object-detection/yolov5s-covision-train/weights/best.pt
+      --include tfjs
+    deps:
+    - path: covision-object-detection/yolov5s-covision-train/weights/best.pt
+      hash: md5
+      md5: fd94b3a6074be3d0fe839eb2806feac4
+      size: 14448309
+    params:
+      params.yaml:
+        train:
+          epochs: 100
+          batch_size: 16
+          img_size: 640
+          weights: yolov5s.pt
+          project: covision-object-detection
+          name: yolov5s-covision-train
+          yolo_flags: --exist-ok
+    outs:
+    - path: covision-object-detection/yolov5s-covision-train/weights/best_web_model
+      hash: md5
+      md5: edb7aedbb42ded0963420951e7a0d489.dir
+      size: 28347733
+      nfiles: 8
+  copy-export:
+    cmd: rsync -a --delete covision-object-detection/yolov5s-covision-train/weights/best_web_model/
+      ../covision-app/public/assets/yolov5s_rapid_test_web_model/
+    deps:
+    - path: covision-object-detection/yolov5s-covision-train/weights/best_web_model
+      hash: md5
+      md5: edb7aedbb42ded0963420951e7a0d489.dir
+      size: 28347733
+      nfiles: 8
+    params:
+      params.yaml:
+        train:
+          epochs: 100
+          batch_size: 16
+          img_size: 640
+          weights: yolov5s.pt
+          project: covision-object-detection
+          name: yolov5s-covision-train
+          yolo_flags: --exist-ok

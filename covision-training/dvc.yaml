@@ -75,3 +75,23 @@ stages:
         cache: false
     - ${val.project}/${val.name}/R_curve.png:
         cache: false
+  export:
+    cmd: >-
+      python yolov5/export.py
+      --weights ${train.project}/${train.name}/weights/best.pt
+      --include tfjs
+    params:
+    - train
+    deps: 
+    - ${train.project}/${train.name}/weights/best.pt
+    outs:
+    - ${train.project}/${train.name}/weights/best_web_model
+  copy-export:
+    cmd: >-
+      rsync -a --delete
+      ${train.project}/${train.name}/weights/best_web_model/
+      ../covision-app/public/assets/yolov5s_rapid_test_web_model/
+    params:
+    - train
+    deps: 
+    - ${train.project}/${train.name}/weights/best_web_model
