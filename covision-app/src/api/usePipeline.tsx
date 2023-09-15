@@ -37,18 +37,29 @@ type AnalysisResult = {
 };
 
 const usePipeline = (webcamRef: MutableRefObject<Webcam | null>) => {
-  const [lastResult, setLastResult] = useState<AnalysisResult>({ result: TestResult.Unknown, detectionScore: -1 });
+  const [lastResult, setLastResult] = useState<AnalysisResult>({ result: TestResult.Pending, detectionScore: -1 });
   useEvery(
     1000,
     useCallback(async () => {
       if (!webcamRef.current) return;
+
+      let result = TestResult.Pending;
+      let detectionScore = -1;
+      let area;
 
       const screenshot = webcamRef.current.getScreenshot({ width: 640, height: 640 });
       const barcodeTask = screenshot ? runBarcodeScan(screenshot) : undefined;
 
       const yolov5Res = await runYolov5Analysis(webcamRef.current);
       const testArea = getValidTestArea(yolov5Res);
-      const result = await runClassifierAnalysis(testArea);
+
+      if (!testArea.input_tf || !testArea.area) {
+        result = TestResult.NotFound;
+      }else{
+        result = await runClassifierAnalysis(testArea);
+        detectionScore = testArea.score;
+        area = testArea.area;
+      }
 
       yolov5Res.input_tf?.dispose();
 
@@ -56,8 +67,8 @@ const usePipeline = (webcamRef: MutableRefObject<Webcam | null>) => {
 
       setLastResult({
         result,
-        detectionScore: testArea.score,
-        area: testArea.area,
+        detectionScore,
+        area,
         barcodeResult,
       });
     }, [webcamRef])
