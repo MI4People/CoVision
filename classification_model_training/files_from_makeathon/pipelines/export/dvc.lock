@@ -1,0 +1,51 @@
+schema: '2.0'
+stages:
+  export:
+    cmd: python ../../export.py --single_model_path ../../models/model_best.pt --outdir
+      ../../models
+    deps:
+    - path: ../../export.py
+      hash: md5
+      md5: 4584225cf8f5f59b78f82eb4f05bf2db
+      size: 1403
+    - path: ../../models/model_best.pt
+      hash: md5
+      md5: 43b5c6b74a5b036831c4195bf8679e90
+      size: 31270857
+    params:
+      params.yaml:
+        base:
+          workdir: ../..
+        export:
+          outdir: models
+        train:
+          outdir: models
+    outs:
+    - path: ../../models/model_best.onnx
+      hash: md5
+      md5: 6fb71dcfc8ee3f457e01ae653896f508
+      size: 30725959
+    - path: ../../models/model_best.pb
+      hash: md5
+      md5: ecd8548b017f9e2028d365b7bdbeaaad.dir
+      size: 31511209
+      nfiles: 3
+  tensorflowjs:
+    cmd: tensorflowjs_converter --input_format=tf_saved_model --output_node_names=tfjs_layers_model
+      --saved_model_tags=serve ../../models/model_best.pb ../../models/tfjs
+    deps:
+    - path: ../../models/model_best.pb
+      hash: md5
+      md5: ecd8548b017f9e2028d365b7bdbeaaad.dir
+      size: 31511209
+      nfiles: 3
+    params:
+      params.yaml:
+        base:
+          workdir: ../..
+    outs:
+    - path: ../../models/tfjs
+      hash: md5
+      md5: 76f5a5ff2e98132a12fb91b0f0c02139.dir
+      size: 31117801
+      nfiles: 9

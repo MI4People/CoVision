@@ -1,7 +1,7 @@
 #### run pipeline with dvc
 ```bash
 dvc pull
-dvc repro
+dvc repro pipelines/train/dvc.yaml
 ```
 
 #### train

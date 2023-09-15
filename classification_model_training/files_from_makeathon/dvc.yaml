@@ -15,6 +15,7 @@ stages:
       --drop_connect_rate ${train.drop_connect_rate}
       --batch_norm_momentum ${train.batch_norm_momentum}
       --batch_norm_epsilon ${train.batch_norm_epsilon}
+      --metrics_file_path models/metrics-training.json
     deps:
     - data/train
     - train.py
@@ -31,6 +32,9 @@ stages:
     - models/training_loss_fold${train.fold}.png:
         cache: false
     - models/validation_loss_fold${train.fold}.png:
+        cache: false
+    metrics:
+    - models/metrics-training.json:
         cache: false
   evaluate:
     cmd: >-
@@ -51,32 +55,4 @@ stages:
     metrics:
     - models/metrics-evaluate.json:
         cache: false
-  export:
-    cmd: >-
-      python export.py
-      --single_model_path ${train.outdir}/model_best.pt
-      --outdir ${export.outdir}
-    deps:
-    - export.py
-    - models/model_best.pt
-    params:
-    - base
-    - train
-    - export
-    outs:
-    - models/model_best.onnx
-    - models/model_best.pb
-  tensorflowjs:
-    cmd: >-
-      tensorflowjs_converter
-      --input_format=tf_saved_model
-      --output_node_names=tfjs_layers_model
-      --saved_model_tags=serve
-      models/model_best.pb
-      models/tfjs
-    deps:
-    - models/model_best.pb
-    params:
-    - base
-    outs:
-    - models/tfjs
+

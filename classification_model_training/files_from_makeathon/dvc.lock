@@ -4,7 +4,7 @@ stages:
     cmd: python train.py --num_classes 4 --pretrained_on_ImageNet --fold 1 --dataset
       ./data/train/images --gt ./data/train/gt.csv --outdir models --epochs 30 --seed
       1 --lr 0.001 --dropout_rate 0.3 --drop_connect_rate 0.2 --batch_norm_momentum
-      0.99 --batch_norm_epsilon 0.001
+      0.99 --batch_norm_epsilon 0.001 --metrics_file_path models/metrics-training.json
     deps:
     - path: data/train
       hash: md5
@@ -13,8 +13,8 @@ stages:
       nfiles: 362
     - path: train.py
       hash: md5
-      md5: 5750322e46e4c0d77c2adc4985a6d90a
-      size: 11957
+      md5: 4317443a9c2c4c8e88858cf9736cea8d
+      size: 13469
     params:
       params.yaml:
         base:
@@ -44,6 +44,10 @@ stages:
       hash: md5
       md5: 338f0f973a3d0403955c744709ee9f5c
       size: 22622
+    - path: models/metrics-training.json
+      hash: md5
+      md5: ed53ecd961ad8a12e05290fa6798cf56
+      size: 145
     - path: models/model_best.pt
       hash: md5
       md5: 43b5c6b74a5b036831c4195bf8679e90
@@ -103,61 +107,3 @@ stages:
       hash: md5
       md5: 49a445cb95476dbc8dc7e7e2530050f0
       size: 74
-  export:
-    cmd: python export.py --single_model_path models/model_best.pt --outdir models
-    deps:
-    - path: export.py
-      hash: md5
-      md5: 4584225cf8f5f59b78f82eb4f05bf2db
-      size: 1403
-    - path: models/model_best.pt
-      hash: md5
-      md5: 43b5c6b74a5b036831c4195bf8679e90
-      size: 31270857
-    params:
-      params.yaml:
-        base:
-          random_seed: 1
-        export:
-          outdir: models
-        train:
-          fold: 1
-          dataset: ./data/train/images
-          gt: ./data/train/gt.csv
-          num_classes: 4
-          metric: f1_score
-          device: cuda
-          epochs: 30
-          train_batch: 16
-          val_batch: 16
-          outdir: models
-          lr: 0.001
-    outs:
-    - path: models/model_best.onnx
-      hash: md5
-      md5: 6fb71dcfc8ee3f457e01ae653896f508
-      size: 30725959
-    - path: models/model_best.pb
-      hash: md5
-      md5: ecd8548b017f9e2028d365b7bdbeaaad.dir
-      size: 31511209
-      nfiles: 3
-  tensorflowjs:
-    cmd: tensorflowjs_converter --input_format=tf_saved_model --output_node_names=tfjs_layers_model
-      --saved_model_tags=serve models/model_best.pb models/tfjs
-    deps:
-    - path: models/model_best.pb
-      hash: md5
-      md5: ecd8548b017f9e2028d365b7bdbeaaad.dir
-      size: 31511209
-      nfiles: 3
-    params:
-      params.yaml:
-        base:
-          random_seed: 1
-    outs:
-    - path: models/tfjs
-      hash: md5
-      md5: a56422595b689848585a456d7c3024f5.dir
-      size: 31117801
-      nfiles: 9

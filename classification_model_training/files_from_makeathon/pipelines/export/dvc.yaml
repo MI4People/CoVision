@@ -1,0 +1,30 @@
+stages:
+  export:
+    cmd: >-
+      python ${base.workdir}/export.py
+      --single_model_path ${base.workdir}/${train.outdir}/model_best.pt
+      --outdir ${base.workdir}/${export.outdir}
+    deps:
+    - ${base.workdir}/export.py
+    - ${base.workdir}/models/model_best.pt
+    params:
+    - base
+    - train
+    - export
+    outs:
+    - ${base.workdir}/models/model_best.onnx
+    - ${base.workdir}/models/model_best.pb
+  tensorflowjs:
+    cmd: >-
+      tensorflowjs_converter
+      --input_format=tf_saved_model
+      --output_node_names=tfjs_layers_model
+      --saved_model_tags=serve
+      ${base.workdir}/models/model_best.pb
+      ${base.workdir}/models/tfjs
+    deps:
+    - ${base.workdir}/models/model_best.pb
+    params:
+    - base
+    outs:
+    - ${base.workdir}/models/tfjs

@@ -1,0 +1,9 @@
+base:
+  workdir: ../..
+
+train:
+  outdir: models
+
+export:
+  # single_model_path: models/model_best.pt
+  outdir: models

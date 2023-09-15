@@ -72,7 +72,9 @@ def train(
     else:
         print("Using NOT pretrained model")
         model = EfficientNet.from_name(
-            "efficientnet-b2", in_channels=3, num_classes=num_classes,
+            "efficientnet-b2",
+            in_channels=3,
+            num_classes=num_classes,
             dropout_rate=dropout_rate,
             drop_connect_rate=drop_connect_rate,
             batch_norm_momentum=batch_norm_momentum,
@@ -197,6 +199,17 @@ def train(
                     model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.pt")
                 )
                 torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
+                if opt.metrics_file_path is not None:
+                    json.dump(
+                        obj={
+                            "auc": auc,
+                            "accuracy": accuracy,
+                            "train_loss": str(np.mean(train_loss)),
+                            "val_loss": str(val_loss),
+                        },
+                        fp=open(opt.metrics_file_path, "w"),
+                        indent=4,
+                    )
                 print("Model with improved auc saved to outdir")
 
         elif metric == "f1_score":
@@ -208,6 +221,17 @@ def train(
                     os.path.join(outdir, f"model_fold_{fold}_{epoch}.pt"),
                 )
                 torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
+                if opt.metrics_file_path is not None:
+                    json.dump(
+                        obj={
+                            "f1_score": f1_score,
+                            "accuracy": accuracy,
+                            "train_loss": str(np.mean(train_loss)),
+                            "val_loss": str(val_loss),
+                        },
+                        fp=open(opt.metrics_file_path, "w"),
+                        indent=4,
+                    )
                 print("Model with improved f1_score saved to outdir")
 
         elif metric == "accuracy":
@@ -218,6 +242,16 @@ def train(
                     model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.bin")
                 )
                 torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
+                if opt.metrics_file_path is not None:
+                    json.dump(
+                        obj={
+                            "accuracy": accuracy,
+                            "train_loss": str(np.mean(train_loss)),
+                            "val_loss": str(val_loss),
+                        },
+                        fp=open(opt.metrics_file_path, "w"),
+                        indent=4,
+                    )
                 print("Model with improved accuracy saved to outdir")
 
         if epoch >= 15:
@@ -330,6 +364,11 @@ if __name__ == "__main__":
     parser.add_argument("--drop_connect_rate", type=float, default=0.2)
     parser.add_argument("--batch_norm_momentum", type=float, default=0.99)
     parser.add_argument("--batch_norm_epsilon", type=float, default=1e-3)
+    parser.add_argument(
+        "--metrics_file_path",
+        default=None,
+        type=str,
+    )
 
     opt = parser.parse_args()
 
