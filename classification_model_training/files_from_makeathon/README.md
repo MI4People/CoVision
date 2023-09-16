@@ -1,3 +1,9 @@
+#### run pipeline with dvc
+```bash
+dvc pull
+dvc repro pipelines/train/dvc.yaml
+```
+
 #### train
 ```bash
 python train.py --num_classes 4 --pretrained_on_ImageNet --fold 1 \

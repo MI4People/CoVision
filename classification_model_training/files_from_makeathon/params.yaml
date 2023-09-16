@@ -1,0 +1,32 @@
+base:
+  random_seed: 1
+
+train:
+  fold: 1
+  dataset: ./data/train/images
+  gt: ./data/train/gt.csv
+  num_classes: 4
+  metric: f1_score
+  device: cuda
+  epochs: 30
+  train_batch: 16
+  val_batch: 16
+  outdir: models
+  lr: 1e-3
+  dropout_rate: 0.3
+  drop_connect_rate: 0.2
+  batch_norm_momentum: 0.99
+  batch_norm_epsilon: 1e-3
+  # pretrained_on_ImageNet:
+  # pretrained_own:
+
+evaluate:
+  # single_model_path: models/model_best.pt
+  dataset: ./data/test/images
+  gt: ./data/test/gt.csv
+  device: cuda
+  val_bs: 16
+
+export:
+  # single_model_path: models/model_best.pt
+  outdir: models

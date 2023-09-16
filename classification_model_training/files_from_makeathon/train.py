@@ -36,8 +36,13 @@ def train(
     val_bs,
     outdir,
     lr,
+    dropout_rate,
+    drop_connect_rate,
+    batch_norm_momentum,
+    batch_norm_epsilon,
     pretrained_on_ImageNet,
     pretrained_own=None,
+    starting_time=None,
 ):
 
     df = pd.read_csv(gt)
@@ -54,14 +59,26 @@ def train(
     if pretrained_on_ImageNet:
         print("Using on ImageNet pretrained model")
         model = EfficientNet.from_pretrained(
-            "efficientnet-b2", in_channels=3, num_classes=num_classes
+            "efficientnet-b2",
+            in_channels=3,
+            num_classes=num_classes,
+            dropout_rate=dropout_rate,
+            drop_connect_rate=drop_connect_rate,
+            batch_norm_momentum=batch_norm_momentum,
+            batch_norm_epsilon=batch_norm_epsilon,
         )
         # model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=True, num_classes=1, force_reload=True)
 
     else:
         print("Using NOT pretrained model")
         model = EfficientNet.from_name(
-            "efficientnet-b2", in_channels=3, num_classes=num_classes
+            "efficientnet-b2",
+            in_channels=3,
+            num_classes=num_classes,
+            dropout_rate=dropout_rate,
+            drop_connect_rate=drop_connect_rate,
+            batch_norm_momentum=batch_norm_momentum,
+            batch_norm_epsilon=batch_norm_epsilon,
         )
         # model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=False, num_classes=1)
 
@@ -181,6 +198,19 @@ def train(
                 torch.save(
                     model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.pt")
                 )
+                torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
+                if opt.metrics_file_path is not None:
+                    json.dump(
+                        obj={
+                            "auc": auc,
+                            "accuracy": accuracy,
+                            "train_loss": str(np.mean(train_loss)),
+                            "val_loss": str(val_loss),
+                            "epoch": epoch + 1,
+                        },
+                        fp=open(opt.metrics_file_path, "w"),
+                        indent=4,
+                    )
                 print("Model with improved auc saved to outdir")
 
         elif metric == "f1_score":
@@ -191,6 +221,19 @@ def train(
                     model.state_dict(),
                     os.path.join(outdir, f"model_fold_{fold}_{epoch}.pt"),
                 )
+                torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
+                if opt.metrics_file_path is not None:
+                    json.dump(
+                        obj={
+                            "f1_score": f1_score,
+                            "accuracy": accuracy,
+                            "train_loss": str(np.mean(train_loss)),
+                            "val_loss": str(val_loss),
+                            "epoch": epoch + 1,
+                        },
+                        fp=open(opt.metrics_file_path, "w"),
+                        indent=4,
+                    )
                 print("Model with improved f1_score saved to outdir")
 
         elif metric == "accuracy":
@@ -200,6 +243,18 @@ def train(
                 torch.save(
                     model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.bin")
                 )
+                torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
+                if opt.metrics_file_path is not None:
+                    json.dump(
+                        obj={
+                            "accuracy": accuracy,
+                            "train_loss": str(np.mean(train_loss)),
+                            "val_loss": str(val_loss),
+                            "epoch": epoch + 1,
+                        },
+                        fp=open(opt.metrics_file_path, "w"),
+                        indent=4,
+                    )
                 print("Model with improved accuracy saved to outdir")
 
         if epoch >= 15:
@@ -216,29 +271,25 @@ def train(
     plt.plot(train_loss_all)
     plt.xlabel("Step")
     plt.ylabel("Training Loss")
-    train_loss_plot.savefig(
-        os.path.join(opt.outdir, f"training_loss_fold{opt.fold}.png")
-    )
+    train_loss_plot.savefig(os.path.join(outdir, f"training_loss_fold{fold}.png"))
 
     val_loss_plot = plt.figure()
     plt.plot(val_loss_list)
     plt.xlabel("Epoch")
     plt.ylabel("Validation Loss")
-    val_loss_plot.savefig(
-        os.path.join(opt.outdir, f"validation_loss_fold{opt.fold}.png")
-    )
+    val_loss_plot.savefig(os.path.join(outdir, f"validation_loss_fold{fold}.png"))
 
     accuracy_plot = plt.figure()
     plt.plot(accuracy_list)
     plt.xlabel("Epoch")
     plt.ylabel("Accuracy")
-    accuracy_plot.savefig(os.path.join(opt.outdir, f"accuracy_fold{opt.fold}.png"))
+    accuracy_plot.savefig(os.path.join(outdir, f"accuracy_fold{fold}.png"))
 
     f1_score_plot = plt.figure()
     plt.plot(f1_score_list)
     plt.xlabel("Epoch")
     plt.ylabel("F1_score")
-    f1_score_plot.savefig(os.path.join(opt.outdir, f"f1_scores_fold{opt.fold}.png"))
+    f1_score_plot.savefig(os.path.join(outdir, f"f1_scores_fold{fold}.png"))
 
     print("plots saved..")
 
@@ -281,7 +332,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--val_batch", type=int, default=16, help="batch size for validation"
     )
-    parser.add_argument("--lr", type=int, default=1e-3)
+    parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument(
         "--pretrained_own", type=str, help="path to a pretrained model (.bin)"
     )
@@ -312,6 +363,15 @@ if __name__ == "__main__":
         "--outdir", type=str, help="outputdir where the files are stored"
     )
     parser.add_argument("--seed", type=int, help="Seed value")
+    parser.add_argument("--dropout_rate", type=float, default=0.3)
+    parser.add_argument("--drop_connect_rate", type=float, default=0.2)
+    parser.add_argument("--batch_norm_momentum", type=float, default=0.99)
+    parser.add_argument("--batch_norm_epsilon", type=float, default=1e-3)
+    parser.add_argument(
+        "--metrics_file_path",
+        default=None,
+        type=str,
+    )
 
     opt = parser.parse_args()
 
@@ -360,6 +420,11 @@ if __name__ == "__main__":
         opt.val_batch,
         opt.outdir,
         opt.lr,
+        opt.dropout_rate,
+        opt.drop_connect_rate,
+        opt.batch_norm_momentum,
+        opt.batch_norm_epsilon,
         opt.pretrained_on_ImageNet,
         opt.pretrained_own,
+        starting_time,
     )

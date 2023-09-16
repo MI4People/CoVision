@@ -1,0 +1,109 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python train.py --num_classes 4 --pretrained_on_ImageNet --fold 1 --dataset
+      ./data/train/images --gt ./data/train/gt.csv --outdir models --epochs 30 --seed
+      1 --lr 0.001 --dropout_rate 0.3 --drop_connect_rate 0.2 --batch_norm_momentum
+      0.99 --batch_norm_epsilon 0.001 --metrics_file_path models/metrics-training.json
+    deps:
+    - path: data/train
+      hash: md5
+      md5: 0263429cb9fefbc8b68b6a88c26d942f.dir
+      size: 2506709
+      nfiles: 362
+    - path: train.py
+      hash: md5
+      md5: 795147f7eefe09c4862254858fc937dc
+      size: 13613
+    params:
+      params.yaml:
+        base:
+          random_seed: 1
+        train:
+          fold: 1
+          dataset: ./data/train/images
+          gt: ./data/train/gt.csv
+          num_classes: 4
+          metric: f1_score
+          device: cuda
+          epochs: 30
+          train_batch: 16
+          val_batch: 16
+          outdir: models
+          lr: 0.001
+          dropout_rate: 0.3
+          drop_connect_rate: 0.2
+          batch_norm_momentum: 0.99
+          batch_norm_epsilon: 0.001
+    outs:
+    - path: models/accuracy_fold1.png
+      hash: md5
+      md5: a435b0bbc49425558f29a72e845b5942
+      size: 22908
+    - path: models/f1_scores_fold1.png
+      hash: md5
+      md5: 338f0f973a3d0403955c744709ee9f5c
+      size: 22622
+    - path: models/metrics-training.json
+      hash: md5
+      md5: d569292e2ed07c0200667077f4b8f414
+      size: 162
+    - path: models/model_best.pt
+      hash: md5
+      md5: 43b5c6b74a5b036831c4195bf8679e90
+      size: 31270857
+    - path: models/training_loss_fold1.png
+      hash: md5
+      md5: d6870ae011a7b3ff67b7b6074aa23d03
+      size: 43918
+    - path: models/validation_loss_fold1.png
+      hash: md5
+      md5: 0b99a1b895658392555231728c37926f
+      size: 28540
+  evaluate:
+    cmd: python predict.py --num_classes 4 --dataset ./data/test/images --gt ./data/test/gt.csv
+      --single_model_path models/model_best.pt --metrics_file_path models/metrics-evaluate.json
+    deps:
+    - path: data/test
+      hash: md5
+      md5: e03ff535d9f3da7f51ed642b70ec5d95.dir
+      size: 549163
+      nfiles: 80
+    - path: models/model_best.pt
+      hash: md5
+      md5: 43b5c6b74a5b036831c4195bf8679e90
+      size: 31270857
+    - path: predict.py
+      hash: md5
+      md5: 8423985a8b1f20117aecc13fd9e81fa3
+      size: 5868
+    params:
+      params.yaml:
+        base:
+          random_seed: 1
+        evaluate:
+          dataset: ./data/test/images
+          gt: ./data/test/gt.csv
+          device: cuda
+          val_bs: 16
+        train:
+          fold: 1
+          dataset: ./data/train/images
+          gt: ./data/train/gt.csv
+          num_classes: 4
+          metric: f1_score
+          device: cuda
+          epochs: 30
+          train_batch: 16
+          val_batch: 16
+          outdir: models
+          lr: 0.001
+          dropout_rate: 0.3
+          drop_connect_rate: 0.2
+          batch_norm_momentum: 0.99
+          batch_norm_epsilon: 0.001
+    outs:
+    - path: models/metrics-evaluate.json
+      hash: md5
+      md5: 49a445cb95476dbc8dc7e7e2530050f0
+      size: 74

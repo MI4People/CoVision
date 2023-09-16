@@ -5,6 +5,7 @@ import os
 import pandas as pd
 import albumentations
 import argparse
+import json
 import glob
 import csv
 import sklearn
@@ -131,6 +132,11 @@ if __name__ == "__main__":
 
     parser.add_argument("--device", type=str, default="cuda")
     parser.add_argument("--val_bs", type=int, default=16)
+    parser.add_argument(
+        "--metrics_file_path",
+        default=None,
+        type=str,
+    )
 
     opt = parser.parse_args()
 
@@ -184,6 +190,13 @@ if __name__ == "__main__":
             )
 
             print("f1_score: ", f1_score, "accuracy: ", accuracy)
+
+            if opt.metrics_file_path is not None:
+                json.dump(
+                    obj={"f1_score": f1_score, "accuracy": accuracy},
+                    fp=open(opt.metrics_file_path, "w"),
+                    indent=4,
+                )
 
         else:
             print("No model path specified - read opt.arguments")

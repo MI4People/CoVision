@@ -1,0 +1,58 @@
+stages:
+  train:
+    cmd: >-
+      python train.py
+      --num_classes ${train.num_classes}
+      --pretrained_on_ImageNet
+      --fold ${train.fold}
+      --dataset ${train.dataset}
+      --gt ${train.gt}
+      --outdir ${train.outdir}
+      --epochs ${train.epochs}
+      --seed ${base.random_seed}
+      --lr ${train.lr}
+      --dropout_rate ${train.dropout_rate}
+      --drop_connect_rate ${train.drop_connect_rate}
+      --batch_norm_momentum ${train.batch_norm_momentum}
+      --batch_norm_epsilon ${train.batch_norm_epsilon}
+      --metrics_file_path models/metrics-training.json
+    deps:
+    - data/train
+    - train.py
+    params:
+    - base
+    - train
+    outs:
+    - models/model_best.pt
+    plots:
+    - models/accuracy_fold${train.fold}.png:
+        cache: false
+    - models/f1_scores_fold${train.fold}.png:
+        cache: false
+    - models/training_loss_fold${train.fold}.png:
+        cache: false
+    - models/validation_loss_fold${train.fold}.png:
+        cache: false
+    metrics:
+    - models/metrics-training.json:
+        cache: false
+  evaluate:
+    cmd: >-
+      python predict.py
+      --num_classes ${train.num_classes}
+      --dataset ${evaluate.dataset}
+      --gt ${evaluate.gt}
+      --single_model_path ${train.outdir}/model_best.pt
+      --metrics_file_path models/metrics-evaluate.json
+    deps:
+    - data/test
+    - predict.py
+    - models/model_best.pt
+    params:
+    - base
+    - train
+    - evaluate
+    metrics:
+    - models/metrics-evaluate.json:
+        cache: false
+
