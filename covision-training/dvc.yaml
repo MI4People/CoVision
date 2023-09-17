@@ -1,0 +1,97 @@
+stages:
+  train:
+    cmd: >-
+      python yolov5/train.py
+      --img-size ${train.img_size}
+      --batch-size ${train.batch_size}
+      --epochs ${train.epochs}
+      --data data/raw/data.yaml
+      --weights ${train.weights}
+      --project ${train.project}
+      --name ${train.name}
+      ${train.yolo_flags}
+    deps:
+    - data/raw
+    - yolov5/train.py
+    params:
+    - base
+    - train
+    outs:
+    - ${train.project}/${train.name}/weights/last.pt
+    - ${train.project}/${train.name}/weights/best.pt
+    metrics:
+    - ${train.project}/${train.name}/results.csv:
+        cache: false
+    # - ${train.project}/${train.name}/hyp.yaml:
+    #     cache: false
+    plots:
+    - ${train.project}/${train.name}/confusion_matrix.png:
+        cache: false
+    - ${train.project}/${train.name}/F1_curve.png:
+        cache: false
+    - ${train.project}/${train.name}/labels_correlogram.jpg:
+        cache: false
+    - ${train.project}/${train.name}/labels.jpg:
+        cache: false
+    - ${train.project}/${train.name}/P_curve.png:
+        cache: false
+    - ${train.project}/${train.name}/PR_curve.png:
+        cache: false
+    - ${train.project}/${train.name}/R_curve.png:
+        cache: false
+    - ${train.project}/${train.name}/results.png:
+        cache: false
+  val:
+    cmd: >-
+      python yolov5/val.py
+      --weights ${train.project}/${train.name}/weights/best.pt
+      --data data/raw/data.yaml
+      --batch-size  ${val.batch_size}
+      --img-size ${val.img_size}
+      --conf-thres ${val.conf_thres}
+      --iou-thres ${val.iou_thres}
+      --max-det ${val.max_det}
+      --project ${val.project}
+      --task val
+      --name ${val.name}
+      ${val.yolo_flags}
+    params:
+    - base
+    - train
+    - val
+    deps: 
+      - ${train.project}/${train.name}/weights/best.pt
+    # outs:
+    # - ${val.project}/${val.name}/best_predictions.json:
+    #     cache: false
+    plots:
+    - ${val.project}/${val.name}/confusion_matrix.png:
+        cache: false
+    - ${val.project}/${val.name}/F1_curve.png:
+        cache: false
+    - ${val.project}/${val.name}/P_curve.png:
+        cache: false
+    - ${val.project}/${val.name}/PR_curve.png:
+        cache: false
+    - ${val.project}/${val.name}/R_curve.png:
+        cache: false
+  export:
+    cmd: >-
+      python yolov5/export.py
+      --weights ${train.project}/${train.name}/weights/best.pt
+      --include tfjs
+    params:
+    - train
+    deps: 
+    - ${train.project}/${train.name}/weights/best.pt
+    outs:
+    - ${train.project}/${train.name}/weights/best_web_model
+  copy-export:
+    cmd: >-
+      rsync -a --delete
+      ${train.project}/${train.name}/weights/best_web_model/
+      ../covision-app/public/assets/yolov5s_rapid_test_web_model/
+    params:
+    - train
+    deps: 
+    - ${train.project}/${train.name}/weights/best_web_model

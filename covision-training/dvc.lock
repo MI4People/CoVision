@@ -1,0 +1,166 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python yolov5/train.py --img-size 640 --batch-size 16 --epochs 100 --data
+      data/raw/data.yaml --weights yolov5s.pt --project covision-object-detection
+      --name yolov5s-covision-train --exist-ok
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 1517b10aa2561ba9567e7f4494299daf.dir
+      size: 5259627
+      nfiles: 1123
+    - path: yolov5/train.py
+      hash: md5
+      md5: 58b9a3629b3f728d965c2c5264fa5b71
+      size: 33882
+    params:
+      params.yaml:
+        base:
+        train:
+          epochs: 100
+          batch_size: 16
+          img_size: 640
+          weights: yolov5s.pt
+          project: covision-object-detection
+          name: yolov5s-covision-train
+          yolo_flags: --exist-ok
+    outs:
+    - path: covision-object-detection/yolov5s-covision-train/F1_curve.png
+      hash: md5
+      md5: 363f58593555661f74b67e3815c69e3d
+      size: 97380
+    - path: covision-object-detection/yolov5s-covision-train/PR_curve.png
+      hash: md5
+      md5: 8cf735f2d3c476546e12cab4d519195a
+      size: 78161
+    - path: covision-object-detection/yolov5s-covision-train/P_curve.png
+      hash: md5
+      md5: 87e68da08f942845f63b2606c8609061
+      size: 85032
+    - path: covision-object-detection/yolov5s-covision-train/R_curve.png
+      hash: md5
+      md5: 6f545683b5bdf65d3fa947ad37b73bc4
+      size: 92777
+    - path: covision-object-detection/yolov5s-covision-train/confusion_matrix.png
+      hash: md5
+      md5: 47ca341920fa39b1290ff0cb11eba862
+      size: 88028
+    - path: covision-object-detection/yolov5s-covision-train/labels.jpg
+      hash: md5
+      md5: 3df62b440df6489d661ae3e60d8c04e5
+      size: 364912
+    - path: covision-object-detection/yolov5s-covision-train/labels_correlogram.jpg
+      hash: md5
+      md5: 3f899c175e0858bbbe5b52aac7fdfb74
+      size: 345184
+    - path: covision-object-detection/yolov5s-covision-train/results.csv
+      hash: md5
+      md5: 1be90cf8ff934708c6da90fb3a7edac3
+      size: 29694
+    - path: covision-object-detection/yolov5s-covision-train/results.png
+      hash: md5
+      md5: 1845adce09e0a7e74cd6fcbcbadbdb3c
+      size: 236620
+    - path: covision-object-detection/yolov5s-covision-train/weights/best.pt
+      hash: md5
+      md5: fd94b3a6074be3d0fe839eb2806feac4
+      size: 14448309
+    - path: covision-object-detection/yolov5s-covision-train/weights/last.pt
+      hash: md5
+      md5: ca9fe5e3d546f103dc1818c03b415c56
+      size: 14448309
+  val:
+    cmd: python yolov5/val.py --weights covision-object-detection/yolov5s-covision-train/weights/best.pt
+      --data data/raw/data.yaml --batch-size  32 --img-size 640 --conf-thres 0.001
+      --iou-thres 0.6 --max-det 300 --project covision-object-detection --task val
+      --name yolov5s-covision-val --verbose --exist-ok
+    deps:
+    - path: covision-object-detection/yolov5s-covision-train/weights/best.pt
+      hash: md5
+      md5: fd94b3a6074be3d0fe839eb2806feac4
+      size: 14448309
+    params:
+      params.yaml:
+        base:
+        train:
+          epochs: 100
+          batch_size: 16
+          img_size: 640
+          weights: yolov5s.pt
+          project: covision-object-detection
+          name: yolov5s-covision-train
+          yolo_flags: --exist-ok
+        val:
+          project: covision-object-detection
+          name: yolov5s-covision-val
+          yolo_flags: --verbose --exist-ok
+          batch_size: 32
+          img_size: 640
+          conf_thres: 0.001
+          iou_thres: 0.6
+          max_det: 300
+    outs:
+    - path: covision-object-detection/yolov5s-covision-val/F1_curve.png
+      hash: md5
+      md5: e2cf2bb94e38da79b2c772b518fb3e39
+      size: 97267
+    - path: covision-object-detection/yolov5s-covision-val/PR_curve.png
+      hash: md5
+      md5: 8cf735f2d3c476546e12cab4d519195a
+      size: 78161
+    - path: covision-object-detection/yolov5s-covision-val/P_curve.png
+      hash: md5
+      md5: e9f4e7b21ce1528f905e4785382eb8cf
+      size: 84622
+    - path: covision-object-detection/yolov5s-covision-val/R_curve.png
+      hash: md5
+      md5: 2deff0e1188b2eaac72e22bcedc4decd
+      size: 93455
+    - path: covision-object-detection/yolov5s-covision-val/confusion_matrix.png
+      hash: md5
+      md5: 47ca341920fa39b1290ff0cb11eba862
+      size: 88028
+  export:
+    cmd: python yolov5/export.py --weights covision-object-detection/yolov5s-covision-train/weights/best.pt
+      --include tfjs
+    deps:
+    - path: covision-object-detection/yolov5s-covision-train/weights/best.pt
+      hash: md5
+      md5: fd94b3a6074be3d0fe839eb2806feac4
+      size: 14448309
+    params:
+      params.yaml:
+        train:
+          epochs: 100
+          batch_size: 16
+          img_size: 640
+          weights: yolov5s.pt
+          project: covision-object-detection
+          name: yolov5s-covision-train
+          yolo_flags: --exist-ok
+    outs:
+    - path: covision-object-detection/yolov5s-covision-train/weights/best_web_model
+      hash: md5
+      md5: edb7aedbb42ded0963420951e7a0d489.dir
+      size: 28347733
+      nfiles: 8
+  copy-export:
+    cmd: rsync -a --delete covision-object-detection/yolov5s-covision-train/weights/best_web_model/
+      ../covision-app/public/assets/yolov5s_rapid_test_web_model/
+    deps:
+    - path: covision-object-detection/yolov5s-covision-train/weights/best_web_model
+      hash: md5
+      md5: edb7aedbb42ded0963420951e7a0d489.dir
+      size: 28347733
+      nfiles: 8
+    params:
+      params.yaml:
+        train:
+          epochs: 100
+          batch_size: 16
+          img_size: 640
+          weights: yolov5s.pt
+          project: covision-object-detection
+          name: yolov5s-covision-train
+          yolo_flags: --exist-ok

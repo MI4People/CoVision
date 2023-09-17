@@ -1,0 +1,21 @@
+base:
+
+train:
+  epochs: 100
+  batch_size: 16
+  img_size: 640
+  weights: yolov5s.pt
+  project: covision-object-detection
+  name: yolov5s-covision-train
+  yolo_flags: '--exist-ok'
+
+val:
+  project: covision-object-detection
+  name: yolov5s-covision-val
+  yolo_flags: '--verbose --exist-ok'
+  batch_size: 32
+  img_size: 640
+  conf_thres: 0.001
+  iou_thres: 0.6
+  max_det: 300
+

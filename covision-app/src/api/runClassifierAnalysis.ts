@@ -8,6 +8,8 @@ const modelPromise = loadGraphModel(MODEL_URL);
 warmUp(modelPromise);
 
 export enum TestResult {
+  Pending = -3,
+  NotFound = -2,
   Unknown = -1,
   Positive = 0,
   Negative = 1,
@@ -22,7 +24,7 @@ function normalize(img: tf.Tensor4D, mean: number[], std: number[], axis: number
 }
 
 const runClassifierAnalysis = async (testArea: TestArea): Promise<TestResult> => {
-  if (!testArea.input_tf || !testArea.area) return TestResult.Unknown;
+  if (!testArea.input_tf || !testArea.area) return TestResult.NotFound;
   const model = await modelPromise;
 
   const input_tf = tf.tidy(() => {

@@ -1,0 +1,6 @@
+outs:
+- md5: 1517b10aa2561ba9567e7f4494299daf.dir
+  size: 5259627
+  nfiles: 1123
+  hash: md5
+  path: raw
