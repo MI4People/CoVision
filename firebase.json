@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "public": "cloud-bucket-upload-page",
+      "public": "covision-app/build",
       "target": "upload",
       "cleanUrls": true,
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
