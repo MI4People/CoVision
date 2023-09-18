@@ -10,9 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install Dependencies
-        run: npm install
+        run: cd covision-app && npm install
       - name: Build
-        run: npm run build
+        run: cd covision-app && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
