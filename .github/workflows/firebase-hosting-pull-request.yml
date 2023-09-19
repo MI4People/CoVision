@@ -9,10 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: cd covision-app && npm install
-      - name: Build
-        run: cd covision-app && npm run build
+      - name: Build App - Cache Dependencies
+        uses: actions/setup-node@v3
+        with:
+          cache: 'npm'
+          cache-dependency-path: covision-app/package-lock.json
+      - name: Build App - Install Dependencies
+        run: cd ./covision-app && npm ci
+      - name: Build App - Run Build Script
+        run: cd ./covision-app && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
