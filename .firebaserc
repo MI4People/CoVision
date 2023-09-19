@@ -7,6 +7,9 @@
       "hosting": {
         "upload": [
           "covisionapp-upload"
+        ],
+        "app": [
+          "covisionapp"
         ]
       }
     }
