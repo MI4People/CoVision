@@ -5,6 +5,12 @@
       "target": "upload",
       "cleanUrls": true,
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    },
+    {
+      "public": "covision-app/build",
+      "target": "app",
+      "cleanUrls": true,
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
     }
   ]
 }
