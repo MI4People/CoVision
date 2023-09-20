@@ -1,88 +1,28 @@
-from configparser import Interpolation
 import os
-from sklearn import metrics
 import torch
 from torch import nn
 
-import albumentations
 import argparse
 import pandas as pd
 import numpy as np
 import json
-import matplotlib.pyplot as plt
 from datetime import datetime
 import random
-import cv2
 from torchvision import transforms
 
 from efficientnet_pytorch import EfficientNet
 from utils.data import ClassificationDataset
 from utils.training_loops import training_loop
 from utils.training_loops import val_loop
-from utils.calc_mean_std import get_mean_std
 
 
-def train(
-    mean,
-    std,
-    fold,
-    training_data_path,
-    gt,
-    num_classes,
-    metric,
-    device,
-    epochs,
-    train_bs,
-    val_bs,
-    outdir,
-    lr,
-    dropout_rate,
-    drop_connect_rate,
-    batch_norm_momentum,
-    batch_norm_epsilon,
-    pretrained_on_ImageNet,
-    pretrained_own=None,
-    starting_time=None,
+def get_data_loaders(
+    gt: str, fold: int, training_data_path: str, train_bs: int, val_bs: int
 ):
-
     df = pd.read_csv(gt)
-    mean = mean
-    std = std
 
     df_train = df[df.fold != fold].reset_index(drop=True)
     df_val = df[df.fold == fold].reset_index(drop=True)
-
-    print()
-    print("use_pretrained: ", pretrained_on_ImageNet)
-    print()
-
-    if pretrained_on_ImageNet:
-        print("Using on ImageNet pretrained model")
-        model = EfficientNet.from_pretrained(
-            "efficientnet-b2",
-            in_channels=3,
-            num_classes=num_classes,
-            dropout_rate=dropout_rate,
-            drop_connect_rate=drop_connect_rate,
-            batch_norm_momentum=batch_norm_momentum,
-            batch_norm_epsilon=batch_norm_epsilon,
-        )
-        # model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=True, num_classes=1, force_reload=True)
-
-    else:
-        print("Using NOT pretrained model")
-        model = EfficientNet.from_name(
-            "efficientnet-b2",
-            in_channels=3,
-            num_classes=num_classes,
-            dropout_rate=dropout_rate,
-            drop_connect_rate=drop_connect_rate,
-            batch_norm_momentum=batch_norm_momentum,
-            batch_norm_epsilon=batch_norm_epsilon,
-        )
-        # model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=False, num_classes=1)
-
-    model.to(device)
 
     # Set up the train_loader and val_loader
     train_aug = transforms.Compose(
@@ -126,6 +66,62 @@ def train(
     val_loader = torch.utils.data.DataLoader(
         val_dataset, batch_size=val_bs, shuffle=False, num_workers=2
     )
+    return train_loader, val_loader
+
+
+def train(
+    fold,
+    training_data_path,
+    gt,
+    num_classes,
+    metric,
+    device,
+    epochs,
+    train_bs,
+    val_bs,
+    outdir,
+    lr,
+    weight_decay,
+    dropout_rate,
+    drop_connect_rate,
+    batch_norm_momentum,
+    batch_norm_epsilon,
+    pretrained_on_ImageNet,
+    pretrained_own=None,
+    starting_time=None,
+):
+
+    train_loader, val_loader = get_data_loaders(
+        gt, fold, training_data_path, train_bs, val_bs
+    )
+
+    if pretrained_on_ImageNet:
+        print("Using on ImageNet pretrained model")
+        model = EfficientNet.from_pretrained(
+            "efficientnet-b2",
+            in_channels=3,
+            num_classes=num_classes,
+            dropout_rate=dropout_rate,
+            drop_connect_rate=drop_connect_rate,
+            batch_norm_momentum=batch_norm_momentum,
+            batch_norm_epsilon=batch_norm_epsilon,
+        )
+        # model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=True, num_classes=1, force_reload=True)
+
+    else:
+        print("Using NOT pretrained model")
+        model = EfficientNet.from_name(
+            "efficientnet-b2",
+            in_channels=3,
+            num_classes=num_classes,
+            dropout_rate=dropout_rate,
+            drop_connect_rate=drop_connect_rate,
+            batch_norm_momentum=batch_norm_momentum,
+            batch_norm_epsilon=batch_norm_epsilon,
+        )
+        # model = torch.hub.load('pytorch/vision:v0.10.0', 'mobilenet_v2', pretrained=False, num_classes=1)
+
+    model.to(device)
 
     # Set loss function
     if num_classes == 1:
@@ -136,162 +132,65 @@ def train(
         loss_function = nn.CrossEntropyLoss()
 
     # Set optimizer
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
 
     # Set scheduler
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, patience=5, threshold=0.0001, mode="max"
     )
 
-    train_loss_all = []
-    val_loss_list = []
-    accuracy_list = []
-    f1_score_list = []
-    f1_score_for_model_saving_list = []
-    auc_list = []
+    best_score = 0
 
     # Start training
     for epoch in range(epochs):
 
-        train_loss = training_loop(
+        (
+            train_running_loss,
+            train_num_correct,
+            train_num_total,
+            train_running_steps,
+            train_f1,
+        ) = training_loop(
             model,
             num_classes,
             device,
             train_loader,
             optimizer,
             loss_function,
-            epoch,
-            epochs,
         )
 
-        targets, predictions, accuracy, val_loss = val_loop(
-            model, num_classes, device, val_loader, loss_function
-        )
+        (
+            test_running_loss,
+            test_num_correct,
+            test_num_total,
+            test_running_steps,
+            test_f1,
+        ) = val_loop(model, num_classes, device, val_loader, loss_function)
 
-        assert np.array_equal(
-            targets, val_targets
-        ), "targets from val_loop are not equal to val_targets (source of the validation data)"
+        print(f"Epoch = {epoch+1}, train_f1 = {train_f1}, val_f1 = {test_f1}")
 
-        print()
-        print("targets: ", targets)
-        print("predictions: ", predictions)
-        print()
+        scheduler.step(test_f1)
 
-        if num_classes == 1:
-            predictions = np.vstack((predictions)).ravel()
-            f1_score = metrics.f1_score(targets, predictions)
-            accuracy = metrics.accuracy_score(targets, predictions)
-            # auc = metrics.roc_auc_score(targets, predictions)
-            print(f"Epoch = {epoch+1}, accuracy = {accuracy}, F1_Score = {f1_score}")
-
-        else:
-            f1_score = metrics.f1_score(targets, predictions, average="micro")
-            # auc = metrics.roc_auc_score(targets, predictions, multi_class ="ovr")
-            auc = "needs to be debugged"
-            print(f"Epoch = {epoch+1}, F1_Score = {f1_score}")
-
-        # Learning rate scheduler improves according to chosen metric
-        if metric == "auc":
-            scheduler.step(auc)
-
-            if all(auc > i for i in auc_list):
-                torch.save(
-                    model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.pt")
+        if test_f1 > best_score and epoch >= 3:
+            best_score = test_f1
+            torch.save(
+                model.state_dict(),
+                os.path.join(outdir, f"model_fold_{fold}_{epoch}.pt"),
+            )
+            torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
+            if opt.metrics_file_path is not None:
+                json.dump(
+                    obj={
+                        "f1_score": test_f1,
+                        "accuracy": test_num_correct / test_num_total,
+                        "train_loss": train_running_loss / train_running_steps,
+                        "val_loss": test_running_loss / test_running_steps,
+                        "epoch": epoch + 1,
+                    },
+                    fp=open(opt.metrics_file_path, "w"),
+                    indent=4,
                 )
-                torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
-                if opt.metrics_file_path is not None:
-                    json.dump(
-                        obj={
-                            "auc": auc,
-                            "accuracy": accuracy,
-                            "train_loss": str(np.mean(train_loss)),
-                            "val_loss": str(val_loss),
-                            "epoch": epoch + 1,
-                        },
-                        fp=open(opt.metrics_file_path, "w"),
-                        indent=4,
-                    )
-                print("Model with improved auc saved to outdir")
-
-        elif metric == "f1_score":
-            scheduler.step(f1_score)
-
-            if all(f1_score > i for i in f1_score_for_model_saving_list) and epoch >= 3:
-                torch.save(
-                    model.state_dict(),
-                    os.path.join(outdir, f"model_fold_{fold}_{epoch}.pt"),
-                )
-                torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
-                if opt.metrics_file_path is not None:
-                    json.dump(
-                        obj={
-                            "f1_score": f1_score,
-                            "accuracy": accuracy,
-                            "train_loss": str(np.mean(train_loss)),
-                            "val_loss": str(val_loss),
-                            "epoch": epoch + 1,
-                        },
-                        fp=open(opt.metrics_file_path, "w"),
-                        indent=4,
-                    )
-                print("Model with improved f1_score saved to outdir")
-
-        elif metric == "accuracy":
-            scheduler.step(accuracy)
-
-            if all(accuracy > i for i in f1_score_for_model_saving_list) and epoch >= 3:
-                torch.save(
-                    model.state_dict(), os.path.join(outdir, f"model_fold_{fold}.bin")
-                )
-                torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
-                if opt.metrics_file_path is not None:
-                    json.dump(
-                        obj={
-                            "accuracy": accuracy,
-                            "train_loss": str(np.mean(train_loss)),
-                            "val_loss": str(val_loss),
-                            "epoch": epoch + 1,
-                        },
-                        fp=open(opt.metrics_file_path, "w"),
-                        indent=4,
-                    )
-                print("Model with improved accuracy saved to outdir")
-
-        if epoch >= 15:
-            f1_score_for_model_saving_list.append(f1_score)
-        train_loss_all.append(train_loss)
-        val_loss_list.append(val_loss)
-        accuracy_list.append(accuracy)
-        f1_score_list.append(f1_score)
-
-    # Make a function for the following lines
-    train_loss_all = np.array(train_loss_all)
-    train_loss_all = train_loss_all.flatten()
-    train_loss_plot = plt.figure()
-    plt.plot(train_loss_all)
-    plt.xlabel("Step")
-    plt.ylabel("Training Loss")
-    train_loss_plot.savefig(os.path.join(outdir, f"training_loss_fold{fold}.png"))
-
-    val_loss_plot = plt.figure()
-    plt.plot(val_loss_list)
-    plt.xlabel("Epoch")
-    plt.ylabel("Validation Loss")
-    val_loss_plot.savefig(os.path.join(outdir, f"validation_loss_fold{fold}.png"))
-
-    accuracy_plot = plt.figure()
-    plt.plot(accuracy_list)
-    plt.xlabel("Epoch")
-    plt.ylabel("Accuracy")
-    accuracy_plot.savefig(os.path.join(outdir, f"accuracy_fold{fold}.png"))
-
-    f1_score_plot = plt.figure()
-    plt.plot(f1_score_list)
-    plt.xlabel("Epoch")
-    plt.ylabel("F1_score")
-    f1_score_plot.savefig(os.path.join(outdir, f"f1_scores_fold{fold}.png"))
-
-    print("plots saved..")
+            print("Model with improved f1_score saved to outdir")
 
     end_time = datetime.now()
 
@@ -316,6 +215,7 @@ def enable_determinism():
     """
     https://pytorch.org/docs/stable/notes/randomness.html#reproducibility
     """
+    torch.use_deterministic_algorithms(True)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
@@ -333,6 +233,7 @@ if __name__ == "__main__":
         "--val_batch", type=int, default=16, help="batch size for validation"
     )
     parser.add_argument("--lr", type=float, default=1e-3)
+    parser.add_argument("--weight_decay", type=float, default=0)
     parser.add_argument(
         "--pretrained_own", type=str, help="path to a pretrained model (.bin)"
     )
@@ -398,17 +299,14 @@ if __name__ == "__main__":
     starting_time = starting_time.strftime("%H:%M:%S")
     print("Starting Time =", starting_time)
 
-    mean = mean = [0.485, 0.456, 0.406]
-    std = std = [0.229, 0.224, 0.225]
-
     if opt.seed is not None:
         print("Setting seed =", opt.seed)
         set_seed(opt.seed)
         enable_determinism()
 
+        os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
+
     train(
-        mean,
-        std,
         opt.fold,
         opt.dataset,
         opt.gt,
@@ -420,6 +318,7 @@ if __name__ == "__main__":
         opt.val_batch,
         opt.outdir,
         opt.lr,
+        opt.weight_decay,
         opt.dropout_rate,
         opt.drop_connect_rate,
         opt.batch_norm_momentum,

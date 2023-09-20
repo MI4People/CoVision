@@ -1,100 +1,68 @@
 import torch
-
-import numpy as np
-from sklearn.metrics import accuracy_score, confusion_matrix
+from torchmetrics.classification import F1Score
 
 
-def training_loop(model, num_classes, device, train_loader, optimizer, loss_function, epoch, num_epochs):
+def training_loop(
+    model,
+    num_classes,
+    device,
+    train_loader,
+    optimizer,
+    loss_function,
+):
 
-    train_loss = []
-
+    device = device or torch.device("cpu")
     model.train()
 
-    n_total_steps = len(train_loader)
+    num_correct = 0
+    num_total = 0
+    running_loss = 0.0
+    running_steps = 0
+    f1 = F1Score(task="multiclass", num_classes=num_classes, average="micro").to(device)
 
     for batch_idx, (data, target) in enumerate(train_loader):
-
-        if num_classes == 1:
-            target = target.type(torch.DoubleTensor)
-        else:
-            target = target.type(torch.LongTensor)
-
         data, target = data.to(device), target.to(device)
-
         optimizer.zero_grad()
 
-        with torch.set_grad_enabled(True):
+        output = model(data)
+        loss = loss_function(output, target)
+        loss.backward()
+        optimizer.step()
 
-            output = model(data)
+        _, predicted = torch.max(output.data, 1)
+        num_total += target.size(0)
+        num_correct += (predicted == target).sum().item()
+        f1.update(predicted, target)
 
-            if num_classes == 1:
-                loss = loss_function(torch.flatten(output), target)
-            else:
-                loss = loss_function(output, target)
+        running_loss += loss.item()
+        running_steps += 1
 
-            loss.backward()
-
-            optimizer.step()
-
-            if batch_idx % 2 == 0:
-                print(f'Epoch [{epoch+1}/{num_epochs}], Step [{batch_idx+1}/{n_total_steps}], Loss: {loss.item():.4f}')
-
-            train_loss.append(loss.item())
-        
-    return train_loss
+    return (running_loss, num_correct, num_total, running_steps, f1.compute().item())
 
 
 def val_loop(model, num_classes, device, val_loader, loss_function):
-
+    device = device or torch.device("cpu")
     model.eval()
 
+    num_correct = 0
+    num_total = 0
+    running_loss = 0.0
+    running_steps = 0
+    f1 = F1Score(task="multiclass", num_classes=num_classes, average="micro").to(device)
+
     with torch.no_grad():
-        for i, (data,target) in enumerate(val_loader):
-            
-            if num_classes == 1:
-                target = target.type(torch.DoubleTensor)
-            else:
-                target = target.type(torch.LongTensor)
-
+        for batch_idx, (data, target) in enumerate(val_loader):
             data, target = data.to(device), target.to(device)
-            output = model(data)
 
-            if num_classes == 1:
-                curr_loss = loss_function(torch.flatten(output),target)
-                # curr_loss = loss_function(output, target)
-            else:
-                curr_loss = loss_function(output, target)
-            
-            # Is this the correct solution for calculating the 
-            output = torch.sigmoid(output)
+            outputs = model(data)
+            loss = loss_function(outputs, target)
 
-            output = output.cpu().numpy() #this numpy array needs to look like this np([1, 0, 1, 0]) instead of np([0.2, -0.1, 0.8, 0.7])
-            
-            if num_classes == 1:
+            _, predicted = torch.max(outputs.data, 1)
+            num_total += target.size(0)
+            num_correct += (predicted == target).sum().item()
+            f1.update(predicted, target)
 
-                for j in range(len(output)):
-                    if output[j] > 0.5:
-                        output[j] = 1
-                    else:
-                        output[j] = 0
-            else:
-                output = np.argmax(output, axis=1)
+            running_loss += loss.item()
+            running_steps += 1
 
-            if i==0:
-                predictions = output
-                targets = target.data.cpu().numpy()
-                loss = np.array([curr_loss.data.cpu().numpy()])
-
-            else:
-                predictions = np.concatenate((predictions, output))
-                targets = np.concatenate((targets, target.data.cpu().numpy()))
-                loss = np.concatenate((loss, np.array([curr_loss.data.cpu().numpy()])))
-
-    accuracy = accuracy_score(targets, predictions)
-    conf_mat = confusion_matrix(targets, predictions)
-
-    sensitivity = conf_mat.diagonal()/conf_mat.sum(axis=1)
-
-    print("Val Accuracy: ", accuracy, "Val Sensitivity (Overall): ", np.mean(sensitivity), "Val loss: ", np.mean(loss))
-
-    return targets, predictions, accuracy, np.mean(loss)
+    return (running_loss, num_correct, num_total, running_steps, f1.compute().item())
