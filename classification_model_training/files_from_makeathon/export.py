@@ -17,12 +17,7 @@ def export_onnx(single_model_path: str, num_classes: int, outdir: str):
     model.set_swish(memory_efficient=False)
 
     dummy_input = Variable(torch.rand(1, 3, 224, 224))
-    torch.onnx.export(
-        model,
-        dummy_input,
-        os.path.join(outdir, "model_best.onnx"),
-        input_names=["input_1"],
-    )
+    torch.onnx.export(model, dummy_input, os.path.join(outdir, "model_best.onnx"))
 
 
 def export_pb(indir: str, outdir: str):

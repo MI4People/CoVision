@@ -6,8 +6,8 @@ stages:
     deps:
     - path: ../../export.py
       hash: md5
-      md5: f955cd2a80cff3babb9183dbee02d68d
-      size: 1428
+      md5: 4584225cf8f5f59b78f82eb4f05bf2db
+      size: 1403
     - path: ../../models/model_best.pt
       hash: md5
       md5: 43b5c6b74a5b036831c4195bf8679e90
@@ -23,22 +23,22 @@ stages:
     outs:
     - path: ../../models/model_best.onnx
       hash: md5
-      md5: 4f690b2bcf9e002238f4036414e8e0df
+      md5: 6fb71dcfc8ee3f457e01ae653896f508
       size: 30725959
     - path: ../../models/model_best.pb
       hash: md5
-      md5: dd63e7d159b54e8bfb79095e3a7a9a87.dir
-      size: 31578893
-      nfiles: 4
+      md5: ecd8548b017f9e2028d365b7bdbeaaad.dir
+      size: 31511209
+      nfiles: 3
   tensorflowjs:
     cmd: tensorflowjs_converter --input_format=tf_saved_model --output_node_names=tfjs_layers_model
       --saved_model_tags=serve ../../models/model_best.pb ../../../../covision-app/public/assets/classifier_model
     deps:
     - path: ../../models/model_best.pb
       hash: md5
-      md5: dd63e7d159b54e8bfb79095e3a7a9a87.dir
-      size: 31578893
-      nfiles: 4
+      md5: ecd8548b017f9e2028d365b7bdbeaaad.dir
+      size: 31511209
+      nfiles: 3
     params:
       params.yaml:
         base:
