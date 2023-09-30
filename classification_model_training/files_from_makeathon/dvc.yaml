@@ -24,15 +24,15 @@ stages:
     - train
     outs:
     - models/model_best.pt
-    plots:
-    - models/accuracy_fold${train.fold}.png:
-        cache: false
-    - models/f1_scores_fold${train.fold}.png:
-        cache: false
-    - models/training_loss_fold${train.fold}.png:
-        cache: false
-    - models/validation_loss_fold${train.fold}.png:
-        cache: false
+    # plots:
+    # - models/accuracy_fold${train.fold}.png:
+    #     cache: false
+    # - models/f1_scores_fold${train.fold}.png:
+    #     cache: false
+    # - models/training_loss_fold${train.fold}.png:
+    #     cache: false
+    # - models/validation_loss_fold${train.fold}.png:
+    #     cache: false
     metrics:
     - models/metrics-training.json:
         cache: false
@@ -55,4 +55,3 @@ stages:
     metrics:
     - models/metrics-evaluate.json:
         cache: false
-
