@@ -6,8 +6,8 @@ stages:
     deps:
     - path: ../../export.py
       hash: md5
-      md5: f955cd2a80cff3babb9183dbee02d68d
-      size: 1428
+      md5: 7ac103807a6ff8f1927e64691cf913ff
+      size: 1467
     - path: ../../models/model_best.pt
       hash: md5
       md5: 43b5c6b74a5b036831c4195bf8679e90

@@ -2,12 +2,14 @@ import os
 import torch
 from torch import nn
 
+
 import argparse
 import pandas as pd
 import numpy as np
 import json
 from datetime import datetime
 import random
+import shutil
 from torchvision import transforms
 
 from efficientnet_pytorch import EfficientNet
@@ -17,7 +19,12 @@ from utils.training_loops import val_loop
 
 
 def get_data_loaders(
-    gt: str, fold: int, training_data_path: str, train_bs: int, val_bs: int
+    gt: str,
+    fold: int,
+    training_data_path: str,
+    train_bs: int,
+    val_bs: int,
+    image_size: int = 224,
 ):
     df = pd.read_csv(gt)
 
@@ -27,7 +34,7 @@ def get_data_loaders(
     # Set up the train_loader and val_loader
     train_aug = transforms.Compose(
         [
-            transforms.Resize((224, 224)),
+            transforms.Resize((image_size, image_size)),
             transforms.RandomHorizontalFlip(0.5),
             transforms.RandomRotation((0, 360)),
             transforms.ToTensor(),
@@ -37,7 +44,7 @@ def get_data_loaders(
 
     val_aug = transforms.Compose(
         [
-            transforms.Resize((224, 224)),
+            transforms.Resize((image_size, image_size)),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
@@ -70,6 +77,8 @@ def get_data_loaders(
 
 
 def train(
+    model_name,
+    image_size,
     fold,
     training_data_path,
     gt,
@@ -92,13 +101,13 @@ def train(
 ):
 
     train_loader, val_loader = get_data_loaders(
-        gt, fold, training_data_path, train_bs, val_bs
+        gt, fold, training_data_path, train_bs, val_bs, image_size
     )
 
     if pretrained_on_ImageNet:
         print("Using on ImageNet pretrained model")
         model = EfficientNet.from_pretrained(
-            "efficientnet-b2",
+            model_name,
             in_channels=3,
             num_classes=num_classes,
             dropout_rate=dropout_rate,
@@ -111,7 +120,7 @@ def train(
     else:
         print("Using NOT pretrained model")
         model = EfficientNet.from_name(
-            "efficientnet-b2",
+            model_name,
             in_channels=3,
             num_classes=num_classes,
             dropout_rate=dropout_rate,
@@ -160,31 +169,43 @@ def train(
         )
 
         (
-            test_running_loss,
-            test_num_correct,
-            test_num_total,
-            test_running_steps,
-            test_f1,
+            val_running_loss,
+            val_num_correct,
+            val_num_total,
+            val_running_steps,
+            val_f1,
         ) = val_loop(model, num_classes, device, val_loader, loss_function)
 
-        print(f"Epoch = {epoch+1}, train_f1 = {train_f1}, val_f1 = {test_f1}")
+        train_loss = train_running_loss / train_running_steps
+        # train_acc = train_num_correct / train_num_total
+        val_loss = val_running_loss / val_running_steps
+        val_acc = val_num_correct / val_num_total
 
-        scheduler.step(test_f1)
+        print(
+            f"Epoch = {epoch+1}, train_loss = {train_loss}, train_f1 = {train_f1}, val_loss = {val_loss}, val_f1 = {val_f1}"
+        )
 
-        if test_f1 > best_score and epoch >= 3:
-            best_score = test_f1
-            torch.save(
-                model.state_dict(),
-                os.path.join(outdir, f"model_fold_{fold}_{epoch}.pt"),
+        if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
+            scheduler.step(val_f1)
+        else:
+            scheduler.step()
+
+        is_best = val_f1 > best_score
+        best_score = max(val_f1, best_score)
+
+        torch.save(model.state_dict(), os.path.join(outdir, "model.pt"))
+        if is_best:
+            shutil.copyfile(
+                os.path.join(outdir, "model.pt"), os.path.join(outdir, "model_best.pt")
             )
-            torch.save(model.state_dict(), os.path.join(outdir, "model_best.pt"))
+
             if opt.metrics_file_path is not None:
                 json.dump(
                     obj={
-                        "f1_score": test_f1,
-                        "accuracy": test_num_correct / test_num_total,
-                        "train_loss": train_running_loss / train_running_steps,
-                        "val_loss": test_running_loss / test_running_steps,
+                        "f1_score": val_f1,
+                        "accuracy": val_acc,
+                        "train_loss": train_loss,
+                        "val_loss": val_loss,
                         "epoch": epoch + 1,
                     },
                     fp=open(opt.metrics_file_path, "w"),
@@ -273,6 +294,10 @@ if __name__ == "__main__":
         default=None,
         type=str,
     )
+    parser.add_argument(
+        "--model", default="efficientnet-b2", type=str, help="model name"
+    )
+    parser.add_argument("--image_size", default=224, type=int, help="image size")
 
     opt = parser.parse_args()
 
@@ -307,6 +332,8 @@ if __name__ == "__main__":
         os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
 
     train(
+        opt.model,
+        opt.image_size,
         opt.fold,
         opt.dataset,
         opt.gt,

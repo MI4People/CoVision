@@ -137,6 +137,10 @@ if __name__ == "__main__":
         default=None,
         type=str,
     )
+    parser.add_argument(
+        "--model", default="efficientnet-b2", type=str, help="model name"
+    )
+    parser.add_argument("--image_size", default=224, type=int, help="image size")
 
     opt = parser.parse_args()
 
@@ -144,7 +148,7 @@ if __name__ == "__main__":
 
     prediction_aug = transforms.Compose(
         [
-            transforms.Resize((224, 224)),
+            transforms.Resize((opt.image_size, opt.image_size)),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
@@ -162,9 +166,7 @@ if __name__ == "__main__":
 
         if opt.single_model_path is not None:
 
-            model = EfficientNet.from_name(
-                "efficientnet-b2", in_channels=3, num_classes=1
-            )
+            model = EfficientNet.from_name(opt.model, in_channels=3, num_classes=1)
             model.load_state_dict(torch.load(opt.single_model_path))
             model.to(opt.device)
 
@@ -179,9 +181,7 @@ if __name__ == "__main__":
 
         if opt.single_model_path is not None:
 
-            model = EfficientNet.from_name(
-                "efficientnet-b2", in_channels=3, num_classes=4
-            )
+            model = EfficientNet.from_name(opt.model, in_channels=3, num_classes=4)
             model.load_state_dict(torch.load(opt.single_model_path))
             model.to(opt.device)
 
