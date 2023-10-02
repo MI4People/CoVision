@@ -2,6 +2,8 @@ stages:
   train:
     cmd: >-
       python train.py
+      --model ${train.model}
+      --image_size ${train.image_size}
       --num_classes ${train.num_classes}
       --pretrained_on_ImageNet
       --fold ${train.fold}
@@ -39,6 +41,8 @@ stages:
   evaluate:
     cmd: >-
       python predict.py
+      --model ${train.model}
+      --image_size ${train.image_size}
       --num_classes ${train.num_classes}
       --dataset ${evaluate.dataset}
       --gt ${evaluate.gt}

@@ -46,6 +46,7 @@ class TrainCoVision(tune.Trainable):
 
         train_bs = config.get("train_bs", 16)
         val_bs = config.get("val_bs", 16)
+        image_size = config.get("image_size", 224)
 
         gt = config.get("args").gt
         training_data_path = config.get("args").dataset
@@ -54,11 +55,11 @@ class TrainCoVision(tune.Trainable):
         self.num_classes = config.get("args").num_classes
 
         self.train_loader, self.test_loader = get_data_loaders(
-            gt, fold, training_data_path, train_bs, val_bs
+            gt, fold, training_data_path, train_bs, val_bs, image_size=image_size
         )
 
         self.model = EfficientNet.from_pretrained(
-            "efficientnet-b2",
+            config.get("model", "efficientnet-b2"),
             in_channels=3,
             num_classes=self.num_classes,
             dropout_rate=config.get("dropout_rate", 0.3),
@@ -178,12 +179,13 @@ if __name__ == "__main__":
             metric="val_f1",
             mode="max",
             scheduler=sched,
-            num_samples=1 if args.smoke_test else 10,
+            num_samples=1 if args.smoke_test else 1,
         ),
         param_space={
             "args": args,
             # "lr": tune.loguniform(1e-4, 1e-3),
-            "seed": tune.randint(0, 42),
+            "seed": 1,
+            # "seed": tune.randint(0, 42),
             # "lr": tune.quniform(1e-4, 1e-3, 1e-4),
             # "weight_decay": tune.uniform(0.0, 1e-4),
             # "dropout_rate": tune.quniform(0.10, 0.4, 0.05),
@@ -191,6 +193,10 @@ if __name__ == "__main__":
             # "batch_norm_momentum": tune.choice([0.9, 0.997, 0.99]),
             # "batch_norm_epsilon": tune.choice([1e-3, 1e-5, 1e-6])
             # "momentum": tune.uniform(0.1, 0.9),
+            # "model": tune.choice(
+            #     ["efficientnet-b0", "efficientnet-b1", "efficientnet-b2"]
+            # ),
+            # "image_size": tune.choice([224, 240, 260]),
         },
     )
     results = tuner.fit()

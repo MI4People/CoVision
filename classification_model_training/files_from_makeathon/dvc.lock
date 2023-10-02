@@ -1,10 +1,11 @@
 schema: '2.0'
 stages:
   train:
-    cmd: python train.py --num_classes 4 --pretrained_on_ImageNet --fold 1 --dataset
-      ./data/train/images --gt ./data/train/gt.csv --outdir models --epochs 30 --seed
-      1 --lr 0.001 --dropout_rate 0.3 --drop_connect_rate 0.2 --batch_norm_momentum
-      0.99 --batch_norm_epsilon 0.001 --metrics_file_path models/metrics-training.json
+    cmd: python train.py --model efficientnet-b2 --image_size 224 --num_classes 4
+      --pretrained_on_ImageNet --fold 1 --dataset ./data/train/images --gt ./data/train/gt.csv
+      --outdir models --epochs 30 --seed 1 --lr 0.001 --dropout_rate 0.3 --drop_connect_rate
+      0.2 --batch_norm_momentum 0.99 --batch_norm_epsilon 0.001 --metrics_file_path
+      models/metrics-training.json
     deps:
     - path: data/train
       hash: md5
@@ -13,8 +14,8 @@ stages:
       nfiles: 362
     - path: train.py
       hash: md5
-      md5: d0b7beb3fc65200f6a9c3a51e9307a24
-      size: 9750
+      md5: cf9e5a2efba47f0da725d7f991d8e424
+      size: 10428
     params:
       params.yaml:
         base:
@@ -35,6 +36,8 @@ stages:
           drop_connect_rate: 0.2
           batch_norm_momentum: 0.99
           batch_norm_epsilon: 0.001
+          model: efficientnet-b2
+          image_size: 224
     outs:
     - path: models/metrics-training.json
       hash: md5
@@ -45,8 +48,9 @@ stages:
       md5: 43b5c6b74a5b036831c4195bf8679e90
       size: 31270857
   evaluate:
-    cmd: python predict.py --num_classes 4 --dataset ./data/test/images --gt ./data/test/gt.csv
-      --single_model_path models/model_best.pt --metrics_file_path models/metrics-evaluate.json
+    cmd: python predict.py --model efficientnet-b2 --image_size 224 --num_classes
+      4 --dataset ./data/test/images --gt ./data/test/gt.csv --single_model_path models/model_best.pt
+      --metrics_file_path models/metrics-evaluate.json
     deps:
     - path: data/test
       hash: md5
@@ -59,8 +63,8 @@ stages:
       size: 31270857
     - path: predict.py
       hash: md5
-      md5: 8423985a8b1f20117aecc13fd9e81fa3
-      size: 5868
+      md5: 43fb163a6a3546d1bd6b47cf92fc6ff5
+      size: 6001
     params:
       params.yaml:
         base:
@@ -86,6 +90,8 @@ stages:
           drop_connect_rate: 0.2
           batch_norm_momentum: 0.99
           batch_norm_epsilon: 0.001
+          model: efficientnet-b2
+          image_size: 224
     outs:
     - path: models/metrics-evaluate.json
       hash: md5
